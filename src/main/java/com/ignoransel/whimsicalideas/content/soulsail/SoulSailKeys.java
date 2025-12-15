@@ -1,0 +1,18 @@
+package com.ignoransel.whimsicalideas.content.soulsail;
+
+public final class SoulSailKeys {
+    private SoulSailKeys() {}
+
+    public static final String SOULS = "Souls";               // long
+    public static final String STORED = "StoredMobs";         // NbtList<String>：待生成
+    public static final String ROOM_X = "RoomX";              // int
+    public static final String ROOM_Z = "RoomZ";              // int
+
+    // 返回点（进入魂帆世界前的位置）
+    public static final String RETURN_DIM = "ReturnDim";      // String (registry key like "minecraft:overworld")
+    public static final String RETURN_X = "ReturnX";          // double
+    public static final String RETURN_Y = "ReturnY";          // double
+    public static final String RETURN_Z = "ReturnZ";          // double
+    public static final String RETURN_YAW = "ReturnYaw";      // float
+    public static final String RETURN_PITCH = "ReturnPitch";  // float
+}

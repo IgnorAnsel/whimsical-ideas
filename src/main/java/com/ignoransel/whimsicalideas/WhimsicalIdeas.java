@@ -1,6 +1,7 @@
 package com.ignoransel.whimsicalideas;
 
 import com.ignoransel.whimsicalideas.content.hex.handers.HexRefineHandler;
+import com.ignoransel.whimsicalideas.content.soulsail.SoulSailEvents;
 import com.ignoransel.whimsicalideas.registry.*;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.ModInitializer;
@@ -17,6 +18,7 @@ public class WhimsicalIdeas implements ModInitializer, ClientModInitializer {
         WIEvents.init();
         WINetwork.registerServer();
         HexRefineHandler.register();
+        SoulSailEvents.register();
         WIStatusEffects.init();
 
     }

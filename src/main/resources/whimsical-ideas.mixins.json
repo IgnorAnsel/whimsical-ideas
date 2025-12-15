@@ -3,7 +3,9 @@
 	"package": "com.ignoransel.whimsicalideas.mixin",
 	"compatibilityLevel": "JAVA_17",
 	"mixins": [
-      "MiningToolItemMixin"
+      "MiningToolItemMixin",
+      "LivingEntityNoDropsInSoulWorldMixin",
+      "BlockEntityTypeAccessor"
 	],
 	"injectors": {
 		"defaultRequire": 1

@@ -1,16 +1,35 @@
 package com.ignoransel.whimsicalideas.registry;
 
 import com.ignoransel.whimsicalideas.WhimsicalIdeas;
+import com.ignoransel.whimsicalideas.content.soulsail.SoulSailBannerBlock;
+import com.ignoransel.whimsicalideas.content.soulsail.SoulSailWallBannerBlock;
 import com.ignoransel.whimsicalideas.content.soultablet.*;
+import com.ignoransel.whimsicalideas.mixin.BlockEntityTypeAccessor;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public final class WIBlocks {
     private WIBlocks(){}
+
+    public static final Block ZUN_SOUL_BANNER =
+            register("zun_soul_banner", new SoulSailBannerBlock(AbstractBlock.Settings.copy(Blocks.BLACK_BANNER)));
+
+    public static final Block ZUN_SOUL_WALL_BANNER =
+            register("zun_soul_wall_banner", new SoulSailWallBannerBlock(AbstractBlock.Settings.copy(Blocks.BLACK_WALL_BANNER)));
+
+
+
+    private static Block register(String id, Block block) {
+        return Registry.register(Registries.BLOCK, new Identifier(WhimsicalIdeas.MODID, id), block);
+    }
 
     public static Block SOUL_TABLET;
     public static Block SOUL_TABLET_WALL;
@@ -42,6 +61,15 @@ public final class WIBlocks {
     public static Block SOUL_TABLET_NETHERITE_BROKEN_WALL;
 
     public static void init() {
+
+        BlockEntityTypeAccessor acc = (BlockEntityTypeAccessor) (Object) BlockEntityType.BANNER;
+
+        Set<Block> newSet = new HashSet<>(acc.whimsicalideas$getBlocks());
+        newSet.add(WIBlocks.ZUN_SOUL_BANNER);
+        newSet.add(WIBlocks.ZUN_SOUL_WALL_BANNER);
+
+        acc.whimsicalideas$setBlocks(newSet);
+
         var settings = AbstractBlock.Settings.copy(Blocks.OAK_SIGN)
                 .nonOpaque()
                 .noCollision();

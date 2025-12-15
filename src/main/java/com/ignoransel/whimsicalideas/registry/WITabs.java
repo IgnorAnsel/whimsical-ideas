@@ -32,7 +32,7 @@ public final class WITabs {
                             entries.add(WIItems.HEX_FORGE_DIAMOND);
                             entries.add(WIItems.HEX_FORGE_NETHERITE);
                             entries.add(WIItems.HEX_FORGE_RANDOM);
-
+                            entries.add(WIItems.ZUN_SOUL_SAIL);
                         })
                         .build()
         );

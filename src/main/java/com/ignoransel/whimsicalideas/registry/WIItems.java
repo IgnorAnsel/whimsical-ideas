@@ -5,6 +5,8 @@ import com.ignoransel.whimsicalideas.WhimsicalIdeas;
 import com.ignoransel.whimsicalideas.content.hex.HexRarity;
 import com.ignoransel.whimsicalideas.content.hex.item.HexForgeItem;
 import com.ignoransel.whimsicalideas.content.hex.item.RandomHexForgeItem;
+import com.ignoransel.whimsicalideas.content.soulsail.SoulSailBannerItem;
+import com.ignoransel.whimsicalideas.content.soulsail.SoulSailTier;
 import com.ignoransel.whimsicalideas.content.soultablet.SoulTabletItem;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.item.Item;
@@ -53,6 +55,23 @@ public final class WIItems {
             new Identifier("whimsical-ideas", "hex_forge_random"),
             new RandomHexForgeItem(new FabricItemSettings().maxCount(16))
     );
+
+
+    public static final Item ZUN_SOUL_SAIL =
+            Registry.register(Registries.ITEM, new Identifier(WhimsicalIdeas.MODID, "zun_soul_sail"),
+                    new SoulSailBannerItem(
+                            WIBlocks.ZUN_SOUL_BANNER,
+                            WIBlocks.ZUN_SOUL_WALL_BANNER,
+                            new FabricItemSettings().maxCount(1),
+                            SoulSailTier.ZUN
+                    ));
+
+
+
+    private static Item register(String id, Item item) {
+        return Registry.register(Registries.ITEM, new Identifier(WhimsicalIdeas.MODID, id), item);
+    }
+
     public static void init() {
 
         SOUL_TABLET_ITEM = Registry.register(

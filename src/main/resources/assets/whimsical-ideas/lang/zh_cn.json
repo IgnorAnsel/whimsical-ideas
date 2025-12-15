@@ -1,4 +1,5 @@
 {
+
   "effect.whimsical-ideas.backlash": "反噬",
   "item.whimsical-ideas.hex_forge_iron": "铁制符能锻造器",
   "item.whimsical-ideas.hex_forge_gold": "金制符能锻造器",
@@ -6,6 +7,8 @@
   "item.whimsical-ideas.hex_forge_netherite": "下界合金符能锻造器",
   "item.whimsical-ideas.hex_forge_random": "随机符能锻造器",
 
+  "item.whimsical-ideas.zun_soul_sail": "尊魂幡",
+  "block.whimsical-ideas.zun_soul_banner": "尊魂幡",
 
   "effect.whimsical-ideas.might": "大力",
   "effect.whimsical-ideas.might.description": "增加攻击力",
