@@ -1,3 +1,22 @@
 {
-  "effect.whimsical-ideas.backlash": "反噬"
+  "effect.whimsical-ideas.backlash": "反噬",
+  "item.whimsical-ideas.hex_forge_iron": "铁制符能锻造器",
+  "item.whimsical-ideas.hex_forge_gold": "金制符能锻造器",
+  "item.whimsical-ideas.hex_forge_diamond": "钻石符能锻造器",
+  "item.whimsical-ideas.hex_forge_netherite": "下界合金符能锻造器",
+  "item.whimsical-ideas.hex_forge_random": "随机符能锻造器",
+
+
+  "effect.whimsical-ideas.might": "大力",
+  "effect.whimsical-ideas.might.description": "增加攻击力",
+  "effect.whimsical-ideas.agility": "敏捷",
+  "effect.whimsical-ideas.agility.description": "增加移动速度",
+  "effect.whimsical-ideas.vitality": "生命力",
+  "effect.whimsical-ideas.vitality.description": "增加生命值",
+  "effect.whimsical-ideas.max_mining": "我的神镐",
+  "effect.whimsical-ideas.max_mining.description": "你的木镐甚至连下界合金都能挖！",
+  "effect.whimsical-ideas.refine": "顷刻炼化",
+  "effect.whimsical-ideas.refine.description": "挖掘的矿物自动精炼！",
+  "effect.whimsical-ideas.regeneration": "无休回复",
+  "effect.whimsical-ideas.regeneration.description": "每移动一百格回复一点生命"
 }

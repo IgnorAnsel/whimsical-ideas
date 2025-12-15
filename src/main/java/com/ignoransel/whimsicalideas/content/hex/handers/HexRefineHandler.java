@@ -59,7 +59,7 @@ public final class HexRefineHandler {
         // world.breakBlock(pos, false) 会移除方块且不掉落
         world.breakBlock(pos, false, player);
 
-        // 工具耐久扣 1（你想不扣也行）
+        // 工具耐久扣 1
         if (!tool.isEmpty() && tool.isDamageable()) {
             tool.damage(1, player, p -> p.sendToolBreakStatus(Hand.MAIN_HAND));
         }
