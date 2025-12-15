@@ -19,7 +19,9 @@ public class WhimsicalIdeas implements ModInitializer, ClientModInitializer {
         WINetwork.registerServer();
         HexRefineHandler.register();
         SoulSailEvents.register();
+        WIPatterns.init();
         WIStatusEffects.init();
+        WIRecipes.init();
 
     }
 

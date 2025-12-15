@@ -2,8 +2,10 @@ package com.ignoransel.whimsicalideas.datagen;
 
 import com.ignoransel.whimsicalideas.WhimsicalIdeas;
 import com.ignoransel.whimsicalideas.registry.WIItems;
+import com.ignoransel.whimsicalideas.registry.WIRecipes;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
+import net.minecraft.data.server.recipe.ComplexRecipeJsonBuilder;
 import net.minecraft.data.server.recipe.RecipeJsonProvider;
 import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder;
 import net.minecraft.item.Item;
@@ -31,7 +33,6 @@ public class WIRecipeProvider extends FabricRecipeProvider {
                 .input('L', ItemTags.LOGS)     // 任意原木/木头
                 .criterion("has_redstone", conditionsFromItem(Items.REDSTONE))
                 .offerTo(consumer, new Identifier(WhimsicalIdeas.MODID, "soul_tablet"));
-
         reinforced(consumer, "reinforced_soul_tablet_iron", WIItems.SOUL_TABLET_IRON_ITEM, Items.IRON_INGOT);
         reinforced(consumer, "reinforced_soul_tablet_gold", WIItems.SOUL_TABLET_GOLD_ITEM, Items.GOLD_INGOT);
         reinforced(consumer, "reinforced_soul_tablet_diamond", WIItems.SOUL_TABLET_DIAMOND_ITEM, Items.DIAMOND);

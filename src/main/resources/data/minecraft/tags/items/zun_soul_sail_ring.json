@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:rotten_flesh",
+    "minecraft:ender_pearl",
+    "minecraft:bone",
+    "minecraft:spider_eye",
+    "minecraft:gunpowder",
+    "minecraft:string",
+    "minecraft:slime_ball",
+    "minecraft:blaze_powder"
+  ]
+}
