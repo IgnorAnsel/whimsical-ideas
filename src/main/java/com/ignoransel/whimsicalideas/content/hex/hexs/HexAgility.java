@@ -1,0 +1,18 @@
+package com.ignoransel.whimsicalideas.content.hex.hexs;
+
+import com.ignoransel.whimsicalideas.content.hex.HexBase;
+import com.ignoransel.whimsicalideas.content.hex.HexRarity;
+import com.ignoransel.whimsicalideas.registry.WIStatusEffects;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.player.PlayerEntity;
+
+public class HexAgility extends HexBase {
+    public HexAgility() {
+        super("敏捷", HexRarity.SILVER,   new StatusEffectInstance(WIStatusEffects.AGILITY, Integer.MAX_VALUE, 0, false, true, true));
+    }
+
+    @Override
+    public void apply(PlayerEntity player) {
+
+    }
+}

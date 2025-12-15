@@ -1,0 +1,14 @@
+{
+	"required": true,
+	"package": "com.ignoransel.whimsicalideas.mixin",
+	"compatibilityLevel": "JAVA_17",
+	"mixins": [
+      "MiningToolItemMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"overwrites": {
+		"requireAnnotations": true
+	}
+}

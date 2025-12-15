@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=south": { "model": "whimsical-ideas:block/soul_tablet_broken_wall", "y": 0 },
+    "facing=west":  { "model": "whimsical-ideas:block/soul_tablet_broken_wall", "y": 90 },
+    "facing=north": { "model": "whimsical-ideas:block/soul_tablet_broken_wall", "y": 180 },
+    "facing=east":  { "model": "whimsical-ideas:block/soul_tablet_broken_wall", "y": 270 }
+  }
+}

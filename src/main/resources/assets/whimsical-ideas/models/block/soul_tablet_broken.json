@@ -1,0 +1,62 @@
+{
+  "parent": "block/block",
+  "textures": {
+    "particle": "whimsical-ideas:block/soul_tablet_broken_front",
+    "bottom": "whimsical-ideas:block/soul_tablet_bottom",
+    "top": "whimsical-ideas:block/soul_tablet_top",
+    "side": "whimsical-ideas:block/soul_tablet_side",
+    "front": "whimsical-ideas:block/soul_tablet_broken_front"
+  },
+  "elements": [
+    {
+      "name": "base",
+      "from": [4, 0, 4],
+      "to": [12, 4, 12],
+      "faces": {
+        "down": { "texture": "#bottom" },
+        "up": { "texture": "#top" },
+        "north": { "texture": "#side" },
+        "south": { "texture": "#side" },
+        "west": { "texture": "#side" },
+        "east": { "texture": "#side" }
+      }
+    },
+    {
+      "name": "token",
+      "from": [4, 4, 7],
+      "to": [12, 12, 9],
+      "faces": {
+        "down": { "texture": "#bottom" },
+        "up": { "texture": "#top" },
+        "north": { "texture": "#front" },
+        "south": { "texture": "#front" },
+        "west": { "texture": "#side" },
+        "east": { "texture": "#side" }
+      }
+    },
+    {
+      "name": "ornament",
+      "from": [6, 12, 7],
+      "to": [10, 13, 9],
+      "faces": {
+        "down": { "texture": "#top" },
+        "up": { "texture": "#top" },
+        "north": { "texture": "#front" },
+        "south": { "texture": "#front" },
+        "west": { "texture": "#side" },
+        "east": { "texture": "#side" }
+      }
+    },
+    {
+      "name": "chip",
+      "from": [3, 8, 9],
+      "to": [4, 10, 10],
+      "faces": {
+        "north": { "texture": "#front" },
+        "south": { "texture": "#front" },
+        "west": { "texture": "#side" },
+        "east": { "texture": "#side" }
+      }
+    }
+  ]
+}
