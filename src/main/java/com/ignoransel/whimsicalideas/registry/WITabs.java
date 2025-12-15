@@ -27,10 +27,11 @@ public final class WITabs {
                             entries.add(WIItems.SOUL_TABLET_GOLD_ITEM);
                             entries.add(WIItems.SOUL_TABLET_DIAMOND_ITEM);
                             entries.add(WIItems.SOUL_TABLET_NETHERITE_ITEM);
-                            entries.add(WIItems.HEX_FORGE);
-//                            entries.add(WIItems.HEX_RUNE_1);
-//                            entries.add(WIItems.HEX_RUNE_2);
-//                            entries.add(WIItems.HEX_RUNE_3);
+                            entries.add(WIItems.HEX_FORGE_IRON);
+                            entries.add(WIItems.HEX_FORGE_GOLD);
+                            entries.add(WIItems.HEX_FORGE_DIAMOND);
+                            entries.add(WIItems.HEX_FORGE_NETHERITE);
+                            entries.add(WIItems.HEX_FORGE_RANDOM);
 
                         })
                         .build()

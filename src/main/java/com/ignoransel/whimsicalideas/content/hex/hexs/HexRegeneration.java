@@ -4,11 +4,9 @@ import com.ignoransel.whimsicalideas.content.hex.HexBase;
 import com.ignoransel.whimsicalideas.content.hex.HexRarity;
 import com.ignoransel.whimsicalideas.registry.WIStatusEffects;
 import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.player.PlayerEntity;
 
-public class HexAgility extends HexBase {
-    public HexAgility() {
-        super("agility", "敏捷", "敏捷说是",HexRarity.IRON, new StatusEffectInstance(WIStatusEffects.AGILITY, Integer.MAX_VALUE, 0, false, true, true));
+public class HexRegeneration extends HexBase {
+    public HexRegeneration() {
+        super("regeneration", "无休回复", "每移动一百格回复一点生命", HexRarity.GOLD, new StatusEffectInstance(WIStatusEffects.REGENERATION, Integer.MAX_VALUE, 0, false, true, true));
     }
-
 }

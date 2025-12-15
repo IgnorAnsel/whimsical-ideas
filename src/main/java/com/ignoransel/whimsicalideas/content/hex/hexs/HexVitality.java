@@ -8,11 +8,6 @@ import net.minecraft.entity.player.PlayerEntity;
 
 public class HexVitality extends HexBase {
     public HexVitality() {
-        super("生命", HexRarity.SILVER, new StatusEffectInstance(WIStatusEffects.VITALITY, Integer.MAX_VALUE, 0, false, true, true));
-    }
-
-    @Override
-    public void apply(PlayerEntity player) {
-
+        super("vitality", "生命", "生命多了",HexRarity.IRON, new StatusEffectInstance(WIStatusEffects.VITALITY, Integer.MAX_VALUE, 0, false, true, true));
     }
 }

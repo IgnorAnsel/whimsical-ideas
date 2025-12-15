@@ -4,11 +4,9 @@ import com.ignoransel.whimsicalideas.content.hex.HexBase;
 import com.ignoransel.whimsicalideas.content.hex.HexRarity;
 import com.ignoransel.whimsicalideas.registry.WIStatusEffects;
 import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.player.PlayerEntity;
 
-public class HexAgility extends HexBase {
-    public HexAgility() {
-        super("agility", "敏捷", "敏捷说是",HexRarity.IRON, new StatusEffectInstance(WIStatusEffects.AGILITY, Integer.MAX_VALUE, 0, false, true, true));
+public class HexRefine extends HexBase {
+    public HexRefine() {
+        super("refine", "顷刻炼化", "挖掘的矿物自动变为其矿锭",HexRarity.GOLD, new StatusEffectInstance(WIStatusEffects.REFINE, Integer.MAX_VALUE, 0, false, true, true));
     }
-
 }

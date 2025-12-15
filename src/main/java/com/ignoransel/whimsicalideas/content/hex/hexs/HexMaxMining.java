@@ -8,7 +8,7 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 public class HexMaxMining extends HexBase {
 
     public HexMaxMining() {
-        super("神稿", HexRarity.GOLD,
+        super("MaxMining","神稿", "我的神稿说是",HexRarity.GOLD,
                 new StatusEffectInstance(WIStatusEffects.MAX_MINING, Integer.MAX_VALUE, 0, false, true, true));
     }
 }

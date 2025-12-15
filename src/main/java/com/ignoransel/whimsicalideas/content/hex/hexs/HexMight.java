@@ -7,7 +7,7 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 
 public class HexMight extends HexBase {
     public HexMight() {
-        super("大力", HexRarity.SILVER, new StatusEffectInstance(WIStatusEffects.MIGHT, Integer.MAX_VALUE, 0, false, true, true));
+        super("Might", "大力", "力量大啊",HexRarity.IRON, new StatusEffectInstance(WIStatusEffects.MIGHT, Integer.MAX_VALUE, 0, false, true, true));
     }
 
 }
