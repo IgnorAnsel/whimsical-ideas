@@ -37,6 +37,9 @@ public class WIRecipeProvider extends FabricRecipeProvider {
         reinforced(consumer, "reinforced_soul_tablet_gold", WIItems.SOUL_TABLET_GOLD_ITEM, Items.GOLD_INGOT);
         reinforced(consumer, "reinforced_soul_tablet_diamond", WIItems.SOUL_TABLET_DIAMOND_ITEM, Items.DIAMOND);
         reinforced(consumer, "reinforced_soul_tablet_netherite", WIItems.SOUL_TABLET_NETHERITE_ITEM, Items.NETHERITE_INGOT);
+        ComplexRecipeJsonBuilder.create(WIRecipes.ZUN_SOUL_SAIL)
+                // 这里传 String，所以最稳妥是直接传完整 id
+                .offerTo(consumer, WhimsicalIdeas.MODID + ":zun_soul_sail");
     }
 
     private static void reinforced(Consumer<RecipeJsonProvider> consumer,
