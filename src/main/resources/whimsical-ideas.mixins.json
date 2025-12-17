@@ -5,7 +5,8 @@
 	"mixins": [
       "MiningToolItemMixin",
       "LivingEntityNoDropsInSoulWorldMixin",
-      "BlockEntityTypeAccessor"
+      "BlockEntityTypeAccessor",
+      "BannerBlockEntityMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
