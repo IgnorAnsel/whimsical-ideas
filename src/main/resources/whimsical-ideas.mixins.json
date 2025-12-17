@@ -8,7 +8,8 @@
       "BlockEntityTypeAccessor",
       "BannerBlockEntityMixin",
       "ScreenHandlerMixin",
-      "PlayerEntityDropMixin"
+      "PlayerEntityDropMixin",
+      "ExperienceOrbEntityAccessor"
 
 	],
 	"injectors": {

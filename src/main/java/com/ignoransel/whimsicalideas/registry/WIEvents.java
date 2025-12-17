@@ -2,6 +2,7 @@ package com.ignoransel.whimsicalideas.registry;
 
 
 
+import com.ignoransel.whimsicalideas.content.soulsail.SoulSailRefine;
 import com.ignoransel.whimsicalideas.content.soultablet.SoulTabletBlockEntity;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
@@ -72,6 +73,7 @@ public final class WIEvents {
 
     private WIEvents(){}
     public static void init() {
+        SoulSailRefine.register();
         ItemTooltipCallback.EVENT.register((stack, context, lines) -> {
             if (!(stack.getItem() instanceof BannerItem)) return;
             if (!hasZunSoulPattern(stack)) return;
