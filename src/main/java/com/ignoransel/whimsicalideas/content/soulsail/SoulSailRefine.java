@@ -6,6 +6,7 @@ import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.ExperienceOrbEntity;
 import net.minecraft.item.Items;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.ActionResult;
@@ -84,7 +85,7 @@ public final class SoulSailRefine {
         if (data.wi$getStoredCount() <= 0) return false;
         if (data.wi$getRawSouls() <= 0) return false;
 
-        // 一个生物 = 一个经验球
+        // 一个生物 = 一个经验球（这里 mobId 你目前没用，但 pop 仍然是消耗列表）
         String mobId = data.wi$popOneStoredMob();
         if (mobId == null) return false;
 
@@ -93,20 +94,35 @@ public final class SoulSailRefine {
         data.wi$syncTotal();
         data.wi$markDirtyAndSync();
 
-        // 生成自定义经验球（不可吸取）
+        // ===== A) 当前维度：生成原版经验球（可吸）=====
         double x = bannerPos.getX() + 0.5;
         double y = bannerPos.getY() + 1.2;
         double z = bannerPos.getZ() + 0.5;
 
-        SoulXpOrbEntity orb = new SoulXpOrbEntity(WIEntities.SOUL_XP_ORB, w);
-        orb.refreshPositionAndAngles(x, y, z, 0, 0);
+        ExperienceOrbEntity overworldOrb = new ExperienceOrbEntity(w, x, y, z, 1);
+        w.spawnEntity(overworldOrb);
 
-        // 设置经验量为 1（一个生物=一个球=1）
-        ((ExperienceOrbEntityAccessor) orb).wi$setAmount(1);
+        // ===== B) 魂帆世界：生成自定义淡蓝经验球（不可吸）=====
+        ServerWorld soulWorld = w.getServer().getWorld(SoulSailRoomManager.SOUL_SAIL_DIM);
+        if (soulWorld != null) {
+            int cx = data.wi$getRoomX();
+            int cz = data.wi$getRoomZ();
+            int sy = soulWorld.getBottomY() + 82; // 跟你 teleportIntoRoom 的高度一致
 
-        w.spawnEntity(orb);
+            double sx = cx + 0.5 + (soulWorld.random.nextDouble() - 0.5) * 0.8;
+            double sz = cz + 0.5 + (soulWorld.random.nextDouble() - 0.5) * 0.8;
+
+            SoulXpOrbEntity soulOrb = new SoulXpOrbEntity(WIEntities.SOUL_XP_ORB, soulWorld);
+            System.out.println("Spawned: " + net.minecraft.registry.Registries.ENTITY_TYPE.getId(soulOrb.getType()));
+
+            soulOrb.refreshPositionAndAngles(sx, sy + 0.2, sz, 0, 0);
+            ((ExperienceOrbEntityAccessor) soulOrb).wi$setAmount(1);
+            soulWorld.spawnEntity(soulOrb);
+        }
+
         return true;
     }
+
 
     private static SoulSailBannerData getSoulSailBannerData(ServerWorld w, BlockPos pos) {
         BlockEntity be = w.getBlockEntity(pos);

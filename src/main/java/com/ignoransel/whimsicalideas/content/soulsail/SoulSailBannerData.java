@@ -1,6 +1,9 @@
 package com.ignoransel.whimsicalideas.content.soulsail;
 
 public interface SoulSailBannerData {
+    int wi$getRoomX();
+    int wi$getRoomZ();
+
     boolean wi$isSoulSailBanner();
 
     String wi$getSailId();

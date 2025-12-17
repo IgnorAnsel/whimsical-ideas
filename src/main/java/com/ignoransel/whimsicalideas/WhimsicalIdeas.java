@@ -3,6 +3,7 @@ package com.ignoransel.whimsicalideas;
 import com.ignoransel.whimsicalideas.content.hex.handers.HexRefineHandler;
 import com.ignoransel.whimsicalideas.content.soulsail.SoulSailEvents;
 import com.ignoransel.whimsicalideas.registry.*;
+import com.ignoransel.whimsicalideas.render.SoulXpOrbEntityRenderer;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
@@ -33,7 +34,6 @@ public class WhimsicalIdeas implements ModInitializer, ClientModInitializer {
         // 客户端渲染注册
         System.out.println("[WhimsicalIdeas] Client init OK");
         WIBlockEntities.initClient();
-        EntityRendererRegistry.register(WIEntities.SOUL_XP_ORB, ExperienceOrbEntityRenderer::new);
-
+        EntityRendererRegistry.register(WIEntities.SOUL_XP_ORB, SoulXpOrbEntityRenderer::new);
     }
 }

@@ -35,6 +35,16 @@ public class BannerBlockEntityMixin implements SoulSailBannerData {
         return (BannerBlockEntity)(Object)this;
     }
 
+    @Override
+    public int wi$getRoomX() {
+        return whimsicalideas$roomX;
+    }
+
+    @Override
+    public int wi$getRoomZ() {
+        return whimsicalideas$roomZ;
+    }
+
     @Unique
     @Override
     public boolean wi$isSoulSailBanner() {
