@@ -24,8 +24,23 @@
                   "source": "Patterns",
                   "target": "BlockEntityTag.Patterns"
                 },
-                { "op": "replace", "source": "Souls",       "target": "BlockEntityTag.Souls" },
-                { "op": "replace", "source": "StoredMobs",  "target": "BlockEntityTag.StoredMobs" }
+                { "op":"replace", "source":"RawSouls",     "target":"BlockEntityTag.RawSouls" },
+                { "op":"replace", "source":"RefinedSouls", "target":"BlockEntityTag.RefinedSouls" },
+                { "op":"replace", "source":"Souls",        "target":"BlockEntityTag.Souls" },
+                { "op":"replace", "source":"SailId", "target":"BlockEntityTag.SailId" },
+
+                { "op":"replace", "source":"StoredMobs", "target":"BlockEntityTag.StoredMobs" },
+
+                { "op":"replace", "source":"RoomX",      "target":"BlockEntityTag.RoomX" },
+                { "op":"replace", "source":"RoomZ",      "target":"BlockEntityTag.RoomZ" },
+
+                { "op":"replace", "source":"ReturnDim",  "target":"BlockEntityTag.ReturnDim" },
+                { "op":"replace", "source":"ReturnX",    "target":"BlockEntityTag.ReturnX" },
+                { "op":"replace", "source":"ReturnY",    "target":"BlockEntityTag.ReturnY" },
+                { "op":"replace", "source":"ReturnZ",    "target":"BlockEntityTag.ReturnZ" },
+                { "op":"replace", "source":"ReturnYaw",  "target":"BlockEntityTag.ReturnYaw" },
+                { "op":"replace", "source":"ReturnPitch","target":"BlockEntityTag.ReturnPitch" }
+
               ],
               "source": "block_entity"
             }

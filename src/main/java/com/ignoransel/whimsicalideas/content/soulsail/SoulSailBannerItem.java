@@ -71,6 +71,10 @@ public class SoulSailBannerItem extends BannerItem {
     public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext context) {
         long souls = SoulSailItemCompat.getSouls(stack);
         tooltip.add(Text.literal("魂魄: " + souls));
+        long rawsouls = SoulSailItemCompat.getRawSouls(stack);
+        tooltip.add(Text.literal("未炼化: " + rawsouls));
+        long refinedsouls = SoulSailItemCompat.getRefinedSouls(stack);
+        tooltip.add(Text.literal("已炼化: " + refinedsouls));
 //        int pending = SoulSailItemCompat.getPendingCount(stack);
 //        tooltip.add(Text.literal("待收容生物: " + pending));
     }

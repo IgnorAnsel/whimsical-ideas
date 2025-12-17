@@ -21,6 +21,8 @@ import net.minecraft.world.World;
 
 import java.util.UUID;
 
+import static com.ignoransel.whimsicalideas.content.soulsail.SoulSailItemCompat.getOrCreateSailId;
+
 public final class SoulSailRoomManager {
     private SoulSailRoomManager() {}
 
@@ -28,11 +30,11 @@ public final class SoulSailRoomManager {
             net.minecraft.registry.RegistryKey.of(RegistryKeys.WORLD, new Identifier("whimsical-ideas", "soul_sail"));
 
     public static void ensureRoomBuilt(ServerWorld w, ServerPlayerEntity player, ItemStack sail, SoulSailTier tier) {
-        var nbt = sail.getOrCreateNbt();
+        var nbt = SoulSailItemCompat.data(sail);
 
         if (!nbt.contains(SoulSailKeys.ROOM_X) || !nbt.contains(SoulSailKeys.ROOM_Z)) {
             // 简单：用玩家 UUID hash 分配房间中心点（避免多人重叠）
-            UUID id = player.getUuid();
+            UUID id = UUID.fromString(getOrCreateSailId(sail));
             int hx = id.hashCode();
             int roomSize = 256; // 房间间距
             int cx = (hx & 1023) * roomSize;
@@ -51,8 +53,8 @@ public final class SoulSailRoomManager {
         for (int x = cx - r; x <= cx + r; x++) {
             for (int z = cz - r; z <= cz + r; z++) {
                 w.setBlockState(new BlockPos(x, y, z), Blocks.SMOOTH_STONE.getDefaultState(), 3);
-                w.setBlockState(new BlockPos(x, y + 1, z), Blocks.AIR.getDefaultState(), 3);
-                w.setBlockState(new BlockPos(x, y + 2, z), Blocks.AIR.getDefaultState(), 3);
+//                w.setBlockState(new BlockPos(x, y + 1, z), Blocks.AIR.getDefaultState(), 3);
+//                w.setBlockState(new BlockPos(x, y + 2, z), Blocks.AIR.getDefaultState(), 3);
             }
         }
 
@@ -73,8 +75,9 @@ public final class SoulSailRoomManager {
     }
 
     public static void teleportIntoRoom(ServerWorld w, ServerPlayerEntity player, ItemStack sail, SoulSailTier tier) {
-        int cx = sail.getOrCreateNbt().getInt(SoulSailKeys.ROOM_X);
-        int cz = sail.getOrCreateNbt().getInt(SoulSailKeys.ROOM_Z);
+        var nbt = SoulSailItemCompat.data(sail);
+        int cx = nbt.getInt(SoulSailKeys.ROOM_X);
+        int cz = nbt.getInt(SoulSailKeys.ROOM_Z);
         int y = w.getBottomY() + 82;
 
         // FabricDimensions 传送
@@ -86,7 +89,7 @@ public final class SoulSailRoomManager {
         ));
     }
     public static void spawnPendingMobsOnce(ServerWorld w, ItemStack sail, SoulSailTier tier) {
-        var nbt = sail.getOrCreateNbt();
+        var nbt = SoulSailItemCompat.data(sail);
         NbtList pending = nbt.getList(SoulSailKeys.STORED, NbtElement.STRING_TYPE);
         if (pending.isEmpty()) return;
 
@@ -110,6 +113,10 @@ public final class SoulSailRoomManager {
             pz = Math.min(cz + r, Math.max(cz - r, pz));
 
             e.refreshPositionAndAngles(px, y, pz, 0, 0);
+            String sailId = getOrCreateSailId(sail);
+            e.addCommandTag("wi:soul");
+            e.addCommandTag("wi:sail:" + sailId);
+
 
             // 小世界生物：无攻击欲望
             if (e instanceof net.minecraft.entity.mob.MobEntity mob) {
@@ -125,7 +132,7 @@ public final class SoulSailRoomManager {
     }
 
     public static void spawnStoredMobs(ServerWorld w, ServerPlayerEntity player, ItemStack sail, SoulSailTier tier) {
-        var nbt = sail.getOrCreateNbt();
+        var nbt = SoulSailItemCompat.data(sail);
         NbtList list = nbt.getList(SoulSailKeys.STORED, NbtElement.STRING_TYPE);
         if (list.isEmpty()) return;
 
@@ -163,7 +170,7 @@ public final class SoulSailRoomManager {
     }
 
     public static void storeReturnPoint(ServerPlayerEntity player, ItemStack sail) {
-        var nbt = sail.getOrCreateNbt();
+        var nbt = SoulSailItemCompat.data(sail);
         var w = player.getServerWorld();
 
         nbt.putString(SoulSailKeys.RETURN_DIM, w.getRegistryKey().getValue().toString());
@@ -175,7 +182,7 @@ public final class SoulSailRoomManager {
     }
 
     public static void teleportBack(ServerPlayerEntity player, ItemStack sail) {
-        var nbt = sail.getOrCreateNbt();
+        var nbt = SoulSailItemCompat.data(sail);
         if (!nbt.contains(SoulSailKeys.RETURN_DIM)) {
             // 没有记录就回主世界出生点附近（兜底）
             var overworld = player.getServer().getWorld(World.OVERWORLD);

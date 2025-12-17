@@ -4,9 +4,13 @@ public final class SoulSailKeys {
     private SoulSailKeys() {}
 
     public static final String SOULS = "Souls";               // long
+    public static final String RAW_SOULS = "RawSouls";           // long 未炼化
+    public static final String REFINED_SOULS = "RefinedSouls";   // long 已炼化
     public static final String STORED = "StoredMobs";         // NbtList<String>：待生成
     public static final String ROOM_X = "RoomX";              // int
     public static final String ROOM_Z = "RoomZ";              // int
+
+    public static final String SAIL_ID = "SailId"; // String UUID
 
     // 返回点（进入魂帆世界前的位置）
     public static final String RETURN_DIM = "ReturnDim";      // String (registry key like "minecraft:overworld")
