@@ -30,6 +30,7 @@ public final class SoulSailItemCompat {
         migrateDouble(root, bet, SoulSailKeys.RETURN_Z);
         migrateFloat(root, bet, SoulSailKeys.RETURN_YAW);
         migrateFloat(root, bet, SoulSailKeys.RETURN_PITCH);
+        migrateBool(root, bet, SoulSailKeys.ACTIVE);
         return bet; // 写入/读取都统一到 BlockEntityTag
     }
 
@@ -43,6 +44,13 @@ public final class SoulSailItemCompat {
             System.out.println("Sail ID found: " + nbt.getString(SoulSailKeys.SAIL_ID));
         }
         return nbt.getString(SoulSailKeys.SAIL_ID);
+    }
+    public static void setActive(ItemStack stack, boolean active) {
+        data(stack).putBoolean(SoulSailKeys.ACTIVE, active);
+    }
+
+    public static boolean isActive(ItemStack stack) {
+        return data(stack).getBoolean(SoulSailKeys.ACTIVE);
     }
 
     // ----------------- Souls / Stored -----------------

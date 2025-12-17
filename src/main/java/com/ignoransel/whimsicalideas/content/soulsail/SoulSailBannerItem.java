@@ -4,10 +4,13 @@ import net.fabricmc.fabric.api.dimension.v1.FabricDimensions;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BannerItem;
+import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUsageContext;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
@@ -23,7 +26,19 @@ public class SoulSailBannerItem extends BannerItem {
         super(standingBlock, wallBlock, settings);
         this.tier = tier;
     }
-
+    @Override
+    public ActionResult useOnBlock(ItemUsageContext context) {
+        World world = context.getWorld();
+        if (!world.isClient && world.getRegistryKey().equals(SoulSailRoomManager.SOUL_SAIL_DIM)) {
+            if (context.getPlayer() instanceof ServerPlayerEntity sp) {
+                if (SoulSailActive.isActiveSail(sp, context.getStack())) {
+                    SoulSailRoomManager.teleportBack(sp, context.getStack());
+                    return ActionResult.FAIL;
+                }
+            }
+        }
+        return super.useOnBlock(context);
+    }
     public SoulSailTier tier() { return tier; }
 
     @Override
@@ -45,13 +60,17 @@ public class SoulSailBannerItem extends BannerItem {
             boolean inSoulWorld = sp.getServerWorld().getRegistryKey().equals(SoulSailRoomManager.SOUL_SAIL_DIM);
 
             // 魂幡世界：潜行长按 -> 回去
-            if (sp.isSneaking() && inSoulWorld) {
+            if (sp.isSneaking() && inSoulWorld && SoulSailActive.isActiveSail(sp, stack)) {
+                SoulSailActive.clearActive(sp);
+                SoulSailItemCompat.setActive(stack, false);
                 SoulSailRoomManager.teleportBack(sp, stack);
                 return stack;
             }
 
             // 外界：长按 -> 记录返回点并进入
             if (!inSoulWorld) {
+                SoulSailActive.setActive(sp, stack);
+                SoulSailItemCompat.setActive(stack, true);
                 SoulSailRoomManager.storeReturnPoint(sp, stack);
 
                 ServerWorld target = sp.getServer().getWorld(SoulSailRoomManager.SOUL_SAIL_DIM);
@@ -75,6 +94,11 @@ public class SoulSailBannerItem extends BannerItem {
         tooltip.add(Text.literal("未炼化: " + rawsouls));
         long refinedsouls = SoulSailItemCompat.getRefinedSouls(stack);
         tooltip.add(Text.literal("已炼化: " + refinedsouls));
+        if (SoulSailItemCompat.isActive(stack)) {
+            tooltip.add(Text.literal("位于此魂幡（已锁定）"));
+        } else {
+            tooltip.remove(Text.literal("位于此魂幡（已锁定）"));
+        }
 //        int pending = SoulSailItemCompat.getPendingCount(stack);
 //        tooltip.add(Text.literal("待收容生物: " + pending));
     }

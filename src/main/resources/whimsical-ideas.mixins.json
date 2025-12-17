@@ -6,7 +6,10 @@
       "MiningToolItemMixin",
       "LivingEntityNoDropsInSoulWorldMixin",
       "BlockEntityTypeAccessor",
-      "BannerBlockEntityMixin"
+      "BannerBlockEntityMixin",
+      "ScreenHandlerMixin",
+      "PlayerEntityDropMixin"
+
 	],
 	"injectors": {
 		"defaultRequire": 1
