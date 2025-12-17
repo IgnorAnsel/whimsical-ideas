@@ -3,41 +3,49 @@ package com.ignoransel.whimsicalideas.registry;
 
 
 import com.ignoransel.whimsicalideas.content.soultablet.SoulTabletBlockEntity;
-import com.ignoransel.whimsicalideas.event.MaxMiningEvents;
+import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
-import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.SignBlock;
-import net.minecraft.block.WallSignBlock;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LightningEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.item.BannerItem;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.property.Properties;
 import net.minecraft.state.property.Property;
 import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.RotationAxis;
 import net.minecraft.world.chunk.WorldChunk;
 
 import java.util.UUID;
+
+import static com.ignoransel.whimsicalideas.recipe.ZunSoulSailRecipe.hasZunSoulPattern;
 
 public final class WIEvents {
     private enum ReinforceTier {
         NORMAL, IRON, GOLD, DIAMOND, NETHERITE
     }
-
+    private static final Item[] RING = new Item[]{
+            Items.GHAST_TEAR,     // 0
+            Items.SPIDER_EYE,     // 1
+            Items.ENDER_PEARL,    // 2
+            Items.STRING,         // 3
+            null,                 // 4 center
+            Items.GUNPOWDER,      // 5
+            Items.ROTTEN_FLESH,   // 6
+            Items.BONE,           // 7
+            Items.SLIME_BALL      // 8
+    };
     private static ReinforceTier tierOf(BlockState state) {
         var b = state.getBlock();
 
@@ -58,9 +66,46 @@ public final class WIEvents {
 
         return ReinforceTier.NORMAL;
     }
+    private static Text name(Item item) {
+        return item == null ? Text.empty() : item.getName();
+    }
 
     private WIEvents(){}
     public static void init() {
+        ItemTooltipCallback.EVENT.register((stack, context, lines) -> {
+            if (!(stack.getItem() instanceof BannerItem)) return;
+            if (!hasZunSoulPattern(stack)) return;
+            if (stack.isOf(WIItems.ZUN_SOUL_SAIL)) return;
+            // 标题
+            lines.add(Text.translatable("tooltip.whimsical-ideas.zun_soul_banner.title")
+                    .formatted(Formatting.GOLD));
+
+            // 未按 Shift：提示展开
+            if (!Screen.hasShiftDown()) {
+                lines.add(Text.translatable("tooltip.whimsical-ideas.hold_shift")
+                        .formatted(Formatting.GRAY, Formatting.ITALIC));
+                return;
+            }
+
+            // 按住 Shift：显示配方
+            lines.add(Text.translatable("tooltip.whimsical-ideas.zun_soul_banner.hint")
+                    .formatted(Formatting.GRAY));
+
+            // 九宫格
+            lines.add(Text.literal(" ")
+                    .append(name(RING[0])).append(Text.literal("  "))
+                    .append(name(RING[1])).append(Text.literal("  "))
+                    .append(name(RING[2])).formatted(Formatting.DARK_GRAY));
+            lines.add(Text.literal(" ")
+                    .append(name(RING[3])).append(Text.literal("  "))
+                    .append(Text.translatable("tooltip.whimsical-ideas.zun_soul_banner.center"))
+                    .append(Text.literal("  "))
+                    .append(name(RING[5])).formatted(Formatting.DARK_GRAY));
+            lines.add(Text.literal(" ")
+                    .append(name(RING[6])).append(Text.literal("  "))
+                    .append(name(RING[7])).append(Text.literal("  "))
+                    .append(name(RING[8])).formatted(Formatting.DARK_GRAY));
+        });
         // MaxMiningEvents.register();
         ServerLivingEntityEvents.AFTER_DEATH.register((entity, damageSource) -> {
             if (!(entity instanceof ServerPlayerEntity player)) return;
@@ -78,8 +123,7 @@ public final class WIEvents {
 
             String last = dp.getX() + " " + dp.getY() + " " + dp.getZ() + "（" + dimName + "）";
             Text deathText = damageSource.getDeathMessage(player);
-            String deathReason = deathText.getString();
-            String reason = deathReason;
+            String reason = deathText.getString();
 //            String last = dp.getX() + " " + dp.getY() + " " + dp.getZ()
 //                    + " (" + world.getRegistryKey().getValue() + ")";
 
@@ -197,7 +241,6 @@ public final class WIEvents {
             // ========= 2) 绑定者反噬（按等级）
             MinecraftServer server = sw.getServer();
             UUID ownerUuid = tablet.getOwnerUuid();
-            String ownerName = tablet.getOwnerName();
             ServerPlayerEntity owner = server.getPlayerManager().getPlayer(ownerUuid);
 
             if (owner != null) {
@@ -279,7 +322,7 @@ public final class WIEvents {
     }
 
     private static BlockState toBrokenState(BlockState old) {
-        BlockState next = old;
+        BlockState next;
 
         if (old.getBlock() == WIBlocks.SOUL_TABLET) {
             next = WIBlocks.SOUL_TABLET_BROKEN.getDefaultState();
