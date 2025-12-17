@@ -1,0 +1,39 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:copy_name",
+              "source": "block_entity"
+            },
+            {
+              "function": "minecraft:copy_nbt",
+              "ops": [
+                {
+                  "op": "replace",
+                  "source": "Patterns",
+                  "target": "BlockEntityTag.Patterns"
+                },
+                { "op": "replace", "source": "Souls",       "target": "BlockEntityTag.Souls" },
+                { "op": "replace", "source": "StoredMobs",  "target": "BlockEntityTag.StoredMobs" }
+              ],
+              "source": "block_entity"
+            }
+          ],
+          "name": "whimsical-ideas:zun_soul_sail"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ]
+}
