@@ -42,10 +42,10 @@ public class SoulBannerItemRenderer implements BuiltinItemRendererRegistry.Dynam
                 || mode == ModelTransformationMode.FIRST_PERSON_LEFT_HAND) {
             matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180f));
             matrices.scale(0.50f, -0.50f, -0.50f);
-            matrices.translate(0.0, -0.05, 0.0);
+            matrices.translate(0.5, -0.05, 0.0);
         } else {
             matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180f));
-            matrices.scale(0.50f, -0.50f, -0.50f);
+            matrices.scale(0.70f, -0.70f, -0.70f);
         }
 
         SoulBannerModel m = model();

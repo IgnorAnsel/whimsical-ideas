@@ -38,11 +38,15 @@ public class SoulSailPoleItemRenderer implements BuiltinItemRendererRegistry.Dyn
         if (mode == ModelTransformationMode.GUI) {
             matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180f));
             matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(20f));
-            matrices.scale(0.85f, -0.85f, -0.85f);
+            matrices.scale(0.55f, -0.55f, -0.55f);
+        } else if (mode == ModelTransformationMode.FIRST_PERSON_RIGHT_HAND
+                || mode == ModelTransformationMode.FIRST_PERSON_LEFT_HAND) {
+            matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180f));
+            matrices.scale(0.50f, -0.50f, -0.50f);
+            matrices.translate(0.5, -0.05, 0.0);
         } else {
             matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180f));
-            matrices.scale(0.80f, -0.80f, -0.80f);
-            matrices.translate(0.0, -0.05, 0.0);
+            matrices.scale(0.70f, -0.70f, -0.70f);
         }
 
         // 只画杆子相关件
