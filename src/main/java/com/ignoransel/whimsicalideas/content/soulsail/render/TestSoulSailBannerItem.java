@@ -1,12 +1,9 @@
-package com.ignoransel.whimsicalideas.content.soulsail;
+package com.ignoransel.whimsicalideas.content.soulsail.render;
 
-import net.fabricmc.fabric.api.dimension.v1.FabricDimensions;
+import com.ignoransel.whimsicalideas.content.soulsail.*;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.BannerItem;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUsageContext;
+import net.minecraft.item.*;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
@@ -15,15 +12,14 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
 
 import java.util.List;
 
-public class SoulSailBannerItem extends BannerItem implements ISoulSailItem {
+public class TestSoulSailBannerItem extends BlockItem implements ISoulSailItem {
     private final SoulSailTier tier;
 
-    public SoulSailBannerItem(Block standingBlock, Block wallBlock, Settings settings, SoulSailTier tier) {
-        super(standingBlock, wallBlock, settings);
+    public TestSoulSailBannerItem(Block standingBlock, Settings settings, SoulSailTier tier) {
+        super(standingBlock, settings);
         this.tier = tier;
     }
     @Override

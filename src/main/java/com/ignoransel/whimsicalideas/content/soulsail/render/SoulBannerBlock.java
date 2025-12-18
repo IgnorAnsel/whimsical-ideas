@@ -1,4 +1,4 @@
-package com.ignoransel.whimsicalideas.content.soulsail.test;
+package com.ignoransel.whimsicalideas.content.soulsail.render;
 
 import com.ignoransel.whimsicalideas.entity.SoulBannerBlockEntity;
 import net.minecraft.block.Block;

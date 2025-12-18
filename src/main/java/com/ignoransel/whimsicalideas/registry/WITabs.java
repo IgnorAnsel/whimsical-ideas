@@ -34,6 +34,8 @@ public final class WITabs {
                             entries.add(WIItems.HEX_FORGE_RANDOM);
                             entries.add(WIItems.ZUN_SOUL_SAIL);
                             entries.add(WIItems.TEST_ZUN_SOUL_SAIL);
+                            entries.add(WIItems.SOUL_SAIL_POLE);
+                            entries.add(WIItems.SOUL_FLAG);
                         })
                         .build()
         );

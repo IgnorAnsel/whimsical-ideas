@@ -3,9 +3,8 @@ package com.ignoransel.whimsicalideas.registry;
 import com.ignoransel.whimsicalideas.WhimsicalIdeas;
 import com.ignoransel.whimsicalideas.content.soulsail.SoulSailBannerBlock;
 import com.ignoransel.whimsicalideas.content.soulsail.SoulSailWallBannerBlock;
-import com.ignoransel.whimsicalideas.content.soulsail.test.SoulBannerBlock;
-import com.ignoransel.whimsicalideas.content.soulsail.test.testSoulSailBannerBlock;
-import com.ignoransel.whimsicalideas.content.soulsail.test.testSoulSailWallBannerBlock;
+import com.ignoransel.whimsicalideas.content.soulsail.render.SoulBannerBlock;
+import com.ignoransel.whimsicalideas.content.soulsail.render.SoulSailPoleBlock;
 import com.ignoransel.whimsicalideas.content.soultablet.*;
 import com.ignoransel.whimsicalideas.mixin.BlockEntityTypeAccessor;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
@@ -33,12 +32,14 @@ public final class WIBlocks {
             new Identifier("whimsical-ideas", "test_zun_soul_banner"),
             new SoulBannerBlock(FabricBlockSettings.copyOf(Blocks.BLACK_BANNER).nonOpaque())
     );
-//    public static final Block TEST_ZUN_SOUL_BANNER =
-//            register("test_zun_soul_banner", new SoulBannerBlock(AbstractBlock.Settings.copy(Blocks.BLACK_BANNER)));
 
     public static final Block TEST_ZUN_SOUL_WALL_BANNER =
-            register("test_zun_soul_wall_banner", new testSoulSailWallBannerBlock(AbstractBlock.Settings.copy(Blocks.BLACK_WALL_BANNER)));
-
+            register("test_zun_soul_wall_banner", new SoulSailWallBannerBlock(AbstractBlock.Settings.copy(Blocks.BLACK_WALL_BANNER)));
+    public static final Block SOUL_SAIL_POLE = Registry.register(
+            Registries.BLOCK,
+            id("soul_sail_pole"),
+            new SoulSailPoleBlock(FabricBlockSettings.copyOf(Blocks.OAK_FENCE).nonOpaque())
+    );
 
     private static Block register(String id, Block block) {
         return Registry.register(Registries.BLOCK, new Identifier(WhimsicalIdeas.MODID, id), block);

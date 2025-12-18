@@ -1,6 +1,7 @@
 package com.ignoransel.whimsicalideas.registry;
 
 import com.ignoransel.whimsicalideas.WhimsicalIdeas;
+import com.ignoransel.whimsicalideas.recipe.SoulSailSwapRecipe;
 import com.ignoransel.whimsicalideas.recipe.ZunSoulSailRecipe;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.SpecialRecipeSerializer;
@@ -13,6 +14,11 @@ public final class WIRecipes {
             Registry.register(Registries.RECIPE_SERIALIZER,
                     new Identifier(WhimsicalIdeas.MODID, "zun_soul_sail"),
                     new SpecialRecipeSerializer<>(ZunSoulSailRecipe::new));
-
+    public static final RecipeSerializer<SoulSailSwapRecipe> SOUL_SAIL_SWAP =
+            Registry.register(
+                    Registries.RECIPE_SERIALIZER,
+                    new Identifier(WhimsicalIdeas.MODID, "soul_sail_swap"),
+                    new SpecialRecipeSerializer<>(SoulSailSwapRecipe::new)
+            );
     public static void init() {}
 }

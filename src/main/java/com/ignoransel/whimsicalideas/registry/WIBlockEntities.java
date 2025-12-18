@@ -1,6 +1,7 @@
 package com.ignoransel.whimsicalideas.registry;
 
 import com.ignoransel.whimsicalideas.WhimsicalIdeas;
+import com.ignoransel.whimsicalideas.content.soulsail.render.SoulSailPoleBlockEntity;
 import com.ignoransel.whimsicalideas.content.soultablet.SoulTabletBlockEntity;
 import com.ignoransel.whimsicalideas.content.soultablet.SoulTabletRenderer;
 import com.ignoransel.whimsicalideas.entity.SoulBannerBlockEntity;
@@ -37,7 +38,14 @@ public final class WIBlockEntities {
                         WIBlocks.TEST_ZUN_SOUL_WALL_BANNER
                 ).build()
         );
+
     }
+    public static final BlockEntityType<SoulSailPoleBlockEntity> SOUL_SAIL_POLE_BE =
+            Registry.register(
+                    Registries.BLOCK_ENTITY_TYPE,
+                    new Identifier("whimsical-ideas", "soul_sail_pole"),
+                    BlockEntityType.Builder.create(SoulSailPoleBlockEntity::new, WIBlocks.SOUL_SAIL_POLE).build(null)
+            );
 
     public static void initClient() {
         BlockEntityRendererRegistry.register(SOUL_TABLET_BE, SoulTabletRenderer::new);

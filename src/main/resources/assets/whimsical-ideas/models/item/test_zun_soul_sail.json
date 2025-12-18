@@ -1,1 +1,1 @@
-{ "parent": "minecraft:item/template_banner" }
+{"parent": "builtin/entity"}

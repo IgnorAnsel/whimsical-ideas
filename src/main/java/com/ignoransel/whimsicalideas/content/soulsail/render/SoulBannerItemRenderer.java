@@ -1,4 +1,4 @@
-package com.ignoransel.whimsicalideas.content.soulsail.test;
+package com.ignoransel.whimsicalideas.content.soulsail.render;
 
 import com.ignoransel.whimsicalideas.WhimsicalIdeas;
 import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
@@ -32,22 +32,20 @@ public class SoulBannerItemRenderer implements BuiltinItemRendererRegistry.Dynam
 
         matrices.push();
 
-        // 统一以方块中心为原点（物品渲染里也习惯这样做）
         matrices.translate(0.5, 0.5, 0.5);
 
-        // 根据模式做点差异化（你后面想精调就改这些数）
         if (mode == ModelTransformationMode.GUI) {
             matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180f));
             matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(20f));
-            matrices.scale(0.85f, -0.85f, -0.85f);
+            matrices.scale(0.55f, -0.55f, -0.55f);
         } else if (mode == ModelTransformationMode.FIRST_PERSON_RIGHT_HAND
                 || mode == ModelTransformationMode.FIRST_PERSON_LEFT_HAND) {
             matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180f));
-            matrices.scale(0.80f, -0.80f, -0.80f);
+            matrices.scale(0.50f, -0.50f, -0.50f);
             matrices.translate(0.0, -0.05, 0.0);
         } else {
             matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180f));
-            matrices.scale(0.80f, -0.80f, -0.80f);
+            matrices.scale(0.50f, -0.50f, -0.50f);
         }
 
         SoulBannerModel m = model();

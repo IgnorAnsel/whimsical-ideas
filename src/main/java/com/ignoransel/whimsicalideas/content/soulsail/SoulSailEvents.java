@@ -34,7 +34,7 @@ public final class SoulSailEvents {
                 ItemStack sail = findSoulSailById(sp, sailId);
                 if (sail.isEmpty()) return; // 玩家背包里没有对应魂幡，就没法扣（你也可以选择别的策略）
 
-                if (!(sail.getItem() instanceof SoulSailBannerItem bannerItem)) return;
+                if (!(sail.getItem() instanceof ISoulSailItem bannerItem)) return;
                 SoulSailTier tier = bannerItem.tier();
 
                 SoulSailItemCompat.addRawSouls(sail, -1, tier.capacity);
@@ -44,7 +44,7 @@ public final class SoulSailEvents {
             // 魂幡世界外：必须主手/副手拿着魂幡才触发
             ItemStack held = findHeldSoulSail(sp);
             if (held.isEmpty()) return;
-            if (!(held.getItem() instanceof SoulSailBannerItem bannerItem)) return;
+            if (!(held.getItem() instanceof ISoulSailItem bannerItem)) return;
 
             SoulSailTier tier = bannerItem.tier();
 
@@ -101,7 +101,7 @@ public final class SoulSailEvents {
         var inv = sp.getInventory();
         for (int i = 0; i < inv.size(); i++) {
             ItemStack s = inv.getStack(i);
-            if (!(s.getItem() instanceof SoulSailBannerItem)) continue;
+            if (!(s.getItem() instanceof ISoulSailItem)) continue;
 
             // 注意：这里要求 SoulSailItemCompat.data(ItemStack) 是 public
             var nbt = SoulSailItemCompat.data(s);
@@ -113,10 +113,10 @@ public final class SoulSailEvents {
     /** 只查主手/副手 */
     private static ItemStack findHeldSoulSail(ServerPlayerEntity p) {
         ItemStack main = p.getMainHandStack();
-        if (main.getItem() instanceof SoulSailBannerItem) return main;
+        if (main.getItem() instanceof ISoulSailItem) return main;
 
         ItemStack off = p.getOffHandStack();
-        if (off.getItem() instanceof SoulSailBannerItem) return off;
+        if (off.getItem() instanceof ISoulSailItem) return off;
 
         return ItemStack.EMPTY;
     }

@@ -2,9 +2,7 @@ package com.ignoransel.whimsicalideas;
 
 import com.ignoransel.whimsicalideas.content.hex.handers.HexRefineHandler;
 import com.ignoransel.whimsicalideas.content.soulsail.SoulSailEvents;
-import com.ignoransel.whimsicalideas.content.soulsail.test.SoulBannerItemRenderer;
-import com.ignoransel.whimsicalideas.content.soulsail.test.SoulBannerModel;
-import com.ignoransel.whimsicalideas.content.soulsail.test.SoulBannerRenderer;
+import com.ignoransel.whimsicalideas.content.soulsail.render.*;
 import com.ignoransel.whimsicalideas.registry.*;
 import com.ignoransel.whimsicalideas.render.SoulXpOrbEntityRenderer;
 import net.fabricmc.api.ClientModInitializer;
@@ -13,7 +11,6 @@ import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
-import net.minecraft.client.render.entity.ExperienceOrbEntityRenderer;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.util.Identifier;
 
@@ -62,5 +59,14 @@ public class WhimsicalIdeas implements ModInitializer, ClientModInitializer {
         );
 
 
+        BlockEntityRendererFactories.register(
+                WIBlockEntities.SOUL_SAIL_POLE_BE,
+                SoulSailPoleRenderer::new
+        );
+
+        BuiltinItemRendererRegistry.INSTANCE.register(
+                WIItems.SOUL_SAIL_POLE,
+                new SoulSailPoleItemRenderer()
+        );
     }
 }

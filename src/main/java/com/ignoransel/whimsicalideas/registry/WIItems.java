@@ -7,7 +7,7 @@ import com.ignoransel.whimsicalideas.content.hex.item.HexForgeItem;
 import com.ignoransel.whimsicalideas.content.hex.item.RandomHexForgeItem;
 import com.ignoransel.whimsicalideas.content.soulsail.SoulSailBannerItem;
 import com.ignoransel.whimsicalideas.content.soulsail.SoulSailTier;
-import com.ignoransel.whimsicalideas.content.soulsail.test.testSoulSailBannerItem;
+import com.ignoransel.whimsicalideas.content.soulsail.render.TestSoulSailBannerItem;
 import com.ignoransel.whimsicalideas.content.soultablet.SoulTabletItem;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.item.BlockItem;
@@ -15,8 +15,6 @@ import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
-
-import java.util.Arrays;
 
 public final class WIItems {
     private WIItems(){}
@@ -58,7 +56,6 @@ public final class WIItems {
             new RandomHexForgeItem(new FabricItemSettings().maxCount(16))
     );
 
-
     public static final Item ZUN_SOUL_SAIL =
             Registry.register(Registries.ITEM, new Identifier(WhimsicalIdeas.MODID, "zun_soul_sail"),
                     new SoulSailBannerItem(
@@ -68,22 +65,21 @@ public final class WIItems {
                             SoulSailTier.ZUN
                     ));
 
-//    public static final Item TEST_ZUN_SOUL_SAIL =
-//            Registry.register(Registries.ITEM, new Identifier(WhimsicalIdeas.MODID, "test_zun_soul_sail"),
-//                    new testSoulSailBannerItem(
-//                            WIBlocks.TEST_ZUN_SOUL_BANNER,
-//                            WIBlocks.TEST_ZUN_SOUL_WALL_BANNER,
-//                            new FabricItemSettings().maxCount(1)
-//                            ));
-public static final Item TEST_ZUN_SOUL_SAIL = Registry.register(
-        Registries.ITEM,
-        new Identifier("whimsical-ideas", "test_zun_soul_sail"),
-        new BlockItem(WIBlocks.TEST_ZUN_SOUL_BANNER, new FabricItemSettings())
-);
-
-
-
-
+    public static final Item TEST_ZUN_SOUL_SAIL = Registry.register(
+            Registries.ITEM,
+            new Identifier("whimsical-ideas", "test_zun_soul_sail"),
+            new TestSoulSailBannerItem(WIBlocks.TEST_ZUN_SOUL_BANNER, new FabricItemSettings(), SoulSailTier.ZUN)
+    );
+    public static final Item SOUL_SAIL_POLE = Registry.register(
+            Registries.ITEM,
+            id("soul_sail_pole"),
+            new BlockItem(WIBlocks.SOUL_SAIL_POLE, new FabricItemSettings())
+    );
+    public static final Item SOUL_FLAG = Registry.register(
+            Registries.ITEM,
+            new Identifier(WhimsicalIdeas.MODID, "soul_flag"),
+            new Item(new FabricItemSettings().maxCount(64))
+    );
 
     private static Item register(String id, Item item) {
         return Registry.register(Registries.ITEM, new Identifier(WhimsicalIdeas.MODID, id), item);

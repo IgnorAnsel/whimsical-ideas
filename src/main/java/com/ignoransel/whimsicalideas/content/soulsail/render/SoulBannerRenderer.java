@@ -1,7 +1,8 @@
-package com.ignoransel.whimsicalideas.content.soulsail.test;
+package com.ignoransel.whimsicalideas.content.soulsail.render;
 
 import com.ignoransel.whimsicalideas.WhimsicalIdeas;
 import com.ignoransel.whimsicalideas.entity.SoulBannerBlockEntity;
+import net.minecraft.client.render.LightmapTextureManager;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -16,6 +17,8 @@ public class SoulBannerRenderer implements BlockEntityRenderer<SoulBannerBlockEn
             new Identifier("whimsical-ideas", "textures/entity/soul_banner_purple.png");
 
     private final SoulBannerModel model;
+    private static final Identifier GLOW_TEX =
+            new Identifier("whimsical-ideas", "textures/entity/soul_banner_purple_glow.png");
 
     public SoulBannerRenderer(BlockEntityRendererFactory.Context ctx) {
         this.model = new SoulBannerModel(ctx.getLayerModelPart(WhimsicalIdeas.SOUL_BANNER_LAYER));
@@ -61,6 +64,28 @@ public class SoulBannerRenderer implements BlockEntityRenderer<SoulBannerBlockEn
         model.tasselRight.pitch = wave;
         // model.chain.pitch = wave * 0.4f;
 
+
+        // ===== 灵珠动画：上下浮动 + 旋转 =====
+        // finial 的原始 pivotY 是 -32.0（因为你 cuboid 在 -33/-34 附近）
+        // 这里用 “像素单位” 做浮动：0.8 像素左右看起来比较自然
+        float t2 = (be.getWorld().getTime() + tickDelta);
+
+        // 上下浮动（像素单位）
+        float bob = (float)Math.sin(t2 * 0.10f) * 0.8f;
+
+        // 旋转（弧度，ModelPart 角度是 rad）
+        float spin = t2 * 0.06f;
+
+        // 每帧重置到基准值，再叠加动画
+        model.finial.pivotY = -2 + bob;  // 你可以微调 -32 让它处在横梁上方
+        model.finial.pivotX = 0.0f;
+        model.finial.pivotZ = 0.0f;
+
+        // 旋转：推荐绕 Y 轴转，再加一点 roll 更“灵”
+        model.finial.yaw  = spin;
+        model.finial.pitch = 0.0f;
+        model.finial.roll  = 0.0f;
+
         VertexConsumer vc = vcp.getBuffer(RenderLayer.getEntityCutoutNoCull(TEX));
 
         // ✅ 把所有部件都画出来
@@ -72,6 +97,13 @@ public class SoulBannerRenderer implements BlockEntityRenderer<SoulBannerBlockEn
         model.tasselRight.render(matrices, vc, light, overlay);
         model.flag.render(matrices, vc, light, overlay);
 
+        VertexConsumer glowVc = vcp.getBuffer(RenderLayer.getEyes(GLOW_TEX));
+
+        // 满亮度（不受环境光影响）
+        int fullBright = LightmapTextureManager.MAX_LIGHT_COORDINATE;
+
+        // 只渲染灵石（finial）发光层
+        model.finial.render(matrices, glowVc, fullBright, overlay);
         matrices.pop();
     }
 }
