@@ -34,7 +34,7 @@ public class SoulXpOrbEntityRenderer extends EntityRenderer<SoulXpOrbEntity> {
         matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180.0F));
 
         // 大小
-        float s = 0.35f;
+        float s = 1f;
         matrices.scale(s, s, s);
 
         VertexConsumer vc = vertexConsumers.getBuffer(RenderLayer.getEntityTranslucent(TEXTURE));
