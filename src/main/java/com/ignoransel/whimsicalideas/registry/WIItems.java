@@ -7,8 +7,10 @@ import com.ignoransel.whimsicalideas.content.hex.item.HexForgeItem;
 import com.ignoransel.whimsicalideas.content.hex.item.RandomHexForgeItem;
 import com.ignoransel.whimsicalideas.content.soulsail.SoulSailBannerItem;
 import com.ignoransel.whimsicalideas.content.soulsail.SoulSailTier;
+import com.ignoransel.whimsicalideas.content.soulsail.test.testSoulSailBannerItem;
 import com.ignoransel.whimsicalideas.content.soultablet.SoulTabletItem;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -65,6 +67,21 @@ public final class WIItems {
                             new FabricItemSettings().maxCount(1),
                             SoulSailTier.ZUN
                     ));
+
+//    public static final Item TEST_ZUN_SOUL_SAIL =
+//            Registry.register(Registries.ITEM, new Identifier(WhimsicalIdeas.MODID, "test_zun_soul_sail"),
+//                    new testSoulSailBannerItem(
+//                            WIBlocks.TEST_ZUN_SOUL_BANNER,
+//                            WIBlocks.TEST_ZUN_SOUL_WALL_BANNER,
+//                            new FabricItemSettings().maxCount(1)
+//                            ));
+public static final Item TEST_ZUN_SOUL_SAIL = Registry.register(
+        Registries.ITEM,
+        new Identifier("whimsical-ideas", "test_zun_soul_sail"),
+        new BlockItem(WIBlocks.TEST_ZUN_SOUL_BANNER, new FabricItemSettings())
+);
+
+
 
 
 

@@ -33,6 +33,7 @@ public final class WITabs {
                             entries.add(WIItems.HEX_FORGE_NETHERITE);
                             entries.add(WIItems.HEX_FORGE_RANDOM);
                             entries.add(WIItems.ZUN_SOUL_SAIL);
+                            entries.add(WIItems.TEST_ZUN_SOUL_SAIL);
                         })
                         .build()
         );

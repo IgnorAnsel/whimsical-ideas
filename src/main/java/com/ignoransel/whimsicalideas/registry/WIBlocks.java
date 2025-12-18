@@ -3,8 +3,12 @@ package com.ignoransel.whimsicalideas.registry;
 import com.ignoransel.whimsicalideas.WhimsicalIdeas;
 import com.ignoransel.whimsicalideas.content.soulsail.SoulSailBannerBlock;
 import com.ignoransel.whimsicalideas.content.soulsail.SoulSailWallBannerBlock;
+import com.ignoransel.whimsicalideas.content.soulsail.test.SoulBannerBlock;
+import com.ignoransel.whimsicalideas.content.soulsail.test.testSoulSailBannerBlock;
+import com.ignoransel.whimsicalideas.content.soulsail.test.testSoulSailWallBannerBlock;
 import com.ignoransel.whimsicalideas.content.soultablet.*;
 import com.ignoransel.whimsicalideas.mixin.BlockEntityTypeAccessor;
+import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -24,7 +28,16 @@ public final class WIBlocks {
 
     public static final Block ZUN_SOUL_WALL_BANNER =
             register("zun_soul_wall_banner", new SoulSailWallBannerBlock(AbstractBlock.Settings.copy(Blocks.BLACK_WALL_BANNER)));
+    public static final Block TEST_ZUN_SOUL_BANNER = Registry.register(
+            Registries.BLOCK,
+            new Identifier("whimsical-ideas", "test_zun_soul_banner"),
+            new SoulBannerBlock(FabricBlockSettings.copyOf(Blocks.BLACK_BANNER).nonOpaque())
+    );
+//    public static final Block TEST_ZUN_SOUL_BANNER =
+//            register("test_zun_soul_banner", new SoulBannerBlock(AbstractBlock.Settings.copy(Blocks.BLACK_BANNER)));
 
+    public static final Block TEST_ZUN_SOUL_WALL_BANNER =
+            register("test_zun_soul_wall_banner", new testSoulSailWallBannerBlock(AbstractBlock.Settings.copy(Blocks.BLACK_WALL_BANNER)));
 
 
     private static Block register(String id, Block block) {
@@ -67,7 +80,8 @@ public final class WIBlocks {
         Set<Block> newSet = new HashSet<>(acc.whimsicalideas$getBlocks());
         newSet.add(WIBlocks.ZUN_SOUL_BANNER);
         newSet.add(WIBlocks.ZUN_SOUL_WALL_BANNER);
-
+        newSet.add(WIBlocks.TEST_ZUN_SOUL_BANNER);
+        newSet.add(WIBlocks.TEST_ZUN_SOUL_WALL_BANNER);
         acc.whimsicalideas$setBlocks(newSet);
 
         var settings = AbstractBlock.Settings.copy(Blocks.OAK_SIGN)
