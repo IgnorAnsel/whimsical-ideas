@@ -53,12 +53,12 @@ public final class SoulSailItemCompat {
     public static boolean isActive(ItemStack stack) {
         return data(stack).getBoolean(SoulSailKeys.ACTIVE);
     }
+
     public static SoulBannerGrade getBannerGrade(ItemStack stack) {
         var nbt = data(stack);
         if (!nbt.contains(SoulSailKeys.BANNER_GRADE)) {
             return SoulBannerGrade.MORTAL;
         }
-
         int level = nbt.getInt(SoulSailKeys.BANNER_GRADE);
         return SoulBannerGrade.byLevel(level);
     }

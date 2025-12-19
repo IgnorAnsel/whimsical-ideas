@@ -6,7 +6,9 @@ import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ExperienceOrbEntity;
+import net.minecraft.entity.LightningEntity;
 import net.minecraft.item.Items;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.ActionResult;
@@ -93,6 +95,7 @@ public final class SoulSailRefine {
         data.wi$setRefinedSouls(data.wi$getRefinedSouls() + 1);
         data.wi$syncTotal();
         data.wi$markDirtyAndSync();
+        boolean upgraded = checkAndUpgradeGrade(w, data, bannerPos);
 
         // ===== A) 当前维度：生成原版经验球（可吸）=====
         double x = bannerPos.getX() + 0.5;
@@ -122,8 +125,56 @@ public final class SoulSailRefine {
 
         return true;
     }
+    private static boolean checkAndUpgradeGrade(ServerWorld world, SoulSailBannerData data, BlockPos pos) {
+        SoulBannerGrade currentGrade = data.wi$getBannerGrade();
+        long refinedSouls = data.wi$getRefinedSouls();
 
-    private static SoulSailBannerData getSoulSailBannerData(ServerWorld w, BlockPos pos) {
+        // 根据品阶的阈值来判断是否需要升级
+        SoulBannerGrade nextGrade = getNextGrade(currentGrade, refinedSouls);
+        if (nextGrade != currentGrade) {
+            // 升级品阶
+            data.wi$setBannerGrade(nextGrade);
+            System.out.println("Upgraded to: " + nextGrade.name());
+
+            // 触发雷击
+            spawnLightning(world, pos);
+            return true;
+        }
+
+        return false;
+    }
+    private static void spawnLightning(ServerWorld world, BlockPos pos) {
+        LightningEntity bolt = EntityType.LIGHTNING_BOLT.create(world);
+        if (bolt != null) {
+            bolt.refreshPositionAfterTeleport(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
+            world.spawnEntity(bolt);
+        }
+    }
+
+    private static SoulBannerGrade getNextGrade(SoulBannerGrade currentGrade, long refinedSouls) {
+        // 计算每个品阶的提升条件（每10个已炼化的魂魄对应一个品阶）
+        int requiredSouls = (currentGrade.getLevel() + 1) * 10;  // 当前品阶 + 1 后的魂魄数量
+
+        // 如果已经炼化的魂魄超过了要求，返回下一个品阶
+        if (refinedSouls >= requiredSouls) {
+            switch (currentGrade) {
+                case MORTAL: return SoulBannerGrade.EARTH;
+                case EARTH: return SoulBannerGrade.HEAVEN;
+                case HEAVEN: return SoulBannerGrade.MYSTERIOUS;
+                case MYSTERIOUS: return SoulBannerGrade.YELLOW;
+                case YELLOW: return SoulBannerGrade.UNIVERSE;
+                case UNIVERSE: return SoulBannerGrade.COSMOS;
+                case COSMOS: return SoulBannerGrade.FLOOD;
+                case FLOOD: return SoulBannerGrade.WASTELAND;
+                case WASTELAND: return SoulBannerGrade.IMMORTAL;
+                default: return currentGrade;  // 达到最高品阶时不再升级
+            }
+        }
+
+        return currentGrade;  // 如果未达到要求，保持当前品阶
+    }
+
+    public static SoulSailBannerData getSoulSailBannerData(ServerWorld w, BlockPos pos) {
         BlockEntity be = w.getBlockEntity(pos);
         if (be instanceof SoulSailBannerData d && d.wi$isSoulSailBanner()) return d;
         return null;

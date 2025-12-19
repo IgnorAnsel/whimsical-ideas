@@ -1,21 +1,20 @@
 {
-	"required": true,
-	"package": "com.ignoransel.whimsicalideas.mixin",
-	"compatibilityLevel": "JAVA_17",
-	"mixins": [
-      "MiningToolItemMixin",
-      "LivingEntityNoDropsInSoulWorldMixin",
-      "BlockEntityTypeAccessor",
-      "BannerBlockEntityMixin",
-      "ScreenHandlerMixin",
-      "PlayerEntityDropMixin",
-      "ExperienceOrbEntityAccessor"
-
-	],
-	"injectors": {
-		"defaultRequire": 1
-	},
-	"overwrites": {
-		"requireAnnotations": true
+  "required": true,
+  "package": "com.ignoransel.whimsicalideas.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "BannerBlockEntityMixin",
+    "BlockEntityTypeAccessor",
+    "ExperienceOrbEntityAccessor",
+    "LivingEntityNoDropsInSoulWorldMixin",
+    "MiningToolItemMixin",
+    "PlayerEntityDropMixin",
+    "ScreenHandlerMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
 	}
 }

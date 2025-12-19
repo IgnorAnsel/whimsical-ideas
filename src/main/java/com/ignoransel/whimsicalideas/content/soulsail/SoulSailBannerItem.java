@@ -105,18 +105,50 @@ public class SoulSailBannerItem extends BannerItem implements ISoulSailItem {
             case IMMORTAL -> Formatting.RED;
         };
     }
+    private static SoulBannerGrade getNextGrade(SoulBannerGrade currentGrade, long refinedSouls) {
+        // 计算每个品阶的提升条件（每10个已炼化的魂魄对应一个品阶）
+        int requiredSouls = (currentGrade.getLevel() + 1) * 10;  // 当前品阶 + 1 后的魂魄数量
+
+        // 如果已经炼化的魂魄超过了要求，返回下一个品阶
+        if (refinedSouls >= requiredSouls) {
+            switch (currentGrade) {
+                case MORTAL: return SoulBannerGrade.EARTH;
+                case EARTH: return SoulBannerGrade.HEAVEN;
+                case HEAVEN: return SoulBannerGrade.MYSTERIOUS;
+                case MYSTERIOUS: return SoulBannerGrade.YELLOW;
+                case YELLOW: return SoulBannerGrade.UNIVERSE;
+                case UNIVERSE: return SoulBannerGrade.COSMOS;
+                case COSMOS: return SoulBannerGrade.FLOOD;
+                case FLOOD: return SoulBannerGrade.WASTELAND;
+                case WASTELAND: return SoulBannerGrade.IMMORTAL;
+                default: return currentGrade;  // 达到最高品阶时不再升级
+            }
+        }
+
+        return currentGrade;  // 如果未达到要求，保持当前品阶
+    }
     // Tooltip 显示信息
     @Override
     public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext context) {
+
         SoulBannerGrade grade = SoulSailItemCompat.getBannerGrade(stack);
+        long rawsouls = SoulSailItemCompat.getRawSouls(stack);
+        long souls = SoulSailItemCompat.getSouls(stack);
+        long refinedsouls = SoulSailItemCompat.getRefinedSouls(stack);
+
+        SoulBannerGrade Nextgrade = getNextGrade(grade, refinedsouls);
+        if(Nextgrade != grade) {
+            SoulSailItemCompat.setBannerGrade(stack, Nextgrade);
+            grade = Nextgrade;
+        }
         Formatting gradeColor = getGradeFormatting(grade);
         tooltip.add(Text.literal("品阶: ").formatted(Formatting.GRAY)
                 .append(Text.literal(grade.getDisplayName()).formatted(gradeColor, Formatting.BOLD)));
-        long souls = SoulSailItemCompat.getSouls(stack);
+
         tooltip.add(Text.literal("魂魄: " + souls));
-        long rawsouls = SoulSailItemCompat.getRawSouls(stack);
+
         tooltip.add(Text.literal("未炼化: " + rawsouls));
-        long refinedsouls = SoulSailItemCompat.getRefinedSouls(stack);
+
         tooltip.add(Text.literal("已炼化: " + refinedsouls));
         if (SoulSailItemCompat.isActive(stack)) {
             tooltip.add(Text.literal("位于此魂幡（已锁定）"));
