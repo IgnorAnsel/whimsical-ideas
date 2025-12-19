@@ -30,7 +30,7 @@ import net.minecraft.world.chunk.WorldChunk;
 
 import java.util.UUID;
 
-import static com.ignoransel.whimsicalideas.recipe.ZunSoulSailRecipe.hasZunSoulPattern;
+//import static com.ignoransel.whimsicalideas.recipe.ZunSoulSailRecipe.hasZunSoulPattern;
 
 public final class WIEvents {
     private enum ReinforceTier {
@@ -74,40 +74,40 @@ public final class WIEvents {
     private WIEvents(){}
     public static void init() {
         SoulSailRefine.register();
-        ItemTooltipCallback.EVENT.register((stack, context, lines) -> {
-            if (!(stack.getItem() instanceof BannerItem)) return;
-            if (!hasZunSoulPattern(stack)) return;
-            if (stack.isOf(WIItems.ZUN_SOUL_SAIL)) return;
-            // 标题
-            lines.add(Text.translatable("tooltip.whimsical-ideas.zun_soul_banner.title")
-                    .formatted(Formatting.GOLD));
-
-            // 未按 Shift：提示展开
-            if (!Screen.hasShiftDown()) {
-                lines.add(Text.translatable("tooltip.whimsical-ideas.hold_shift")
-                        .formatted(Formatting.GRAY, Formatting.ITALIC));
-                return;
-            }
-
-            // 按住 Shift：显示配方
-            lines.add(Text.translatable("tooltip.whimsical-ideas.zun_soul_banner.hint")
-                    .formatted(Formatting.GRAY));
-
-            // 九宫格
-            lines.add(Text.literal(" ")
-                    .append(name(RING[0])).append(Text.literal("  "))
-                    .append(name(RING[1])).append(Text.literal("  "))
-                    .append(name(RING[2])).formatted(Formatting.DARK_GRAY));
-            lines.add(Text.literal(" ")
-                    .append(name(RING[3])).append(Text.literal("  "))
-                    .append(Text.translatable("tooltip.whimsical-ideas.zun_soul_banner.center"))
-                    .append(Text.literal("  "))
-                    .append(name(RING[5])).formatted(Formatting.DARK_GRAY));
-            lines.add(Text.literal(" ")
-                    .append(name(RING[6])).append(Text.literal("  "))
-                    .append(name(RING[7])).append(Text.literal("  "))
-                    .append(name(RING[8])).formatted(Formatting.DARK_GRAY));
-        });
+//        ItemTooltipCallback.EVENT.register((stack, context, lines) -> {
+//            if (!(stack.getItem() instanceof BannerItem)) return;
+//            if (!hasZunSoulPattern(stack)) return;
+//            if (stack.isOf(WIItems.ZUN_SOUL_SAIL)) return;
+//            // 标题
+//            lines.add(Text.translatable("tooltip.whimsical-ideas.zun_soul_banner.title")
+//                    .formatted(Formatting.GOLD));
+//
+//            // 未按 Shift：提示展开
+//            if (!Screen.hasShiftDown()) {
+//                lines.add(Text.translatable("tooltip.whimsical-ideas.hold_shift")
+//                        .formatted(Formatting.GRAY, Formatting.ITALIC));
+//                return;
+//            }
+//
+//            // 按住 Shift：显示配方
+//            lines.add(Text.translatable("tooltip.whimsical-ideas.zun_soul_banner.hint")
+//                    .formatted(Formatting.GRAY));
+//
+//            // 九宫格
+//            lines.add(Text.literal(" ")
+//                    .append(name(RING[0])).append(Text.literal("  "))
+//                    .append(name(RING[1])).append(Text.literal("  "))
+//                    .append(name(RING[2])).formatted(Formatting.DARK_GRAY));
+//            lines.add(Text.literal(" ")
+//                    .append(name(RING[3])).append(Text.literal("  "))
+//                    .append(Text.translatable("tooltip.whimsical-ideas.zun_soul_banner.center"))
+//                    .append(Text.literal("  "))
+//                    .append(name(RING[5])).formatted(Formatting.DARK_GRAY));
+//            lines.add(Text.literal(" ")
+//                    .append(name(RING[6])).append(Text.literal("  "))
+//                    .append(name(RING[7])).append(Text.literal("  "))
+//                    .append(name(RING[8])).formatted(Formatting.DARK_GRAY));
+//        });
         // MaxMiningEvents.register();
         ServerLivingEntityEvents.AFTER_DEATH.register((entity, damageSource) -> {
             if (!(entity instanceof ServerPlayerEntity player)) return;
