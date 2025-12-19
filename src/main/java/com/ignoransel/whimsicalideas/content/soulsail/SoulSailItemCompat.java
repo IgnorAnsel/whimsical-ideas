@@ -31,6 +31,7 @@ public final class SoulSailItemCompat {
         migrateFloat(root, bet, SoulSailKeys.RETURN_YAW);
         migrateFloat(root, bet, SoulSailKeys.RETURN_PITCH);
         migrateBool(root, bet, SoulSailKeys.ACTIVE);
+        migrateInt(root, bet, SoulSailKeys.BANNER_GRADE);
         return bet; // 写入/读取都统一到 BlockEntityTag
     }
 
@@ -52,7 +53,20 @@ public final class SoulSailItemCompat {
     public static boolean isActive(ItemStack stack) {
         return data(stack).getBoolean(SoulSailKeys.ACTIVE);
     }
+    public static SoulBannerGrade getBannerGrade(ItemStack stack) {
+        var nbt = data(stack);
+        if (!nbt.contains(SoulSailKeys.BANNER_GRADE)) {
+            return SoulBannerGrade.MORTAL;
+        }
 
+        int level = nbt.getInt(SoulSailKeys.BANNER_GRADE);
+        return SoulBannerGrade.byLevel(level);
+    }
+
+    public static void setBannerGrade(ItemStack stack, SoulBannerGrade grade) {
+        var nbt = data(stack);
+        nbt.putInt(SoulSailKeys.BANNER_GRADE, grade.getLevel());
+    }
     // ----------------- Souls / Stored -----------------
     public static long getRawSouls(ItemStack stack) {
         var nbt = data(stack);

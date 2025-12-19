@@ -5,16 +5,20 @@ import com.ignoransel.whimsicalideas.WhimsicalIdeas;
 import com.ignoransel.whimsicalideas.content.hex.HexRarity;
 import com.ignoransel.whimsicalideas.content.hex.item.HexForgeItem;
 import com.ignoransel.whimsicalideas.content.hex.item.RandomHexForgeItem;
-import com.ignoransel.whimsicalideas.content.soulsail.SoulSailBannerItem;
-import com.ignoransel.whimsicalideas.content.soulsail.SoulSailTier;
+import com.ignoransel.whimsicalideas.content.soulsail.*;
 import com.ignoransel.whimsicalideas.content.soulsail.render.TestSoulSailBannerItem;
 import com.ignoransel.whimsicalideas.content.soultablet.SoulTabletItem;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public final class WIItems {
     private WIItems(){}
@@ -25,7 +29,61 @@ public final class WIItems {
     public static Item SOUL_TABLET_GOLD_ITEM;
     public static Item SOUL_TABLET_DIAMOND_ITEM;
     public static Item SOUL_TABLET_NETHERITE_ITEM;
+    public static Item ZUN_SOUL_SAIL_MORTAL = registerGradeBanner(SoulBannerGrade.MORTAL);
+    public static Item ZUN_SOUL_SAIL_EARTH = registerGradeBanner(SoulBannerGrade.EARTH);
+    public static Item ZUN_SOUL_SAIL_HEAVEN = registerGradeBanner(SoulBannerGrade.HEAVEN);
+    public static Item ZUN_SOUL_SAIL_MYSTERIOUS = registerGradeBanner(SoulBannerGrade.MYSTERIOUS);
+    public static Item ZUN_SOUL_SAIL_YELLOW = registerGradeBanner(SoulBannerGrade.YELLOW);
+    public static Item ZUN_SOUL_SAIL_UNIVERSE = registerGradeBanner(SoulBannerGrade.UNIVERSE);
+    public static Item ZUN_SOUL_SAIL_COSMOS = registerGradeBanner(SoulBannerGrade.COSMOS);
+    public static Item ZUN_SOUL_SAIL_FLOOD = registerGradeBanner(SoulBannerGrade.FLOOD);
+    public static Item ZUN_SOUL_SAIL_WASTELAND = registerGradeBanner(SoulBannerGrade.WASTELAND);
+    public static Item ZUN_SOUL_SAIL_IMMORTAL = registerGradeBanner(SoulBannerGrade.IMMORTAL);
+    public static Map<SoulBannerGrade, Item> GRADE_BANNERS = new HashMap<>();
+    static {
+        // 初始化映射
+        GRADE_BANNERS.put(SoulBannerGrade.MORTAL, ZUN_SOUL_SAIL_MORTAL);
+        GRADE_BANNERS.put(SoulBannerGrade.EARTH, ZUN_SOUL_SAIL_EARTH);
+        GRADE_BANNERS.put(SoulBannerGrade.HEAVEN, ZUN_SOUL_SAIL_HEAVEN);
+        GRADE_BANNERS.put(SoulBannerGrade.MYSTERIOUS, ZUN_SOUL_SAIL_MYSTERIOUS);
+        GRADE_BANNERS.put(SoulBannerGrade.YELLOW, ZUN_SOUL_SAIL_YELLOW);
+        GRADE_BANNERS.put(SoulBannerGrade.UNIVERSE, ZUN_SOUL_SAIL_UNIVERSE);
+        GRADE_BANNERS.put(SoulBannerGrade.COSMOS, ZUN_SOUL_SAIL_COSMOS);
+        GRADE_BANNERS.put(SoulBannerGrade.FLOOD, ZUN_SOUL_SAIL_FLOOD);
+        GRADE_BANNERS.put(SoulBannerGrade.WASTELAND, ZUN_SOUL_SAIL_WASTELAND);
+        GRADE_BANNERS.put(SoulBannerGrade.IMMORTAL, ZUN_SOUL_SAIL_IMMORTAL);
+    }
 
+    private static Item registerGradeBanner(SoulBannerGrade grade) {
+        return Registry.register(
+                Registries.ITEM,
+                new Identifier(WhimsicalIdeas.MODID, "zun_soul_sail_" + grade.name().toLowerCase()),
+                new SoulSailBannerItem(
+                        WIBlocks.ZUN_SOUL_BANNER,
+                        WIBlocks.ZUN_SOUL_WALL_BANNER,
+                        new FabricItemSettings().maxCount(1),
+                        SoulSailTier.ZUN
+                ) {
+                    @Override
+                    public ItemStack getDefaultStack() {
+                        ItemStack stack = super.getDefaultStack();
+                        SoulSailItemCompat.setBannerGrade(stack, grade);
+                        long refinedSouls = getRefinedSoulsForGrade(grade);
+                        SoulSailItemCompat.addRefinedSouls(stack, refinedSouls, grade.getSoulCapacity());
+                        NbtCompound bet = stack.getOrCreateSubNbt("BlockEntityTag");
+                        bet.putInt(SoulSailKeys.BANNER_GRADE, grade.getLevel());
+                        return stack;
+                    }
+
+
+                    // 重写物品名称显示
+                    @Override
+                    public String getTranslationKey() {
+                        return "item.whimsical-ideas.zun_soul_sail";
+                    }
+                }
+        );
+    }
     public static final Item HEX_FORGE_IRON = Registry.register(
             Registries.ITEM,
             new Identifier("whimsical-ideas", "hex_forge_iron"),
@@ -67,7 +125,7 @@ public final class WIItems {
 
     public static final Item TEST_ZUN_SOUL_SAIL = Registry.register(
             Registries.ITEM,
-            new Identifier("whimsical-ideas", "test_zun_soul_sail"),
+            new Identifier(WhimsicalIdeas.MODID, "test_zun_soul_sail"),
             new TestSoulSailBannerItem(WIBlocks.TEST_ZUN_SOUL_BANNER, new FabricItemSettings(), SoulSailTier.ZUN)
     );
     public static final Item SOUL_SAIL_POLE = Registry.register(
@@ -126,4 +184,10 @@ public final class WIItems {
     private static Identifier id(String path){
         return new Identifier(WhimsicalIdeas.MODID, path);
     }
+
+    private static long getRefinedSoulsForGrade(SoulBannerGrade grade) {
+        return (long) Math.pow(10, grade.getLevel());
+    }
+
+
 }

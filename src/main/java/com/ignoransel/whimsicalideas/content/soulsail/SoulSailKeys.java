@@ -10,6 +10,7 @@ public final class SoulSailKeys {
     public static final String ROOM_X = "RoomX";              // int
     public static final String ROOM_Z = "RoomZ";              // int
     public static final String ACTIVE = "Active"; // boolean
+    public static final String BANNER_GRADE = "BannerGrade";        // int (0-9) 品阶等级
 
     public static final String SAIL_ID = "SailId"; // String UUID
 

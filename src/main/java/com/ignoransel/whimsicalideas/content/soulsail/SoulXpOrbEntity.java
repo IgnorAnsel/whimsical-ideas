@@ -17,12 +17,10 @@ public class SoulXpOrbEntity extends ExperienceOrbEntity {
 
     @Override
     public void onPlayerCollision(PlayerEntity player) {
-        // 不可吸取
     }
 
     @Override
     public Packet<ClientPlayPacketListener> createSpawnPacket() {
-        // 关键：让客户端按 EntityType 创建你的实体，从而使用你的 Renderer/贴图
         return new EntitySpawnS2CPacket(this);
     }
 }

@@ -29,7 +29,7 @@ public final class WIBlocks {
             register("zun_soul_wall_banner", new SoulSailWallBannerBlock(AbstractBlock.Settings.copy(Blocks.BLACK_WALL_BANNER)));
     public static final Block TEST_ZUN_SOUL_BANNER = Registry.register(
             Registries.BLOCK,
-            new Identifier("whimsical-ideas", "test_zun_soul_banner"),
+            new Identifier(WhimsicalIdeas.MODID, "test_zun_soul_banner"),
             new SoulBannerBlock(FabricBlockSettings.copyOf(Blocks.BLACK_BANNER).nonOpaque())
     );
 

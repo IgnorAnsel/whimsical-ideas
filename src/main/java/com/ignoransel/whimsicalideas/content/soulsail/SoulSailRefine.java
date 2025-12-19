@@ -107,7 +107,7 @@ public final class SoulSailRefine {
         if (soulWorld != null) {
             int cx = data.wi$getRoomX();
             int cz = data.wi$getRoomZ();
-            int sy = soulWorld.getBottomY() + 82; // 跟你 teleportIntoRoom 的高度一致
+            int sy = soulWorld.getBottomY() + 82;
 
             double sx = cx + 0.5 + (soulWorld.random.nextDouble() - 0.5) * 0.8;
             double sz = cz + 0.5 + (soulWorld.random.nextDouble() - 0.5) * 0.8;
@@ -122,7 +122,6 @@ public final class SoulSailRefine {
 
         return true;
     }
-
 
     private static SoulSailBannerData getSoulSailBannerData(ServerWorld w, BlockPos pos) {
         BlockEntity be = w.getBlockEntity(pos);

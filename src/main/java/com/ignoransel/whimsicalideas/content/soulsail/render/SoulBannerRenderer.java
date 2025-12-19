@@ -86,6 +86,18 @@ public class SoulBannerRenderer implements BlockEntityRenderer<SoulBannerBlockEn
         model.finial.pitch = 0.0f;
         model.finial.roll  = 0.0f;
 
+
+
+        float t3 = (be.getWorld().getTime() + tickDelta);
+
+        // 紫气动画：纹理的偏移
+        float vaporOffset = (float) Math.sin(t3 * 0.15f) * 0.05f;  // 紫气的浮动效果
+
+        VertexConsumer vaporVc = vcp.getBuffer(RenderLayer.getEntityCutoutNoCull(TEX));
+        matrices.push();
+        matrices.translate(vaporOffset, 0.0, 0.0);  // 紫气的浮动效果
+        model.vapor.render(matrices, vaporVc, light, overlay);
+        matrices.pop();
         VertexConsumer vc = vcp.getBuffer(RenderLayer.getEntityCutoutNoCull(TEX));
 
         // ✅ 把所有部件都画出来

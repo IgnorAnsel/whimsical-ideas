@@ -1,5 +1,7 @@
 package com.ignoransel.whimsicalideas.content.soulsail;
 
+import com.ignoransel.whimsicalideas.mixin.ExperienceOrbEntityAccessor;
+import com.ignoransel.whimsicalideas.registry.WIEntities;
 import net.fabricmc.fabric.api.dimension.v1.FabricDimensions;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
@@ -15,6 +17,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.TeleportTarget;
 import net.minecraft.world.World;
@@ -48,7 +51,6 @@ public final class SoulSailRoomManager {
         int cz = nbt.getInt(SoulSailKeys.ROOM_Z);
         int r = tier.roomRadius;
         int y = w.getBottomY() + 80; // 固定高度，简单稳定
-
         // 建地板
         for (int x = cx - r; x <= cx + r; x++) {
             for (int z = cz - r; z <= cz + r; z++) {
@@ -73,13 +75,57 @@ public final class SoulSailRoomManager {
             }
         }
     }
+    private static long countExistingSoulOrbs(ServerWorld w, int cx, int cz, int y, SoulSailTier tier) {
+        Box box = new Box(cx - tier.roomRadius, y - 20, cz - tier.roomRadius, cx + tier.roomRadius, y + 6, cz + tier.roomRadius);
+        System.out.println("Querying box: " + box);  // 调试信息，确保查询范围正确
+        var entities = w.getEntitiesByType(WIEntities.SOUL_XP_ORB, box, e -> true);
+        System.out.println("Found " + entities.size() + " SoulXpOrbs.");
+        for (Entity entity : entities) {
+            System.out.println("SoulXpOrb at: " + entity.getBlockPos());
+        }
 
+        return entities.size();  // 返回找到的实体数量
+    }
+
+    private static void spawnMissingSoulOrbs(ServerWorld w, ItemStack sail, SoulSailTier tier, long missingOrbs) {
+        int cx = SoulSailItemCompat.getRoomX(sail);
+        int cz = SoulSailItemCompat.getRoomZ(sail);
+        int y = w.getBottomY() + 82;
+
+        long remainingOrbs = missingOrbs;
+        while (remainingOrbs > 0) {
+
+            SoulXpOrbEntity orb = new SoulXpOrbEntity(WIEntities.SOUL_XP_ORB, w);
+            double posX = cx + 0.5 + (w.random.nextDouble() - 0.5) * 0.8;
+            double posZ = cz + 0.5 + (w.random.nextDouble() - 0.5) * 0.8;
+            double posY = y + 0.2;
+            orb.refreshPositionAndAngles(posX, posY, posZ, 0, 0);
+            ((ExperienceOrbEntityAccessor) orb).wi$setAmount(1);
+//            if (w.spawnEntity(orb)) {
+//                System.out.println("SoulXpOrbEntity successfully spawned.");
+//            } else {
+//                System.out.println("Failed to spawn SoulXpOrbEntity at: " + posX + ", " + posY + ", " + posZ);
+//            }
+            remainingOrbs -= 1;
+        }
+    }
     public static void teleportIntoRoom(ServerWorld w, ServerPlayerEntity player, ItemStack sail, SoulSailTier tier) {
         var nbt = SoulSailItemCompat.data(sail);
         int cx = nbt.getInt(SoulSailKeys.ROOM_X);
         int cz = nbt.getInt(SoulSailKeys.ROOM_Z);
         int y = w.getBottomY() + 82;
-
+        // 计算当前已经生成的 SoulXpOrbEntity 数量
+        long currentOrbs = countExistingSoulOrbs(w, cx, cz, y, tier);
+        System.out.println("currentOrbs: " + currentOrbs);
+        // 计算需要生成的 SoulXpOrbEntity 数量
+        long missingOrbs = Math.max(0, SoulSailItemCompat.getRefinedSouls(sail) - currentOrbs);
+        System.out.println("missingOrbs: " + missingOrbs);
+        // 如果有缺失的魂，补充生成
+        if (missingOrbs > 0) {
+            spawnMissingSoulOrbs(w, sail, tier, missingOrbs);
+        }
+        long afterSpawnOrbs = countExistingSoulOrbs(w, cx, cz, y, tier);
+        System.out.println("生成后魂数量: " + afterSpawnOrbs);
         // FabricDimensions 传送
         net.fabricmc.fabric.api.dimension.v1.FabricDimensions.teleport(player, w, new TeleportTarget(
                 new Vec3d(cx + 0.5, y, cz + 0.5),
@@ -87,6 +133,8 @@ public final class SoulSailRoomManager {
                 player.getYaw(),
                 player.getPitch()
         ));
+
+
     }
     public static void spawnPendingMobsOnce(ServerWorld w, ItemStack sail, SoulSailTier tier) {
         var nbt = SoulSailItemCompat.data(sail);

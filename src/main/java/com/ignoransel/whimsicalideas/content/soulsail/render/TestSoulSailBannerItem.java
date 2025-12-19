@@ -8,6 +8,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
@@ -82,9 +83,27 @@ public class TestSoulSailBannerItem extends BlockItem implements ISoulSailItem {
         return stack;
     }
 
-    // Tooltip 显示魂数
+    private Formatting getGradeFormatting(SoulBannerGrade grade) {
+        return switch (grade) {
+            case MORTAL -> Formatting.GRAY;
+            case EARTH -> Formatting.DARK_GREEN;
+            case HEAVEN -> Formatting.BLUE;
+            case MYSTERIOUS -> Formatting.DARK_PURPLE;
+            case YELLOW -> Formatting.YELLOW;
+            case UNIVERSE -> Formatting.DARK_BLUE;
+            case COSMOS -> Formatting.AQUA;
+            case FLOOD -> Formatting.LIGHT_PURPLE;
+            case WASTELAND -> Formatting.GOLD;
+            case IMMORTAL -> Formatting.RED;
+        };
+    }
+    // Tooltip 显示信息
     @Override
     public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext context) {
+        SoulBannerGrade grade = SoulSailItemCompat.getBannerGrade(stack);
+        Formatting gradeColor = getGradeFormatting(grade);
+        tooltip.add(Text.literal("品阶: ").formatted(Formatting.GRAY)
+                .append(Text.literal(grade.getDisplayName()).formatted(gradeColor, Formatting.BOLD)));
         long souls = SoulSailItemCompat.getSouls(stack);
         tooltip.add(Text.literal("魂魄: " + souls));
         long rawsouls = SoulSailItemCompat.getRawSouls(stack);
