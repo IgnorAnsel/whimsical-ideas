@@ -21,7 +21,7 @@ import net.minecraft.block.BlockState;
 import java.util.List;
 
 public class SoulSailBannerItem extends BannerItem implements ISoulSailItem {
-    private final SoulSailTier tier;
+    private SoulSailTier tier;
 
     public SoulSailBannerItem(Block standingBlock, Block wallBlock, Settings settings, SoulSailTier tier) {
         super(standingBlock, wallBlock, settings);
@@ -47,7 +47,9 @@ public class SoulSailBannerItem extends BannerItem implements ISoulSailItem {
     }
     @Override
     public SoulSailTier tier() { return tier; }
-
+    public void setTier(SoulSailTier soulSailTier) {
+        this.tier = soulSailTier;
+    }
     @Override
     public int getMaxUseTime(ItemStack stack) {
         return 32;
@@ -82,6 +84,7 @@ public class SoulSailBannerItem extends BannerItem implements ISoulSailItem {
 
                 ServerWorld target = sp.getServer().getWorld(SoulSailRoomManager.SOUL_SAIL_DIM);
                 if (target != null) {
+                    setTier(SoulSailItemCompat.getBannerGrade(stack).getSoulSailTier());
                     SoulSailRoomManager.ensureRoomBuilt(target, sp, stack, tier);
                     SoulSailRoomManager.teleportIntoRoom(target, sp, stack, tier);
                     SoulSailRoomManager.spawnPendingMobsOnce(target, stack, tier);
@@ -139,6 +142,7 @@ public class SoulSailBannerItem extends BannerItem implements ISoulSailItem {
         SoulBannerGrade Nextgrade = getNextGrade(grade, refinedsouls);
         if(Nextgrade != grade) {
             SoulSailItemCompat.setBannerGrade(stack, Nextgrade);
+            setTier(grade.getSoulSailTier());
             grade = Nextgrade;
         }
         Formatting gradeColor = getGradeFormatting(grade);

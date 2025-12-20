@@ -62,7 +62,7 @@ public final class WIItems {
                         WIBlocks.ZUN_SOUL_BANNER,
                         WIBlocks.ZUN_SOUL_WALL_BANNER,
                         new FabricItemSettings().maxCount(1),
-                        SoulSailTier.ZUN
+                        SoulSailTier.MORTAL
                 ) {
                     @Override
                     public ItemStack getDefaultStack() {
@@ -72,6 +72,7 @@ public final class WIItems {
                         SoulSailItemCompat.addRefinedSouls(stack, refinedSouls, grade.getSoulCapacity());
                         NbtCompound bet = stack.getOrCreateSubNbt("BlockEntityTag");
                         bet.putInt(SoulSailKeys.BANNER_GRADE, grade.getLevel());
+                        setTier(grade.getSoulSailTier());
                         return stack;
                     }
 
@@ -120,13 +121,13 @@ public final class WIItems {
                             WIBlocks.ZUN_SOUL_BANNER,
                             WIBlocks.ZUN_SOUL_WALL_BANNER,
                             new FabricItemSettings().maxCount(1),
-                            SoulSailTier.ZUN
+                            SoulSailTier.MORTAL
                     ));
 
     public static final Item TEST_ZUN_SOUL_SAIL = Registry.register(
             Registries.ITEM,
             new Identifier(WhimsicalIdeas.MODID, "test_zun_soul_sail"),
-            new TestSoulSailBannerItem(WIBlocks.TEST_ZUN_SOUL_BANNER, new FabricItemSettings(), SoulSailTier.ZUN)
+            new TestSoulSailBannerItem(WIBlocks.TEST_ZUN_SOUL_BANNER, new FabricItemSettings(), SoulSailTier.MORTAL)
     );
     public static final Item SOUL_SAIL_POLE = Registry.register(
             Registries.ITEM,

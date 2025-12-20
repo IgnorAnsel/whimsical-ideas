@@ -90,17 +90,37 @@ public class SoulBannerRenderer implements BlockEntityRenderer<SoulBannerBlockEn
 
         float t3 = (be.getWorld().getTime() + tickDelta);
 
-        // 紫气动画：纹理的偏移
-        float vaporOffset = (float) Math.sin(t3 * 0.15f) * 0.05f;  // 紫气的浮动效果
-
-        VertexConsumer vaporVc = vcp.getBuffer(RenderLayer.getEntityCutoutNoCull(TEX));
+        VertexConsumer vaporVc = vcp.getBuffer(RenderLayer.getEntityTranslucent(TEX));
         matrices.push();
-        matrices.translate(vaporOffset, 0.0, 0.0);  // 紫气的浮动效果
+
+        matrices.translate(0.0, -22.0 / 16.0, 0.0);
+
+        float orbitAngle = t3 * 2.0f;
+        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(orbitAngle));
+
+        float radius = 0.8f;
+        float radiusBreath = radius + (float)Math.sin(t3 * 0.05f) * 0.1f;
+        matrices.translate(0.0, 0.0, radiusBreath);
+
+        float bob2 = (float)Math.sin(t3 * 0.15f) * 0.1f;
+        matrices.translate(0.0, bob2, 0.0);
+
+
+        float spinAngle = t3 * 3.0f;
+        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(spinAngle));
+
+        // 3. 渲染第一片
         model.vapor.render(matrices, vaporVc, light, overlay);
+
+        // 4. 渲染第二片 (旋转90度交叉)，形成立体感
+        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(90.0f));
+        model.vapor.render(matrices, vaporVc, light, overlay);
+
         matrices.pop();
+
         VertexConsumer vc = vcp.getBuffer(RenderLayer.getEntityCutoutNoCull(TEX));
 
-        // ✅ 把所有部件都画出来
+        // 把所有部件都画出来
         model.pole.render(matrices, vc, light, overlay);
         model.crossbar.render(matrices, vc, light, overlay);
         model.finial.render(matrices, vc, light, overlay);

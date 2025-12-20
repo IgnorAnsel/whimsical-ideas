@@ -32,6 +32,7 @@ public final class SoulSailItemCompat {
         migrateFloat(root, bet, SoulSailKeys.RETURN_PITCH);
         migrateBool(root, bet, SoulSailKeys.ACTIVE);
         migrateInt(root, bet, SoulSailKeys.BANNER_GRADE);
+        migrateInt(root, bet, SoulSailKeys.LAST_RADIUS);
         return bet; // 写入/读取都统一到 BlockEntityTag
     }
 
@@ -46,6 +47,17 @@ public final class SoulSailItemCompat {
         }
         return nbt.getString(SoulSailKeys.SAIL_ID);
     }
+
+    public static void setLastRadius(ItemStack stack, int radius) {
+        var nbt = data(stack);
+        nbt.putInt(SoulSailKeys.LAST_RADIUS, radius);
+    }
+
+    public static int getLastRadius(ItemStack stack) {
+        var nbt = data(stack);
+        return nbt.getInt(SoulSailKeys.LAST_RADIUS);
+    }
+
     public static void setActive(ItemStack stack, boolean active) {
         data(stack).putBoolean(SoulSailKeys.ACTIVE, active);
     }

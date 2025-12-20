@@ -133,7 +133,7 @@ public final class WIEvents {
             int cx = dp.getX() >> 4;
             int cz = dp.getZ() >> 4;
 
-            // ✅ 先收集目标，避免 CME
+            // 先收集目标，避免 CME
             java.util.ArrayList<BlockPos> targets = new java.util.ArrayList<>();
 
             for (int dx = -radiusChunks; dx <= radiusChunks; dx++) {
@@ -145,7 +145,7 @@ public final class WIEvents {
 
                     WorldChunk chunk = world.getChunk(x, z);
 
-                    // ✅ 快照遍历：复制一份 values
+                    // 快照遍历：复制一份 values
                     for (BlockEntity be : java.util.List.copyOf(chunk.getBlockEntities().values())) {
                         if (!(be instanceof SoulTabletBlockEntity tablet)) continue;
                         if (tablet.getOwnerUuid() == null || !dead.equals(tablet.getOwnerUuid())) continue;
@@ -155,7 +155,7 @@ public final class WIEvents {
                 }
             }
 
-            // ✅ 第二阶段：对快照目标执行修改世界的操作
+            // 第二阶段：对快照目标执行修改世界的操作
             for (BlockPos pos : targets) {
                 BlockEntity be = world.getBlockEntity(pos);
                 if (!(be instanceof SoulTabletBlockEntity tablet)) continue;

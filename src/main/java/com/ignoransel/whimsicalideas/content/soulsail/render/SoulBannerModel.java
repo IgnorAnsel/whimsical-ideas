@@ -140,7 +140,7 @@ public class SoulBannerModel {
         );
 
         root.addChild("vapor", ModelPartBuilder.create()
-                        .uv(64, 64).cuboid(-10.0F, -30.0F, -2.0F, 20.0F, 18.0F, 1.0F),
+                        .uv(64, 64).cuboid(1, 1, -0.5F, 2.0F, 2.0F, 1.0F),
                 ModelTransform.NONE
         );
 

@@ -11,7 +11,7 @@ public final class SoulSailKeys {
     public static final String ROOM_Z = "RoomZ";              // int
     public static final String ACTIVE = "Active"; // boolean
     public static final String BANNER_GRADE = "BannerGrade";        // int (0-9) 品阶等级
-
+    public static final String LAST_RADIUS = "LastRadius"; // int
     public static final String SAIL_ID = "SailId"; // String UUID
 
     // 返回点（进入魂帆世界前的位置）
