@@ -17,7 +17,7 @@ import net.minecraft.block.Block;
 import java.util.List;
 
 public class TestSoulSailBannerItem extends BlockItem implements ISoulSailItem {
-    private final SoulSailTier tier;
+    private SoulSailTier tier;
 
     public TestSoulSailBannerItem(Block standingBlock, Settings settings, SoulSailTier tier) {
         super(standingBlock, settings);
@@ -39,7 +39,9 @@ public class TestSoulSailBannerItem extends BlockItem implements ISoulSailItem {
     }
     @Override
     public SoulSailTier tier() { return tier; }
-
+    public void setTier(SoulSailTier soulSailTier) {
+        this.tier = soulSailTier;
+    }
     @Override
     public int getMaxUseTime(ItemStack stack) {
         return 32;

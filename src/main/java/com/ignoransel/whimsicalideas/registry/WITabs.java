@@ -50,6 +50,17 @@ public final class WITabs {
                             entries.add(WIItems.ZUN_SOUL_SAIL_FLOOD.getDefaultStack());
                             entries.add(WIItems.ZUN_SOUL_SAIL_WASTELAND.getDefaultStack());
                             entries.add(WIItems.ZUN_SOUL_SAIL_IMMORTAL.getDefaultStack());
+
+                            entries.add(WIItems.TEST_ZUN_SOUL_SAIL_MORTAL.getDefaultStack());
+                            entries.add(WIItems.TEST_ZUN_SOUL_SAIL_EARTH.getDefaultStack());
+                            entries.add(WIItems.TEST_ZUN_SOUL_SAIL_HEAVEN.getDefaultStack());
+                            entries.add(WIItems.TEST_ZUN_SOUL_SAIL_MYSTERIOUS.getDefaultStack());
+                            entries.add(WIItems.TEST_ZUN_SOUL_SAIL_YELLOW.getDefaultStack());
+                            entries.add(WIItems.TEST_ZUN_SOUL_SAIL_UNIVERSE.getDefaultStack());
+                            entries.add(WIItems.TEST_ZUN_SOUL_SAIL_COSMOS.getDefaultStack());
+                            entries.add(WIItems.TEST_ZUN_SOUL_SAIL_FLOOD.getDefaultStack());
+                            entries.add(WIItems.TEST_ZUN_SOUL_SAIL_WASTELAND.getDefaultStack());
+                            entries.add(WIItems.TEST_ZUN_SOUL_SAIL_IMMORTAL.getDefaultStack());
                         })
                         .build()
         );

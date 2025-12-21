@@ -166,11 +166,11 @@ public final class SoulSailRoomManager {
             double posY = y + 0.2;
             orb.refreshPositionAndAngles(posX, posY, posZ, 0, 0);
             ((ExperienceOrbEntityAccessor) orb).wi$setAmount(1);
-//            if (w.spawnEntity(orb)) {
-//                System.out.println("SoulXpOrbEntity successfully spawned.");
-//            } else {
-//                System.out.println("Failed to spawn SoulXpOrbEntity at: " + posX + ", " + posY + ", " + posZ);
-//            }
+            if (w.spawnEntity(orb)) {
+                System.out.println("SoulXpOrbEntity successfully spawned.");
+            } else {
+                System.out.println("Failed to spawn SoulXpOrbEntity at: " + posX + ", " + posY + ", " + posZ);
+            }
             remainingOrbs -= 1;
         }
     }

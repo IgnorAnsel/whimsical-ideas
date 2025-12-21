@@ -1,6 +1,7 @@
 package com.ignoransel.whimsicalideas;
 
 import com.ignoransel.whimsicalideas.content.hex.handers.HexRefineHandler;
+import com.ignoransel.whimsicalideas.content.soulsail.SoulBannerGrade;
 import com.ignoransel.whimsicalideas.content.soulsail.SoulSailEvents;
 import com.ignoransel.whimsicalideas.content.soulsail.render.*;
 import com.ignoransel.whimsicalideas.registry.*;
@@ -12,6 +13,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
+import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
 
 public class WhimsicalIdeas implements ModInitializer, ClientModInitializer {
@@ -34,6 +36,14 @@ public class WhimsicalIdeas implements ModInitializer, ClientModInitializer {
 
 
     }
+
+    public void registerSoulBannerItemRenderer(Item item) {
+        BuiltinItemRendererRegistry.INSTANCE.register(
+                item,
+                new SoulBannerItemRenderer()
+                );
+    }
+
     public static final EntityModelLayer SOUL_BANNER_LAYER =
             new EntityModelLayer(new Identifier("whimsical-ideas", "soul_banner"), "main");
     @Override
@@ -49,15 +59,23 @@ public class WhimsicalIdeas implements ModInitializer, ClientModInitializer {
                 SOUL_BANNER_LAYER,
                 SoulBannerModel::getTexturedModelData
         );
-        BuiltinItemRendererRegistry.INSTANCE.register(
-                WIItems.TEST_ZUN_SOUL_SAIL,     // 你的旗帜物品 Item 实例
-                new SoulBannerItemRenderer()
-        );
+
+        registerSoulBannerItemRenderer(WIItems.TEST_ZUN_SOUL_SAIL);
+        registerSoulBannerItemRenderer(WIItems.TEST_ZUN_SOUL_SAIL_MORTAL);
+        registerSoulBannerItemRenderer(WIItems.TEST_ZUN_SOUL_SAIL_EARTH);
+        registerSoulBannerItemRenderer(WIItems.TEST_ZUN_SOUL_SAIL_HEAVEN);
+        registerSoulBannerItemRenderer(WIItems.TEST_ZUN_SOUL_SAIL_MYSTERIOUS);
+        registerSoulBannerItemRenderer(WIItems.TEST_ZUN_SOUL_SAIL_YELLOW);
+        registerSoulBannerItemRenderer(WIItems.TEST_ZUN_SOUL_SAIL_UNIVERSE);
+        registerSoulBannerItemRenderer(WIItems.TEST_ZUN_SOUL_SAIL_COSMOS);
+        registerSoulBannerItemRenderer(WIItems.TEST_ZUN_SOUL_SAIL_FLOOD);
+        registerSoulBannerItemRenderer(WIItems.TEST_ZUN_SOUL_SAIL_WASTELAND);
+        registerSoulBannerItemRenderer(WIItems.TEST_ZUN_SOUL_SAIL_IMMORTAL);
+
         BlockEntityRendererFactories.register(
                 WIBlockEntities.SOUL_BANNER_BE,
-                ctx -> new SoulBannerRenderer(ctx)
+                SoulBannerRenderer::new
         );
-
 
         BlockEntityRendererFactories.register(
                 WIBlockEntities.SOUL_SAIL_POLE_BE,
