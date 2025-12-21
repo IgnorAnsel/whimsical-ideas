@@ -109,26 +109,23 @@ public class SoulSailBannerItem extends BannerItem implements ISoulSailItem {
         };
     }
     private static SoulBannerGrade getNextGrade(SoulBannerGrade currentGrade, long refinedSouls) {
-        // 计算每个品阶的提升条件（每10个已炼化的魂魄对应一个品阶）
-        int requiredSouls = (currentGrade.getLevel() + 1) * 10;  // 当前品阶 + 1 后的魂魄数量
-
-        // 如果已经炼化的魂魄超过了要求，返回下一个品阶
+        long requiredSouls = (long) Math.pow(10, currentGrade.getLevel() + 1);
         if (refinedSouls >= requiredSouls) {
-            switch (currentGrade) {
-                case MORTAL: return SoulBannerGrade.EARTH;
-                case EARTH: return SoulBannerGrade.HEAVEN;
-                case HEAVEN: return SoulBannerGrade.MYSTERIOUS;
-                case MYSTERIOUS: return SoulBannerGrade.YELLOW;
-                case YELLOW: return SoulBannerGrade.UNIVERSE;
-                case UNIVERSE: return SoulBannerGrade.COSMOS;
-                case COSMOS: return SoulBannerGrade.FLOOD;
-                case FLOOD: return SoulBannerGrade.WASTELAND;
-                case WASTELAND: return SoulBannerGrade.IMMORTAL;
-                default: return currentGrade;  // 达到最高品阶时不再升级
-            }
+            return switch (currentGrade) {
+                case MORTAL -> SoulBannerGrade.EARTH;
+                case EARTH -> SoulBannerGrade.HEAVEN;
+                case HEAVEN -> SoulBannerGrade.MYSTERIOUS;
+                case MYSTERIOUS -> SoulBannerGrade.YELLOW;
+                case YELLOW -> SoulBannerGrade.UNIVERSE;
+                case UNIVERSE -> SoulBannerGrade.COSMOS;
+                case COSMOS -> SoulBannerGrade.FLOOD;
+                case FLOOD -> SoulBannerGrade.WASTELAND;
+                case WASTELAND -> SoulBannerGrade.IMMORTAL;
+                default -> currentGrade; // 已经是最高阶
+            };
         }
 
-        return currentGrade;  // 如果未达到要求，保持当前品阶
+        return currentGrade;
     }
     // Tooltip 显示信息
     @Override
