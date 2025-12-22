@@ -9,7 +9,9 @@
     "LivingEntityNoDropsInSoulWorldMixin",
     "MiningToolItemMixin",
     "PlayerEntityDropMixin",
-    "ScreenHandlerMixin"
+    "ScreenHandlerMixin",
+    "LivingEntityMixin",
+    "LivingEntityDamageMixin"
   ],
   "injectors": {
     "defaultRequire": 1

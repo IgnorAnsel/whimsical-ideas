@@ -8,6 +8,8 @@ import net.minecraft.nbt.NbtString;
 
 import java.util.UUID;
 
+import static com.ignoransel.whimsicalideas.content.soulsail.SoulSailKeys.ABILITY_CDS;
+
 public final class SoulSailItemCompat {
     private static final String BET = "BlockEntityTag";
 
@@ -34,8 +36,66 @@ public final class SoulSailItemCompat {
         migrateInt(root, bet, SoulSailKeys.BANNER_GRADE);
         migrateInt(root, bet, SoulSailKeys.LAST_RADIUS);
         migrateInt(root, bet, SoulSailKeys.SELECTED_ABILITY);
+        migrateCompound(root, bet, ABILITY_CDS);
+        migrateBool(root, bet, SoulSailKeys.PASSIVE_SOUL_TOTEM);
+        migrateBool(root, bet, SoulSailKeys.PASSIVE_SOUL_BARRIER);
+
         return bet; // 写入/读取都统一到 BlockEntityTag
     }
+
+
+    // 技能
+    // SoulSailItemCompat
+    public static boolean isSoulTotemEnabled(ItemStack stack) {
+        return data(stack).getBoolean(SoulSailKeys.PASSIVE_SOUL_TOTEM);
+    }
+    public static void setSoulTotemEnabled(ItemStack stack, boolean enabled) {
+        data(stack).putBoolean(SoulSailKeys.PASSIVE_SOUL_TOTEM, enabled);
+    }
+    public static boolean toggleSoulTotem(ItemStack stack) {
+        boolean next = !isSoulTotemEnabled(stack);
+        setSoulTotemEnabled(stack, next);
+        return next;
+    }
+
+    public static boolean isSoulBarrierEnabled(ItemStack stack) {
+        return data(stack).getBoolean(SoulSailKeys.PASSIVE_SOUL_BARRIER);
+    }
+
+    public static void setSoulBarrierEnabled(ItemStack stack, boolean enabled) {
+        data(stack).putBoolean(SoulSailKeys.PASSIVE_SOUL_BARRIER, enabled);
+    }
+
+    public static boolean toggleSoulBarrier(ItemStack stack) {
+        boolean next = !isSoulBarrierEnabled(stack);
+        setSoulBarrierEnabled(stack, next);
+        return next;
+    }
+
+    public static boolean isAbilityOnCooldown(ItemStack stack, SoulSailAbility ab, long nowTick) {
+        NbtCompound nbt = data(stack);
+        NbtCompound cds = nbt.getCompound(ABILITY_CDS);
+        long until = cds.getLong(ab.name());
+        return until > nowTick;
+    }
+
+    public static void setAbilityCooldown(ItemStack stack, SoulSailAbility ab, long nowTick, int cooldownTicks) {
+        if (cooldownTicks <= 0) return;
+        NbtCompound nbt = data(stack);
+        NbtCompound cds = nbt.getCompound(ABILITY_CDS);
+        cds.putLong(ab.name(), nowTick + cooldownTicks);
+        nbt.put(ABILITY_CDS, cds);
+    }
+
+    private static NbtCompound getAbilityCds(ItemStack stack) {
+        NbtCompound nbt = data(stack);
+        if (!nbt.contains(SoulSailKeys.ABILITY_CDS, NbtElement.COMPOUND_TYPE)) {
+            nbt.put(SoulSailKeys.ABILITY_CDS, new NbtCompound());
+        }
+        return nbt.getCompound(SoulSailKeys.ABILITY_CDS);
+    }
+
+
     public static int getSelectedAbility(ItemStack stack) {
         return data(stack).getInt(SoulSailKeys.SELECTED_ABILITY);
     }
@@ -212,4 +272,11 @@ public final class SoulSailItemCompat {
             from.remove(key);
         }
     }
+    private static void migrateCompound(NbtCompound from, NbtCompound to, String key) {
+        if (from.contains(key, NbtElement.COMPOUND_TYPE) && !to.contains(key, NbtElement.COMPOUND_TYPE)) {
+            to.put(key, from.getCompound(key));
+            from.remove(key);
+        }
+    }
+
 }

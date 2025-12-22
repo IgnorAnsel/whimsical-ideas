@@ -1,7 +1,6 @@
 package com.ignoransel.whimsicalideas;
 
 import com.ignoransel.whimsicalideas.content.hex.handers.HexRefineHandler;
-import com.ignoransel.whimsicalideas.content.soulsail.SoulBannerGrade;
 import com.ignoransel.whimsicalideas.content.soulsail.SoulSailEvents;
 import com.ignoransel.whimsicalideas.content.soulsail.render.*;
 import com.ignoransel.whimsicalideas.registry.*;
@@ -11,6 +10,7 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.item.Item;
@@ -85,5 +85,7 @@ public class WhimsicalIdeas implements ModInitializer, ClientModInitializer {
                 WIItems.SOUL_SAIL_POLE,
                 new SoulSailPoleItemRenderer()
         );
+
+        HudRenderCallback.EVENT.register(new SoulSailCooldownHud());
     }
 }

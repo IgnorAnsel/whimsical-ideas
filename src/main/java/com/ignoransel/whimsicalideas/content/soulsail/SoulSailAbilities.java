@@ -5,8 +5,6 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
-import java.util.Arrays;
-
 public final class SoulSailAbilities {
     private SoulSailAbilities() {}
 
@@ -50,38 +48,54 @@ public final class SoulSailAbilities {
             return;
         }
 
+        long now = sp.age;
+        if (ab.cooldownTicks > 0 && SoulSailItemCompat.isAbilityOnCooldown(stack, ab, now)) {
+            return;
+        }
+        if (ab.passive) {
+            switch (ab) {
+                case SOUL_TOTEM -> {
+                    boolean on = SoulSailItemCompat.toggleSoulTotem(stack);
+                    sp.sendMessage(Text.literal("魂替: " + (on ? "开启" : "关闭"))
+                            .formatted(on ? Formatting.GREEN : Formatting.DARK_GRAY), true);
+                }
+                case SOUL_BARRIER -> {
+                    boolean on = SoulSailItemCompat.toggleSoulBarrier(stack);
+                    sp.sendMessage(Text.literal("魂御: " + (on ? "开启" : "关闭"))
+                            .formatted(on ? Formatting.GREEN : Formatting.DARK_GRAY), true);
+                }
+                default -> {}
+            }
+            return;
+        }
         switch (ab) {
             case NONE -> sp.sendMessage(Text.literal("当前无术式").formatted(Formatting.GRAY), true);
 
             case HEAL -> {
-                // 地阶：用魂回血（你可自己调整数值）
-                if (grade.getLevel() < SoulBannerGrade.EARTH.getLevel()) return;
-
                 if (sp.getHealth() >= sp.getMaxHealth()) {
                     sp.sendMessage(Text.literal("生命已满").formatted(Formatting.GRAY), true);
                     return;
                 }
+                if (!consumeAndCooldown(sp, stack, ab)) return;
 
-                // 防连点：给物品CD（2秒）
-                if (sp.getItemCooldownManager().isCoolingDown(stack.getItem())) return;
-
-                long cost = 200L;  // 消耗魂
-                float heal = 2.0f; // +1颗心
-
-                if (!SoulSailItemCompat.spendRefinedSouls(stack, cost)) {
-                    sp.sendMessage(Text.literal("魂魄不足").formatted(Formatting.RED), true);
-                    return;
-                }
-
+                float heal = 2.0f; // 1颗心
                 sp.heal(heal);
-                sp.getItemCooldownManager().set(stack.getItem(), 40);
-
-                sp.sendMessage(
-                        Text.literal("回春 +" + (heal / 2f) + "❤  (-" + cost + "魂)")
-                                .formatted(Formatting.GREEN),
-                        true
-                );
+                sp.sendMessage(Text.literal("回春 +" + (heal / 2f) + "❤").formatted(Formatting.GREEN), true);
             }
+
         }
     }
+
+    /** 统一：扣魂 + 设置物品CD */
+    private static boolean consumeAndCooldown(ServerPlayerEntity sp, ItemStack stack, SoulSailAbility ab) {
+        if (ab.costSouls > 0 && !SoulSailItemCompat.spendRefinedSouls(stack, ab.costSouls)) {
+            sp.sendMessage(Text.literal("魂魄不足 (-" + ab.costSouls + "魂)").formatted(Formatting.RED), true);
+            return false;
+        }
+
+        long now = sp.age;
+        SoulSailItemCompat.setAbilityCooldown(stack, ab, now, ab.cooldownTicks);
+        return true;
+    }
+
 }
