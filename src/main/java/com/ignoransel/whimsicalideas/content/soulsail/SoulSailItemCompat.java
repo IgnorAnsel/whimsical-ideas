@@ -33,9 +33,21 @@ public final class SoulSailItemCompat {
         migrateBool(root, bet, SoulSailKeys.ACTIVE);
         migrateInt(root, bet, SoulSailKeys.BANNER_GRADE);
         migrateInt(root, bet, SoulSailKeys.LAST_RADIUS);
+        migrateInt(root, bet, SoulSailKeys.SELECTED_ABILITY);
         return bet; // 写入/读取都统一到 BlockEntityTag
     }
-
+    public static int getSelectedAbility(ItemStack stack) {
+        return data(stack).getInt(SoulSailKeys.SELECTED_ABILITY);
+    }
+    public static void setSelectedAbility(ItemStack stack, int idx) {
+        data(stack).putInt(SoulSailKeys.SELECTED_ABILITY, idx);
+    }
+    public static SoulSailAbility getSelectedAbilitySafe(ItemStack stack) {
+        int idx = getSelectedAbility(stack);
+        SoulSailAbility[] vals = SoulSailAbility.values();
+        if (idx < 0 || idx >= vals.length) return SoulSailAbility.NONE;
+        return vals[idx];
+    }
     public static String getOrCreateSailId(ItemStack stack) {
         var nbt = data(stack); // BlockEntityTag
         if (!nbt.contains(SoulSailKeys.SAIL_ID)) {
@@ -105,6 +117,16 @@ public final class SoulSailItemCompat {
         var nbt = data(stack);
         long raw = nbt.getLong(SoulSailKeys.RAW_SOULS);
         nbt.putLong(SoulSailKeys.RAW_SOULS, Math.max(0L, raw + amount));
+    }
+
+    public static boolean spendRefinedSouls(ItemStack stack, long amount) {
+        var nbt = data(stack);
+        long refined = nbt.getLong(SoulSailKeys.REFINED_SOULS);
+        if (refined >= amount) {
+            nbt.putLong(SoulSailKeys.REFINED_SOULS, Math.max(0L, refined - amount));
+            return true;
+            }
+        return false;
     }
 
     public static void addRefinedSouls(ItemStack stack, long amount, long cap) {

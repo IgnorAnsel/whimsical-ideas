@@ -13,6 +13,7 @@ public final class SoulSailKeys {
     public static final String BANNER_GRADE = "BannerGrade";        // int (0-9) 品阶等级
     public static final String LAST_RADIUS = "LastRadius"; // int
     public static final String SAIL_ID = "SailId"; // String UUID
+    public static final String SELECTED_ABILITY = "SelectedAbility"; // int (枚举 ordinal)
 
     // 返回点（进入魂帆世界前的位置）
     public static final String RETURN_DIM = "ReturnDim";      // String (registry key like "minecraft:overworld")

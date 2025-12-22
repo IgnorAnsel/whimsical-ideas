@@ -25,10 +25,6 @@ public class SoulSailBannerItem extends BannerItem implements ISoulSailItem {
         this.tier = tier;
     }
 
-    public SoulSailBannerItem(Block standingBlock, Settings settings, SoulSailTier tier) {
-        super(standingBlock, null, settings);
-        this.tier = tier;
-    }
     @Override
     public ActionResult useOnBlock(ItemUsageContext context) {
         World world = context.getWorld();
@@ -133,6 +129,9 @@ public class SoulSailBannerItem extends BannerItem implements ISoulSailItem {
         tooltip.add(Text.literal("未炼化: " + rawsouls));
 
         tooltip.add(Text.literal("已炼化: " + refinedsouls));
+        SoulSailAbility ab = SoulSailItemCompat.getSelectedAbilitySafe(stack);
+        tooltip.add(Text.literal("当前术式: " + ab.displayName).formatted(Formatting.AQUA));
+
         if (SoulSailItemCompat.isActive(stack)) {
             tooltip.add(Text.literal("位于此魂幡（已锁定）"));
         } else {
