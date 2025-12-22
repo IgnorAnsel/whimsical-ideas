@@ -1,10 +1,8 @@
 package com.ignoransel.whimsicalideas.content.soulsail;
 
-import net.fabricmc.fabric.api.dimension.v1.FabricDimensions;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BannerItem;
-import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -16,7 +14,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
 
 import java.util.List;
 
@@ -71,7 +68,6 @@ public class SoulSailBannerItem extends BannerItem implements ISoulSailItem {
             // 魂幡世界：潜行长按 -> 回去
             if (sp.isSneaking() && inSoulWorld && SoulSailActive.isActiveSail(sp, stack)) {
                 SoulSailActive.clearActive(sp);
-                SoulSailItemCompat.setActive(stack, false);
                 SoulSailRoomManager.teleportBack(sp, stack);
                 return stack;
             }
@@ -94,20 +90,7 @@ public class SoulSailBannerItem extends BannerItem implements ISoulSailItem {
         }
         return stack;
     }
-    private Formatting getGradeFormatting(SoulBannerGrade grade) {
-        return switch (grade) {
-            case MORTAL -> Formatting.GRAY;
-            case EARTH -> Formatting.DARK_GREEN;
-            case HEAVEN -> Formatting.BLUE;
-            case MYSTERIOUS -> Formatting.DARK_PURPLE;
-            case YELLOW -> Formatting.YELLOW;
-            case UNIVERSE -> Formatting.DARK_BLUE;
-            case COSMOS -> Formatting.AQUA;
-            case FLOOD -> Formatting.LIGHT_PURPLE;
-            case WASTELAND -> Formatting.GOLD;
-            case IMMORTAL -> Formatting.RED;
-        };
-    }
+
     private static SoulBannerGrade getNextGrade(SoulBannerGrade currentGrade, long refinedSouls) {
         long requiredSouls = (long) Math.pow(10, currentGrade.getLevel() + 1);
         if (refinedSouls >= requiredSouls) {
@@ -142,9 +125,8 @@ public class SoulSailBannerItem extends BannerItem implements ISoulSailItem {
             setTier(grade.getSoulSailTier());
             grade = Nextgrade;
         }
-        Formatting gradeColor = getGradeFormatting(grade);
         tooltip.add(Text.literal("品阶: ").formatted(Formatting.GRAY)
-                .append(Text.literal(grade.getDisplayName()).formatted(gradeColor, Formatting.BOLD)));
+                .append(Text.literal(grade.getDisplayName()).formatted(grade.getTooltipFormatting(), Formatting.BOLD)));
 
         tooltip.add(Text.literal("魂魄: " + souls));
 

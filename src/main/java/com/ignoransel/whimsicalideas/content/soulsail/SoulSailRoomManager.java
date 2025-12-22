@@ -51,7 +51,7 @@ public final class SoulSailRoomManager {
         int r = tier.roomRadius;
 
         int lastR = nbt.contains(SoulSailKeys.LAST_RADIUS) ? nbt.getInt(SoulSailKeys.LAST_RADIUS) : 0;
-        System.out.println("Last R:" + lastR);
+        System.out.println("Last R: " + lastR);
         int floorY = w.getBottomY() + 80; // 地板高度
         int minY = w.getBottomY();        // 世界最低点
         int maxY = w.getTopY();           // 世界最高点
@@ -74,7 +74,7 @@ public final class SoulSailRoomManager {
         buildFullHeightWallRing(w, cx, cz, r, minY, maxY, floorY);
 
         if (lastR != r) {
-            System.out.println("存入"+r);
+            System.out.println("存入 "+r);
             nbt.putInt(SoulSailKeys.LAST_RADIUS, r);
         }
     }
@@ -296,6 +296,7 @@ public final class SoulSailRoomManager {
 
     public static void teleportBack(ServerPlayerEntity player, ItemStack sail) {
         var nbt = SoulSailItemCompat.data(sail);
+        SoulSailItemCompat.setActive(sail, false);
         if (!nbt.contains(SoulSailKeys.RETURN_DIM)) {
             // 没有记录就回主世界出生点附近（兜底）
             var overworld = player.getServer().getWorld(World.OVERWORLD);

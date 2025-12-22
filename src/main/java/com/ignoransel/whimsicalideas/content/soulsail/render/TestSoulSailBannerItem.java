@@ -63,7 +63,6 @@ public class TestSoulSailBannerItem extends BlockItem implements ISoulSailItem {
             // 魂幡世界：潜行长按 -> 回去
             if (sp.isSneaking() && inSoulWorld && SoulSailActive.isActiveSail(sp, stack)) {
                 SoulSailActive.clearActive(sp);
-                SoulSailItemCompat.setActive(stack, false);
                 SoulSailRoomManager.teleportBack(sp, stack);
                 return stack;
             }
@@ -85,20 +84,7 @@ public class TestSoulSailBannerItem extends BlockItem implements ISoulSailItem {
         }
         return stack;
     }
-    private Formatting getGradeFormatting(SoulBannerGrade grade) {
-        return switch (grade) {
-            case MORTAL -> Formatting.GRAY;
-            case EARTH -> Formatting.DARK_GREEN;
-            case HEAVEN -> Formatting.BLUE;
-            case MYSTERIOUS -> Formatting.DARK_PURPLE;
-            case YELLOW -> Formatting.YELLOW;
-            case UNIVERSE -> Formatting.DARK_BLUE;
-            case COSMOS -> Formatting.AQUA;
-            case FLOOD -> Formatting.LIGHT_PURPLE;
-            case WASTELAND -> Formatting.GOLD;
-            case IMMORTAL -> Formatting.RED;
-        };
-    }
+
     private static SoulBannerGrade getNextGrade(SoulBannerGrade currentGrade, long refinedSouls) {
         long requiredSouls = (long) Math.pow(10, currentGrade.getLevel() + 1);
         if (refinedSouls >= requiredSouls) {
@@ -132,9 +118,8 @@ public class TestSoulSailBannerItem extends BlockItem implements ISoulSailItem {
             SoulSailItemCompat.setBannerGrade(stack, Nextgrade);
             grade = Nextgrade;
         }
-        Formatting gradeColor = getGradeFormatting(grade);
         tooltip.add(Text.literal("品阶: ").formatted(Formatting.GRAY)
-                .append(Text.literal(grade.getDisplayName()).formatted(gradeColor, Formatting.BOLD)));
+                .append(Text.literal(grade.getDisplayName()).formatted(grade.getTooltipFormatting(), Formatting.BOLD)));
 
         tooltip.add(Text.literal("魂魄: " + souls));
 
