@@ -1,12 +1,12 @@
 package com.ignoransel.whimsicalideas.content.soulsail;
 
+import com.ignoransel.whimsicalideas.mixin.ExperienceOrbEntityAccessor;
+import com.ignoransel.whimsicalideas.registry.WIEntities;
 import net.fabricmc.fabric.api.dimension.v1.FabricDimensions;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
@@ -15,6 +15,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.TeleportTarget;
 import net.minecraft.world.World;
@@ -32,54 +33,166 @@ public final class SoulSailRoomManager {
     public static void ensureRoomBuilt(ServerWorld w, ServerPlayerEntity player, ItemStack sail, SoulSailTier tier) {
         var nbt = SoulSailItemCompat.data(sail);
 
+        //  初始化房间坐标
         if (!nbt.contains(SoulSailKeys.ROOM_X) || !nbt.contains(SoulSailKeys.ROOM_Z)) {
-            // 简单：用玩家 UUID hash 分配房间中心点（避免多人重叠）
-            UUID id = UUID.fromString(getOrCreateSailId(sail));
+            UUID id = UUID.fromString(SoulSailItemCompat.getOrCreateSailId(sail));
+            int roomSize = 1024;
             int hx = id.hashCode();
-            int roomSize = 256; // 房间间距
             int cx = (hx & 1023) * roomSize;
             int cz = ((hx >>> 10) & 1023) * roomSize;
 
             nbt.putInt(SoulSailKeys.ROOM_X, cx);
             nbt.putInt(SoulSailKeys.ROOM_Z, cz);
+            nbt.putInt(SoulSailKeys.LAST_RADIUS, 0);
         }
 
         int cx = nbt.getInt(SoulSailKeys.ROOM_X);
         int cz = nbt.getInt(SoulSailKeys.ROOM_Z);
         int r = tier.roomRadius;
-        int y = w.getBottomY() + 80; // 固定高度，简单稳定
 
-        // 建地板
+        int lastR = nbt.contains(SoulSailKeys.LAST_RADIUS) ? nbt.getInt(SoulSailKeys.LAST_RADIUS) : 0;
+        System.out.println("Last R:" + lastR);
+        int floorY = w.getBottomY() + 80; // 地板高度
+        int minY = w.getBottomY();        // 世界最低点
+        int maxY = w.getTopY();           // 世界最高点
+
+        if (lastR > 0 && lastR != r) {
+            removeFullHeightWallRing(w, cx, cz, lastR, minY, maxY);
+        }
+
         for (int x = cx - r; x <= cx + r; x++) {
             for (int z = cz - r; z <= cz + r; z++) {
-                w.setBlockState(new BlockPos(x, y, z), Blocks.SMOOTH_STONE.getDefaultState(), 3);
-//                w.setBlockState(new BlockPos(x, y + 1, z), Blocks.AIR.getDefaultState(), 3);
-//                w.setBlockState(new BlockPos(x, y + 2, z), Blocks.AIR.getDefaultState(), 3);
+                BlockPos pos = new BlockPos(x, floorY, z);
+                // 只有当是空气、旧屏障时才铺，防止覆盖玩家放的方块
+                BlockState state = w.getBlockState(pos);
+                if (state.isAir() || state.isOf(Blocks.BARRIER)) {
+                    w.setBlockState(pos, Blocks.SMOOTH_STONE.getDefaultState(), 3);
+                }
             }
         }
 
-        // 围边界（Barrier）
-        int wallH = 6;
+        buildFullHeightWallRing(w, cx, cz, r, minY, maxY, floorY);
+
+        if (lastR != r) {
+            System.out.println("存入"+r);
+            nbt.putInt(SoulSailKeys.LAST_RADIUS, r);
+        }
+    }
+
+    /**
+     * 辅助：建造全高度屏障墙
+     * @param floorY 地板高度，如果你希望墙壁在地板处也是屏障（把你围起来），或者地板处是石头
+     * 这里逻辑是：墙壁外圈全是屏障，地板那是石头（在主逻辑里铺了），所以这里不需要特殊避开地板，
+     * 因为墙壁是在 r 的边缘，而地板是在 r 内部。边缘通常也作为墙。
+     */
+    private static void buildFullHeightWallRing(ServerWorld w, int cx, int cz, int r, int minY, int maxY, int floorY) {
+        // 遍历四条边
         for (int x = cx - r; x <= cx + r; x++) {
-            for (int dy = 0; dy <= wallH; dy++) {
-                w.setBlockState(new BlockPos(x, y + dy, cz - r), Blocks.BARRIER.getDefaultState(), 3);
-                w.setBlockState(new BlockPos(x, y + dy, cz + r), Blocks.BARRIER.getDefaultState(), 3);
-            }
+            fillColumn(w, x, cz - r, minY, maxY, floorY); // 北墙
+            fillColumn(w, x, cz + r, minY, maxY, floorY); // 南墙
         }
         for (int z = cz - r; z <= cz + r; z++) {
-            for (int dy = 0; dy <= wallH; dy++) {
-                w.setBlockState(new BlockPos(cx - r, y + dy, z), Blocks.BARRIER.getDefaultState(), 3);
-                w.setBlockState(new BlockPos(cx + r, y + dy, z), Blocks.BARRIER.getDefaultState(), 3);
+            fillColumn(w, cx - r, z, minY, maxY, floorY); // 西墙
+            fillColumn(w, cx + r, z, minY, maxY, floorY); // 东墙
+        }
+    }
+
+    /**
+     * 辅助：移除全高度屏障墙 (只移除 Barrier，不破坏其他方块)
+     */
+    private static void removeFullHeightWallRing(ServerWorld w, int cx, int cz, int r, int minY, int maxY) {
+        for (int x = cx - r; x <= cx + r; x++) {
+            clearColumn(w, x, cz - r, minY, maxY);
+            clearColumn(w, x, cz + r, minY, maxY);
+        }
+        for (int z = cz - r; z <= cz + r; z++) {
+            clearColumn(w, cx - r, z, minY, maxY);
+            clearColumn(w, cx + r, z, minY, maxY);
+        }
+    }
+
+    // 单列填充屏障
+    private static void fillColumn(ServerWorld w, int x, int z, int minY, int maxY, int floorY) {
+        BlockPos.Mutable mutable = new BlockPos.Mutable(x, minY, z);
+        BlockState barrier = Blocks.BARRIER.getDefaultState();
+
+        for (int y = minY; y < maxY; y++) {
+            mutable.setY(y);
+            // 性能优化：只有当不是屏障时才设置，减少区块更新
+            if (!w.getBlockState(mutable).isOf(Blocks.BARRIER)) {
+                // 可选：如果 y == floorY，是否要强制设为屏障？
+                // 通常边缘一圈是墙，地板在墙里面。所以边缘全设屏障没问题。
+                w.setBlockState(mutable, barrier, 3);
             }
         }
     }
 
+    // 单列清除屏障
+    private static void clearColumn(ServerWorld w, int x, int z, int minY, int maxY) {
+        BlockPos.Mutable mutable = new BlockPos.Mutable(x, minY, z);
+        BlockState air = Blocks.AIR.getDefaultState();
+
+        for (int y = minY; y < maxY; y++) {
+            mutable.setY(y);
+            // 安全检查：只拆 Barrier，防止拆了玩家的建筑
+            if (w.getBlockState(mutable).isOf(Blocks.BARRIER)) {
+                w.setBlockState(mutable, air, 3);
+            }
+        }
+    }
+    private static long countExistingSoulOrbs(ServerWorld w, int cx, int cz, int y, SoulSailTier tier) {
+        Box box = new Box(cx - tier.roomRadius, y - 20, cz - tier.roomRadius, cx + tier.roomRadius, y + 6, cz + tier.roomRadius);
+        System.out.println("Querying box: " + box);  // 调试信息，确保查询范围正确
+        var entities = w.getEntitiesByType(WIEntities.SOUL_XP_ORB, box, e -> true);
+        System.out.println("Found " + entities.size() + " SoulXpOrbs.");
+        for (Entity entity : entities) {
+            System.out.println("SoulXpOrb at: " + entity.getBlockPos());
+        }
+
+        return entities.size();  // 返回找到的实体数量
+    }
+
+    private static void spawnMissingSoulOrbs(ServerWorld w, ItemStack sail, SoulSailTier tier, long missingOrbs) {
+        int cx = SoulSailItemCompat.getRoomX(sail);
+        int cz = SoulSailItemCompat.getRoomZ(sail);
+        int y = w.getBottomY() + 82;
+        long remainingOrbs = missingOrbs;
+        System.out.println("remainingOrbs: " + remainingOrbs);
+        while (remainingOrbs > 0) {
+
+            SoulXpOrbEntity orb = new SoulXpOrbEntity(WIEntities.SOUL_XP_ORB, w);
+//            double posX = cx + 0.5 + (w.random.nextDouble() - 0.5) * 0.8;
+//            double posZ = cz + 0.5 + (w.random.nextDouble() - 0.5) * 0.8;
+            double posY = y + 0.2;
+
+            double posX = cx;
+            double posZ = cz;
+
+            orb.refreshPositionAndAngles(posX, posY, posZ, 0, 0);
+            ((ExperienceOrbEntityAccessor) orb).wi$setAmount(1);
+            w.spawnEntity(orb);
+            remainingOrbs -= 1;
+        }
+    }
     public static void teleportIntoRoom(ServerWorld w, ServerPlayerEntity player, ItemStack sail, SoulSailTier tier) {
         var nbt = SoulSailItemCompat.data(sail);
         int cx = nbt.getInt(SoulSailKeys.ROOM_X);
         int cz = nbt.getInt(SoulSailKeys.ROOM_Z);
         int y = w.getBottomY() + 82;
-
+        // 计算当前已经生成的 SoulXpOrbEntity 数量
+        long currentOrbs = countExistingSoulOrbs(w, cx, cz, y, tier);
+        System.out.println("currentOrbs: " + currentOrbs);
+        // 计算需要生成的 SoulXpOrbEntity 数量
+        int level = SoulSailItemCompat.getBannerGrade(sail).getLevel() - 2;
+        long need = (long) (SoulSailItemCompat.getRefinedSouls(sail) / Math.pow(10,Math.max(0, level)));
+        long missingOrbs = Math.max(0, need - currentOrbs);
+        System.out.println("missingOrbs: " + missingOrbs);
+        // 如果有缺失的魂，补充生成
+        if (missingOrbs > 0) {
+            spawnMissingSoulOrbs(w, sail, tier, missingOrbs);
+        }
+        long afterSpawnOrbs = countExistingSoulOrbs(w, cx, cz, y, tier);
+        System.out.println("生成后魂数量: " + afterSpawnOrbs);
         // FabricDimensions 传送
         net.fabricmc.fabric.api.dimension.v1.FabricDimensions.teleport(player, w, new TeleportTarget(
                 new Vec3d(cx + 0.5, y, cz + 0.5),
@@ -217,6 +330,4 @@ public final class SoulSailRoomManager {
                         pitch
                 ));
     }
-
-
 }

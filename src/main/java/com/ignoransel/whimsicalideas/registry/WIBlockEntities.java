@@ -1,8 +1,10 @@
 package com.ignoransel.whimsicalideas.registry;
 
 import com.ignoransel.whimsicalideas.WhimsicalIdeas;
+import com.ignoransel.whimsicalideas.content.soulsail.render.SoulSailPoleBlockEntity;
 import com.ignoransel.whimsicalideas.content.soultablet.SoulTabletBlockEntity;
 import com.ignoransel.whimsicalideas.content.soultablet.SoulTabletRenderer;
+import com.ignoransel.whimsicalideas.entity.SoulBannerBlockEntity;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
@@ -16,7 +18,7 @@ public final class WIBlockEntities {
     private WIBlockEntities(){}
 
     public static BlockEntityType<SoulTabletBlockEntity> SOUL_TABLET_BE;
-
+    public static BlockEntityType<SoulBannerBlockEntity> SOUL_BANNER_BE;
     public static void init() {
         SOUL_TABLET_BE = Registry.register(
                 Registries.BLOCK_ENTITY_TYPE,
@@ -27,7 +29,23 @@ public final class WIBlockEntities {
                         WIBlocks.SOUL_TABLET_BROKEN, WIBlocks.SOUL_TABLET_BROKEN_WALL
                 ).build()
         );
+
+        SOUL_BANNER_BE = Registry.register(
+                Registries.BLOCK_ENTITY_TYPE,
+                new Identifier("whimsical-ideas", "soul_banner"),
+                FabricBlockEntityTypeBuilder.create(SoulBannerBlockEntity::new,
+                        WIBlocks.TEST_ZUN_SOUL_BANNER,
+                        WIBlocks.TEST_ZUN_SOUL_WALL_BANNER
+                ).build()
+        );
+
     }
+    public static final BlockEntityType<SoulSailPoleBlockEntity> SOUL_SAIL_POLE_BE =
+            Registry.register(
+                    Registries.BLOCK_ENTITY_TYPE,
+                    new Identifier("whimsical-ideas", "soul_sail_pole"),
+                    BlockEntityType.Builder.create(SoulSailPoleBlockEntity::new, WIBlocks.SOUL_SAIL_POLE).build(null)
+            );
 
     public static void initClient() {
         BlockEntityRendererRegistry.register(SOUL_TABLET_BE, SoulTabletRenderer::new);

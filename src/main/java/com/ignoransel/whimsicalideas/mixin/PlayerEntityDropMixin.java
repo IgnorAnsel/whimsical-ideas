@@ -1,7 +1,7 @@
 package com.ignoransel.whimsicalideas.mixin;
 
+import com.ignoransel.whimsicalideas.content.soulsail.ISoulSailItem;
 import com.ignoransel.whimsicalideas.content.soulsail.SoulSailActive;
-import com.ignoransel.whimsicalideas.content.soulsail.SoulSailBannerItem;
 import com.ignoransel.whimsicalideas.content.soulsail.SoulSailRoomManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -31,7 +31,7 @@ public abstract class PlayerEntityDropMixin {
         if (!(self instanceof ServerPlayerEntity sp)) return;
         if (!sp.getServerWorld().getRegistryKey().equals(SoulSailRoomManager.SOUL_SAIL_DIM)) return;
 
-        if (!stack.isEmpty() && SoulSailActive.isActiveSail(sp, stack) && stack.getItem() instanceof SoulSailBannerItem) {
+        if (!stack.isEmpty() && SoulSailActive.isActiveSail(sp, stack) && stack.getItem() instanceof ISoulSailItem) {
             SoulSailRoomManager.teleportBack(sp, stack);
         }
     }

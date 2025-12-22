@@ -1,7 +1,7 @@
 package com.ignoransel.whimsicalideas.mixin;
 
+import com.ignoransel.whimsicalideas.content.soulsail.ISoulSailItem;
 import com.ignoransel.whimsicalideas.content.soulsail.SoulSailActive;
-import com.ignoransel.whimsicalideas.content.soulsail.SoulSailBannerItem;
 import com.ignoransel.whimsicalideas.content.soulsail.SoulSailRoomManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -51,6 +51,6 @@ public abstract class ScreenHandlerMixin {
     }
 
     private static boolean isSoulSail(ItemStack stack) {
-        return !stack.isEmpty() && stack.getItem() instanceof SoulSailBannerItem;
+        return !stack.isEmpty() && stack.getItem() instanceof ISoulSailItem;
     }
 }

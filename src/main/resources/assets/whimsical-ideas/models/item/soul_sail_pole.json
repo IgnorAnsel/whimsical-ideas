@@ -1,0 +1,7 @@
+{
+  "parent": "builtin/entity",
+  "gui_light": "front",
+  "textures": {
+    "particle": "whimsical-ideas:block/soul_sail_pole"
+  }
+}

@@ -25,4 +25,7 @@ public interface SoulSailBannerData {
 
     /** markDirty + updateListeners 同步到客户端 */
     void wi$markDirtyAndSync();
+
+    SoulBannerGrade wi$getBannerGrade();
+    void wi$setBannerGrade(SoulBannerGrade grade);
 }

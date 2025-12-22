@@ -28,9 +28,9 @@
                 { "op":"replace", "source":"RefinedSouls", "target":"BlockEntityTag.RefinedSouls" },
                 { "op":"replace", "source":"Souls",        "target":"BlockEntityTag.Souls" },
                 { "op":"replace", "source":"SailId", "target":"BlockEntityTag.SailId" },
-
+                { "op":"replace", "source":"BannerGrade", "target":"BlockEntityTag.BannerGrade" },
                 { "op":"replace", "source":"StoredMobs", "target":"BlockEntityTag.StoredMobs" },
-
+                { "op":"replace", "source":"LastRadius", "target":"BlockEntityTag.LastRadius" },
                 { "op":"replace", "source":"RoomX",      "target":"BlockEntityTag.RoomX" },
                 { "op":"replace", "source":"RoomZ",      "target":"BlockEntityTag.RoomZ" },
 

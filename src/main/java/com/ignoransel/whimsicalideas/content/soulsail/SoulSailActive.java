@@ -33,7 +33,7 @@ public final class SoulSailActive {
     }
 
     public static boolean isActiveSail(ServerPlayerEntity sp, ItemStack stack) {
-        if (stack.isEmpty() || !(stack.getItem() instanceof SoulSailBannerItem)) return false;
+        if (stack.isEmpty() || !(stack.getItem() instanceof ISoulSailItem)) return false;
         String active = getActiveId(sp);
         if (active == null || active.isEmpty()) return false;
 
