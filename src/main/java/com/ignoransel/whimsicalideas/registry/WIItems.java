@@ -29,6 +29,8 @@ public final class WIItems {
     public static Item SOUL_TABLET_GOLD_ITEM;
     public static Item SOUL_TABLET_DIAMOND_ITEM;
     public static Item SOUL_TABLET_NETHERITE_ITEM;
+
+
     public static Item ZUN_SOUL_SAIL_MORTAL = registerGradeBanner(SoulBannerGrade.MORTAL);
     public static Item ZUN_SOUL_SAIL_EARTH = registerGradeBanner(SoulBannerGrade.EARTH);
     public static Item ZUN_SOUL_SAIL_HEAVEN = registerGradeBanner(SoulBannerGrade.HEAVEN);
@@ -51,6 +53,13 @@ public final class WIItems {
     public static Item TEST_ZUN_SOUL_SAIL_FLOOD = registerTestGradeBanner(SoulBannerGrade.FLOOD);
     public static Item TEST_ZUN_SOUL_SAIL_WASTELAND = registerTestGradeBanner(SoulBannerGrade.WASTELAND);
     public static Item TEST_ZUN_SOUL_SAIL_IMMORTAL = registerTestGradeBanner(SoulBannerGrade.IMMORTAL);
+
+    public static Item HEX_FORGE_IRON;
+    public static Item HEX_FORGE_GOLD;
+    public static Item HEX_FORGE_DIAMOND;
+    public static Item HEX_FORGE_NETHERITE;
+    public static Item HEX_FORGE_RANDOM;
+
 
 
     public static Map<SoulBannerGrade, Item> GRADE_BANNERS = new HashMap<>();
@@ -145,35 +154,36 @@ public final class WIItems {
                 }
         );
     }
-    public static final Item HEX_FORGE_IRON = Registry.register(
-            Registries.ITEM,
-            new Identifier("whimsical-ideas", "hex_forge_iron"),
-            new HexForgeItem(new FabricItemSettings().maxCount(1), HexRarity.IRON)
-    );
 
-    public static final Item HEX_FORGE_GOLD = Registry.register(
-            Registries.ITEM,
-            new Identifier("whimsical-ideas", "hex_forge_gold"),
-            new HexForgeItem(new FabricItemSettings().maxCount(1), HexRarity.GOLD)
-    );
+    private static void registerHexForge() {
+        HEX_FORGE_IRON = Registry.register(
+                Registries.ITEM,
+                new Identifier(WhimsicalIdeas.MODID, "hex_forge_iron"),
+                new HexForgeItem(new FabricItemSettings().maxCount(1), HexRarity.IRON)
+        );
+        HEX_FORGE_GOLD = Registry.register(
+                Registries.ITEM,
+                new Identifier(WhimsicalIdeas.MODID, "hex_forge_gold"),
+                new HexForgeItem(new FabricItemSettings().maxCount(1), HexRarity.GOLD)
+        );
+        HEX_FORGE_DIAMOND = Registry.register(
+                Registries.ITEM,
+                new Identifier(WhimsicalIdeas.MODID, "hex_forge_diamond"),
+                new HexForgeItem(new FabricItemSettings().maxCount(1), HexRarity.DIAMOND)
+        );
+        HEX_FORGE_NETHERITE = Registry.register(
+                Registries.ITEM,
+                new Identifier(WhimsicalIdeas.MODID, "hex_forge_netherite"),
+                new HexForgeItem(new FabricItemSettings().maxCount(1), HexRarity.NETHERITE)
+        );
+        HEX_FORGE_RANDOM = Registry.register(
+                Registries.ITEM,
+                new Identifier(WhimsicalIdeas.MODID, "hex_forge_random"),
+                new RandomHexForgeItem(new FabricItemSettings().maxCount(16))
+        );
 
-    public static final Item HEX_FORGE_DIAMOND = Registry.register(
-            Registries.ITEM,
-            new Identifier("whimsical-ideas", "hex_forge_diamond"),
-            new HexForgeItem(new FabricItemSettings().maxCount(1), HexRarity.DIAMOND)
-    );
+    }
 
-    public static final Item HEX_FORGE_NETHERITE = Registry.register(
-            Registries.ITEM,
-            new Identifier("whimsical-ideas", "hex_forge_netherite"),
-            new HexForgeItem(new FabricItemSettings().maxCount(1), HexRarity.NETHERITE)
-    );
-
-    public static final Item HEX_FORGE_RANDOM = Registry.register(
-            Registries.ITEM,
-            new Identifier("whimsical-ideas", "hex_forge_random"),
-            new RandomHexForgeItem(new FabricItemSettings().maxCount(16))
-    );
 
     public static final Item ZUN_SOUL_SAIL =
             Registry.register(Registries.ITEM, new Identifier(WhimsicalIdeas.MODID, "zun_soul_sail"),
@@ -240,6 +250,7 @@ public final class WIItems {
                 new SoulTabletItem(WIBlocks.SOUL_TABLET_NETHERITE, WIBlocks.SOUL_TABLET_NETHERITE_WALL,
                         new FabricItemSettings().maxCount(1))
         );
+        registerHexForge();
     }
 
     private static Identifier id(String path){

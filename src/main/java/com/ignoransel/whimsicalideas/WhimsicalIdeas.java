@@ -33,8 +33,6 @@ public class WhimsicalIdeas implements ModInitializer, ClientModInitializer {
         WIStatusEffects.init();
         WIRecipes.init();
         WIEntities.init();
-
-
     }
 
     public void registerSoulBannerItemRenderer(Item item) {

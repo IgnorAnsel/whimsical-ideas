@@ -156,21 +156,21 @@ public final class SoulSailRoomManager {
         int cx = SoulSailItemCompat.getRoomX(sail);
         int cz = SoulSailItemCompat.getRoomZ(sail);
         int y = w.getBottomY() + 82;
-
         long remainingOrbs = missingOrbs;
+        System.out.println("remainingOrbs: " + remainingOrbs);
         while (remainingOrbs > 0) {
 
             SoulXpOrbEntity orb = new SoulXpOrbEntity(WIEntities.SOUL_XP_ORB, w);
-            double posX = cx + 0.5 + (w.random.nextDouble() - 0.5) * 0.8;
-            double posZ = cz + 0.5 + (w.random.nextDouble() - 0.5) * 0.8;
+//            double posX = cx + 0.5 + (w.random.nextDouble() - 0.5) * 0.8;
+//            double posZ = cz + 0.5 + (w.random.nextDouble() - 0.5) * 0.8;
             double posY = y + 0.2;
+
+            double posX = cx;
+            double posZ = cz;
+
             orb.refreshPositionAndAngles(posX, posY, posZ, 0, 0);
             ((ExperienceOrbEntityAccessor) orb).wi$setAmount(1);
-            if (w.spawnEntity(orb)) {
-                System.out.println("SoulXpOrbEntity successfully spawned.");
-            } else {
-                System.out.println("Failed to spawn SoulXpOrbEntity at: " + posX + ", " + posY + ", " + posZ);
-            }
+            w.spawnEntity(orb);
             remainingOrbs -= 1;
         }
     }
@@ -183,7 +183,9 @@ public final class SoulSailRoomManager {
         long currentOrbs = countExistingSoulOrbs(w, cx, cz, y, tier);
         System.out.println("currentOrbs: " + currentOrbs);
         // 计算需要生成的 SoulXpOrbEntity 数量
-        long missingOrbs = Math.max(0, SoulSailItemCompat.getRefinedSouls(sail) - currentOrbs);
+        int level = SoulSailItemCompat.getBannerGrade(sail).getLevel() - 2;
+        long need = (long) (SoulSailItemCompat.getRefinedSouls(sail) / Math.pow(10,Math.max(0, level)));
+        long missingOrbs = Math.max(0, need - currentOrbs);
         System.out.println("missingOrbs: " + missingOrbs);
         // 如果有缺失的魂，补充生成
         if (missingOrbs > 0) {
@@ -198,8 +200,6 @@ public final class SoulSailRoomManager {
                 player.getYaw(),
                 player.getPitch()
         ));
-
-
     }
     public static void spawnPendingMobsOnce(ServerWorld w, ItemStack sail, SoulSailTier tier) {
         var nbt = SoulSailItemCompat.data(sail);
@@ -330,6 +330,4 @@ public final class SoulSailRoomManager {
                         pitch
                 ));
     }
-
-
 }

@@ -42,14 +42,20 @@ public class SoulXpOrbEntityRenderer extends EntityRenderer<SoulXpOrbEntity> {
 
         // 如果你希望它“发光更亮”，用 fullBright；不需要就用 light
         int fullBright = LightmapTextureManager.MAX_LIGHT_COORDINATE;
+        float t = (entity.age + tickDelta);
+        float pulse = 0.6f + 0.4f * (float)Math.sin(t * 0.2f);
+        int a = (int)(120 + 100 * pulse); // 120~220
+        int r = (int)(80  + 40  * pulse);
+        int g = (int)(160 + 60  * pulse);
+        int b = 255;
 
-        vc.vertex(mat, -0.5f, -0.5f, 0.0f).color(255,255,255,255).texture(0f,1f)
+        vc.vertex(mat, -0.5f, -0.5f, 0.0f).color(r,g,b,a).texture(0f,1f)
                 .overlay(OverlayTexture.DEFAULT_UV).light(fullBright).normal(0,1,0).next();
-        vc.vertex(mat,  0.5f, -0.5f, 0.0f).color(255,255,255,255).texture(1f,1f)
+        vc.vertex(mat,  0.5f, -0.5f, 0.0f).color(r,g,b,a).texture(1f,1f)
                 .overlay(OverlayTexture.DEFAULT_UV).light(fullBright).normal(0,1,0).next();
-        vc.vertex(mat,  0.5f,  0.5f, 0.0f).color(255,255,255,255).texture(1f,0f)
+        vc.vertex(mat,  0.5f,  0.5f, 0.0f).color(r,g,b,a).texture(1f,0f)
                 .overlay(OverlayTexture.DEFAULT_UV).light(fullBright).normal(0,1,0).next();
-        vc.vertex(mat, -0.5f,  0.5f, 0.0f).color(255,255,255,255).texture(0f,0f)
+        vc.vertex(mat, -0.5f,  0.5f, 0.0f).color(r,g,b,a).texture(0f,0f)
                 .overlay(OverlayTexture.DEFAULT_UV).light(fullBright).normal(0,1,0).next();
 
         matrices.pop();

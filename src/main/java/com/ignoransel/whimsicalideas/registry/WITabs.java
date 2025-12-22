@@ -16,6 +16,7 @@ public final class WITabs {
     private WITabs() {}
 
     public static ItemGroup WHIMSICAL_IDEAS_GROUP;
+    public static ItemGroup ZUN_SOUL_SAIL_GROUP;
     public static void init() {
         WHIMSICAL_IDEAS_GROUP = Registry.register(
                 Registries.ITEM_GROUP,
@@ -34,12 +35,23 @@ public final class WITabs {
                             entries.add(WIItems.HEX_FORGE_DIAMOND);
                             entries.add(WIItems.HEX_FORGE_NETHERITE);
                             entries.add(WIItems.HEX_FORGE_RANDOM);
+                        })
+                        .build()
+        );
+
+        ZUN_SOUL_SAIL_GROUP = Registry.register(
+                Registries.ITEM_GROUP,
+                new Identifier(WhimsicalIdeas.MODID, "zun_soul_sail"),
+                FabricItemGroup.builder()
+                        .displayName(Text.translatable("itemGroup.whimsical-ideas.zun_soul_sail"))
+                        .icon(() -> new ItemStack(WIItems.ZUN_SOUL_SAIL))
+                        .entries((displayContext, entries) -> {
                             entries.add(WIItems.ZUN_SOUL_SAIL);
                             entries.add(WIItems.TEST_ZUN_SOUL_SAIL);
                             entries.add(WIItems.SOUL_SAIL_POLE);
                             entries.add(WIItems.SOUL_FLAG);
 
-                            // 添加品阶魂幡（按品阶等级顺序）
+                            // 添加品阶魂幡
                             entries.add(WIItems.ZUN_SOUL_SAIL_MORTAL.getDefaultStack());
                             entries.add(WIItems.ZUN_SOUL_SAIL_EARTH.getDefaultStack());
                             entries.add(WIItems.ZUN_SOUL_SAIL_HEAVEN.getDefaultStack());
