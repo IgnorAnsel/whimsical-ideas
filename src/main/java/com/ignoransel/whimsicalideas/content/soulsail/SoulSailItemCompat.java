@@ -5,6 +5,9 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtString;
+import net.minecraft.particle.ParticleTypes;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 
 import java.util.UUID;
 
@@ -39,7 +42,7 @@ public final class SoulSailItemCompat {
         migrateCompound(root, bet, ABILITY_CDS);
         migrateBool(root, bet, SoulSailKeys.PASSIVE_SOUL_TOTEM);
         migrateBool(root, bet, SoulSailKeys.PASSIVE_SOUL_BARRIER);
-
+        migrateBool(root, bet, SoulSailKeys.PASSIVE_SOUL_DOMAIN);
         return bet; // 写入/读取都统一到 BlockEntityTag
     }
 
@@ -87,6 +90,19 @@ public final class SoulSailItemCompat {
         nbt.put(ABILITY_CDS, cds);
     }
 
+    public static boolean isSoulDomainEnabled(ItemStack stack) {
+        return data(stack).getBoolean(SoulSailKeys.PASSIVE_SOUL_DOMAIN);
+    }
+    public static void setSoulDomainEnabled(ItemStack stack, boolean enabled) {
+        data(stack).putBoolean(SoulSailKeys.PASSIVE_SOUL_DOMAIN, enabled);
+    }
+    public static boolean toggleSoulDomain(ItemStack stack) {
+        boolean next = !isSoulDomainEnabled(stack);
+        setSoulDomainEnabled(stack, next);
+        return next;
+    }
+
+
     private static NbtCompound getAbilityCds(ItemStack stack) {
         NbtCompound nbt = data(stack);
         if (!nbt.contains(SoulSailKeys.ABILITY_CDS, NbtElement.COMPOUND_TYPE)) {
@@ -108,6 +124,9 @@ public final class SoulSailItemCompat {
         if (idx < 0 || idx >= vals.length) return SoulSailAbility.NONE;
         return vals[idx];
     }
+
+
+
     public static String getOrCreateSailId(ItemStack stack) {
         var nbt = data(stack); // BlockEntityTag
         if (!nbt.contains(SoulSailKeys.SAIL_ID)) {
@@ -177,6 +196,32 @@ public final class SoulSailItemCompat {
         var nbt = data(stack);
         long raw = nbt.getLong(SoulSailKeys.RAW_SOULS);
         nbt.putLong(SoulSailKeys.RAW_SOULS, Math.max(0L, raw + amount));
+    }
+
+    public static boolean spendRefinedSoulsFx(ServerPlayerEntity sp, ItemStack stack, long amount) {
+        boolean ok = spendRefinedSouls(stack, amount);
+
+        if (sp.getWorld() instanceof ServerWorld sw) {
+            if (ok) {
+                sw.spawnParticles(
+                        ParticleTypes.SOUL,                // 也可换 SOUL_FIRE_FLAME 更亮
+                        sp.getX(), sp.getBodyY(0.5), sp.getZ(),
+                        20,                                  // 数量
+                        0.25, 0.20, 0.25,                   // 扩散
+                        0.01                                // 速度
+                );
+            } else {
+                sw.spawnParticles(
+                        ParticleTypes.SMOKE,
+                        sp.getX(), sp.getBodyY(0.5), sp.getZ(),
+                        6,
+                        0.15, 0.15, 0.15,
+                        0.01
+                );
+            }
+        }
+
+        return ok;
     }
 
     public static boolean spendRefinedSouls(ItemStack stack, long amount) {
@@ -279,4 +324,14 @@ public final class SoulSailItemCompat {
         }
     }
 
+
+    public static ItemStack findSoulSail(ServerPlayerEntity sp) {
+        ItemStack main = sp.getMainHandStack();
+        if (main.getItem() instanceof SoulSailBannerItem) return main;
+
+        ItemStack off = sp.getOffHandStack();
+        if (off.getItem() instanceof SoulSailBannerItem) return off;
+
+        return ItemStack.EMPTY;
+    }
 }

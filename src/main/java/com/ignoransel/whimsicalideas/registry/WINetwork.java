@@ -11,6 +11,8 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 
+import static com.ignoransel.whimsicalideas.content.soulsail.SoulSailItemCompat.findSoulSail;
+
 public class WINetwork {
     public static final Identifier SELECT_HEX = new Identifier(WhimsicalIdeas.MODID, "select_hex");
     public static final Identifier CYCLE_ABILITY = new Identifier("whimsical-ideas", "cycle_ability");
@@ -29,7 +31,7 @@ public class WINetwork {
 
         ServerPlayNetworking.registerGlobalReceiver(CYCLE_ABILITY, (server, player, handler, buf, responseSender) -> {
             server.execute(() -> {
-                ItemStack stack = player.getMainHandStack();
+                ItemStack stack = findSoulSail(player);
                 if (!(stack.getItem() instanceof SoulSailBannerItem)) return;
                 SoulSailAbilities.cycleAbility((ServerPlayerEntity) player, stack);
             });
@@ -37,7 +39,7 @@ public class WINetwork {
 
         ServerPlayNetworking.registerGlobalReceiver(CAST_ABILITY, (server, player, handler, buf, responseSender) -> {
             server.execute(() -> {
-                ItemStack stack = player.getMainHandStack();
+                ItemStack stack = findSoulSail(player);
                 if (!(stack.getItem() instanceof SoulSailBannerItem)) return;
                 SoulSailAbilities.castSelectedAbility((ServerPlayerEntity) player, stack);
             });

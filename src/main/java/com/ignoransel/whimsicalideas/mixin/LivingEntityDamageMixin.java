@@ -13,6 +13,8 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
 import java.util.Objects;
 
+import static com.ignoransel.whimsicalideas.content.soulsail.SoulSailItemCompat.findSoulSail;
+
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityDamageMixin {
 
@@ -38,7 +40,7 @@ public abstract class LivingEntityDamageMixin {
         if (SoulSailItemCompat.isAbilityOnCooldown(stack, SoulSailAbility.SOUL_BARRIER, now)) return amount;
 
         long cost = SoulSailAbility.SOUL_BARRIER.costSouls;
-        if (cost > 0 && !SoulSailItemCompat.spendRefinedSouls(stack, cost)) {
+        if (cost > 0 && !SoulSailItemCompat.spendRefinedSoulsFx(sp, stack, cost)) {
             // 魂不足就不触发，不要刷屏可去掉提示
             sp.sendMessage(Text.literal("魂御失败：魂魄不足").formatted(Formatting.RED), true);
             return amount;
@@ -51,13 +53,4 @@ public abstract class LivingEntityDamageMixin {
         return amount * multiplier;
     }
 
-    private static ItemStack findSoulSail(ServerPlayerEntity sp) {
-        ItemStack main = sp.getMainHandStack();
-        if (main.getItem() instanceof SoulSailBannerItem) return main;
-
-        ItemStack off = sp.getOffHandStack();
-        if (off.getItem() instanceof SoulSailBannerItem) return off;
-
-        return ItemStack.EMPTY;
-    }
 }

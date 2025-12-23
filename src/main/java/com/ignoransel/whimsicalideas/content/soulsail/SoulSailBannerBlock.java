@@ -1,7 +1,6 @@
 package com.ignoransel.whimsicalideas.content.soulsail;
 
 import net.minecraft.block.BannerBlock;
-import net.minecraft.block.Block;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.util.DyeColor;
 

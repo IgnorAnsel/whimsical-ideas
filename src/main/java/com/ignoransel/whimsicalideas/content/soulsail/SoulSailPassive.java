@@ -19,12 +19,11 @@ public final class SoulSailPassive {
 
         if (!SoulSailItemCompat.isSoulTotemEnabled(stack)) return false;
         long now = Objects.requireNonNull(sp.getServer()).getOverworld().getTime();
-        // 冷却：用物品 cooldown 控制（简单可靠）
         if (SoulSailItemCompat.isAbilityOnCooldown(stack, SoulSailAbility.SOUL_TOTEM, now)) return false;
 
 
         long cost = SoulSailAbility.SOUL_TOTEM.costSouls;
-        if (!SoulSailItemCompat.spendRefinedSouls(stack, cost)) {
+        if (!SoulSailItemCompat.spendRefinedSoulsFx(sp, stack, cost)) {
             sp.sendMessage(Text.literal("魂替失败：魂魄不足").formatted(Formatting.RED), true);
             return false;
         }

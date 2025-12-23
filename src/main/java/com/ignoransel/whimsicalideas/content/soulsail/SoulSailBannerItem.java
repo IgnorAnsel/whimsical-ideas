@@ -51,9 +51,22 @@ public class SoulSailBannerItem extends BannerItem implements ISoulSailItem {
     // 右键空气：开始“使用”（长按）
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-        user.setCurrentHand(hand);
-        return TypedActionResult.consume(user.getStackInHand(hand));
+        ItemStack stack = user.getStackInHand(hand);
+
+        if (user.isSneaking()) {
+            user.setCurrentHand(hand);
+            return TypedActionResult.consume(stack);
+        }
+
+        if (!world.isClient && user instanceof ServerPlayerEntity sp) {
+            SoulSailAbilities.castSelectedAbility(sp, stack);
+            user.stopUsingItem();
+            return TypedActionResult.success(stack);
+        }
+        user.stopUsingItem();
+        return TypedActionResult.pass(stack);
     }
+
 
     // 长按完成：进入/离开魂幡世界
     @Override

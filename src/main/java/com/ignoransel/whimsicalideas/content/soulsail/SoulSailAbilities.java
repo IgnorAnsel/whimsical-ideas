@@ -67,6 +67,12 @@ public final class SoulSailAbilities {
                     sp.sendMessage(Text.literal("魂御: " + (on ? "开启" : "关闭"))
                             .formatted(on ? Formatting.GREEN : Formatting.DARK_GRAY), true);
                 }
+                case SOUL_DOMAIN -> {
+                    boolean on = SoulSailItemCompat.toggleSoulDomain(stack);
+                    sp.sendMessage(Text.literal("魂域: " + (on ? "开启" : "关闭"))
+                            .formatted(on ? Formatting.GREEN : Formatting.DARK_GRAY), true);
+                }
+
                 default -> {}
             }
             return;
@@ -117,12 +123,13 @@ public final class SoulSailAbilities {
             }
 
 
+
         }
     }
 
     /** 统一：扣魂 + 设置物品CD */
     private static boolean consumeAndCooldown(ServerPlayerEntity sp, ItemStack stack, SoulSailAbility ab) {
-        if (ab.costSouls > 0 && !SoulSailItemCompat.spendRefinedSouls(stack, ab.costSouls)) {
+        if (ab.costSouls > 0 && !SoulSailItemCompat.spendRefinedSoulsFx(sp, stack, ab.costSouls)) {
             sp.sendMessage(Text.literal("魂魄不足 (-" + ab.costSouls + "魂)").formatted(Formatting.RED), true);
             return false;
         }

@@ -28,6 +28,7 @@ public final class SoulSailKeys {
     public static final String ABILITY_CDS = "AbilityCooldowns"; // Compound：{ "HEAL": long, "SOUL_TOTEM": long ... }
     public static final String PASSIVE_SOUL_TOTEM = "PassiveSoulTotem";
     public static final String PASSIVE_SOUL_BARRIER = "PassiveSoulBarrier"; // boolean
+    public static final String PASSIVE_SOUL_DOMAIN = "PassiveSoulDomain";
 
 
 }

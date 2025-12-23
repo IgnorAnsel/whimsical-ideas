@@ -5,7 +5,9 @@ public enum SoulSailAbility {
     HEAL(SoulBannerGrade.EARTH, "回春", false, 200L, 40),
     SOUL_BARRIER(SoulBannerGrade.HEAVEN, "魂御", true, 120L, 80),
     SOUL_TOTEM(SoulBannerGrade.MYSTERIOUS, "魂替", true, 100L, 600),
-    LIGHTNING(SoulBannerGrade.YELLOW, "唤雷", false, 600L, 100);
+    LIGHTNING(SoulBannerGrade.YELLOW, "唤雷", false, 600L, 100),
+    SOUL_DOMAIN(SoulBannerGrade.UNIVERSE, "魂域", true, 0L, 0);
+
 
 
 

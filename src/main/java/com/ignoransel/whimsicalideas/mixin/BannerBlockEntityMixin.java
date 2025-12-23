@@ -36,8 +36,7 @@ public class BannerBlockEntityMixin implements SoulSailBannerData {
     @Unique private NbtCompound whimsicalideas$AbilityCooldowns = new NbtCompound();
     @Unique private boolean whimsicalideas$PassiveSoulTotem = false;
     @Unique private boolean whimsicalideas$PassiveSoulBarrier = false;
-
-
+    @Unique private boolean whimsicalideas$PassiveSoulDomain = false;
 
     @Unique
     private BannerBlockEntity self() {
@@ -87,6 +86,7 @@ public class BannerBlockEntityMixin implements SoulSailBannerData {
         whimsicalideas$AbilityCooldowns = nbt.getCompound(SoulSailKeys.ABILITY_CDS);
         whimsicalideas$PassiveSoulTotem = nbt.getBoolean(SoulSailKeys.PASSIVE_SOUL_TOTEM);
         whimsicalideas$PassiveSoulBarrier = nbt.getBoolean(SoulSailKeys.PASSIVE_SOUL_BARRIER);
+        whimsicalideas$PassiveSoulDomain = nbt.getBoolean(SoulSailKeys.PASSIVE_SOUL_DOMAIN);
         // 兜底：总魂同步一次（防止旧存档不一致）
         wi$syncTotal();
     }
@@ -113,6 +113,7 @@ public class BannerBlockEntityMixin implements SoulSailBannerData {
         nbt.put(SoulSailKeys.ABILITY_CDS, whimsicalideas$AbilityCooldowns);
         nbt.putBoolean(SoulSailKeys.PASSIVE_SOUL_TOTEM, whimsicalideas$PassiveSoulTotem);
         nbt.putBoolean(SoulSailKeys.PASSIVE_SOUL_BARRIER, whimsicalideas$PassiveSoulBarrier);
+        nbt.putBoolean(SoulSailKeys.PASSIVE_SOUL_DOMAIN, whimsicalideas$PassiveSoulDomain);
 
         if (!whimsicalideas$returnDim.isEmpty()) {
             nbt.putString(SoulSailKeys.RETURN_DIM, whimsicalideas$returnDim);
@@ -188,5 +189,9 @@ public class BannerBlockEntityMixin implements SoulSailBannerData {
 
     public boolean isWhimsicalideas$PassiveSoulBarrier() {
         return whimsicalideas$PassiveSoulBarrier;
+    }
+
+    public boolean isWhimsicalideas$PassiveSoulDomain() {
+        return whimsicalideas$PassiveSoulDomain;
     }
 }
