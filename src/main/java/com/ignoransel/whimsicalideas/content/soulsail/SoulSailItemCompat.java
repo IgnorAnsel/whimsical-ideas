@@ -8,7 +8,10 @@ import net.minecraft.nbt.NbtString;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.math.Vec3d;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 import static com.ignoransel.whimsicalideas.content.soulsail.SoulSailKeys.ABILITY_CDS;
@@ -43,6 +46,16 @@ public final class SoulSailItemCompat {
         migrateBool(root, bet, SoulSailKeys.PASSIVE_SOUL_TOTEM);
         migrateBool(root, bet, SoulSailKeys.PASSIVE_SOUL_BARRIER);
         migrateBool(root, bet, SoulSailKeys.PASSIVE_SOUL_DOMAIN);
+        migrateLong(root, bet, SoulSailKeys.GRASP_UNTIL);
+        migrateString(root, bet, SoulSailKeys.GRASP_TARGET);
+
+        migrateLong(root, bet, SoulSailKeys.MAELSTROM_UNTIL);
+        migrateDouble(root, bet, SoulSailKeys.MAELSTROM_X);
+        migrateDouble(root, bet, SoulSailKeys.MAELSTROM_Y);
+        migrateDouble(root, bet, SoulSailKeys.MAELSTROM_Z);
+        migrateLong(root, bet, SoulSailKeys.MAELSTROM_START);
+
+
         return bet; // 写入/读取都统一到 BlockEntityTag
     }
 
@@ -110,6 +123,71 @@ public final class SoulSailItemCompat {
         }
         return nbt.getCompound(SoulSailKeys.ABILITY_CDS);
     }
+    // ====== Judgment Active / Pos ======
+    public static boolean isJudgmentActive(ItemStack stack, long nowTick) {
+        var nbt = data(stack);
+        if (!nbt.getBoolean(SoulSailKeys.JUDGMENT_ACTIVE)) return false;
+        long until = nbt.getLong(SoulSailKeys.JUDGMENT_UNTIL);
+        return until > nowTick;
+    }
+
+    public static void startJudgment(ItemStack stack, long start, long until, Vec3d pos) {
+        var nbt = data(stack);
+        nbt.putBoolean(SoulSailKeys.JUDGMENT_ACTIVE, true);
+        nbt.putLong(SoulSailKeys.JUDGMENT_START, start);
+        nbt.putLong(SoulSailKeys.JUDGMENT_UNTIL, until);
+        nbt.putDouble(SoulSailKeys.JUDGMENT_X, pos.x);
+        nbt.putDouble(SoulSailKeys.JUDGMENT_Y, pos.y);
+        nbt.putDouble(SoulSailKeys.JUDGMENT_Z, pos.z);
+        clearJudgmentPunished(stack);
+    }
+
+    public static void clearJudgment(ItemStack stack) {
+        var nbt = data(stack);
+        nbt.putBoolean(SoulSailKeys.JUDGMENT_ACTIVE, false);
+        nbt.putLong(SoulSailKeys.JUDGMENT_START, 0);
+        nbt.putLong(SoulSailKeys.JUDGMENT_UNTIL, 0);
+        clearJudgmentPunished(stack);
+    }
+
+    public static long getJudgmentStart(ItemStack stack) { return data(stack).getLong(SoulSailKeys.JUDGMENT_START); }
+    public static long getJudgmentUntil(ItemStack stack) { return data(stack).getLong(SoulSailKeys.JUDGMENT_UNTIL); }
+
+    public static Vec3d getJudgmentPos(ItemStack stack) {
+        var nbt = data(stack);
+        return new Vec3d(
+                nbt.getDouble(SoulSailKeys.JUDGMENT_X),
+                nbt.getDouble(SoulSailKeys.JUDGMENT_Y),
+                nbt.getDouble(SoulSailKeys.JUDGMENT_Z)
+        );
+    }
+
+    // ====== Punished list ======
+    public static Set<UUID> getJudgmentPunished(ItemStack stack) {
+        var nbt = data(stack);
+        NbtList list = nbt.getList(SoulSailKeys.JUDGMENT_PUNISHED, NbtElement.STRING_TYPE);
+        Set<UUID> out = new HashSet<>();
+        for (int i = 0; i < list.size(); i++) {
+            try { out.add(UUID.fromString(list.getString(i))); } catch (Exception ignored) {}
+        }
+        return out;
+    }
+
+    public static void setJudgmentPunished(ItemStack stack, Set<UUID> uuids) {
+        var nbt = data(stack);
+        NbtList list = new NbtList();
+        for (UUID id : uuids) list.add(NbtString.of(id.toString()));
+        nbt.put(SoulSailKeys.JUDGMENT_PUNISHED, list);
+    }
+
+    public static void addJudgmentPunished(ItemStack stack, UUID id) {
+        Set<UUID> s = getJudgmentPunished(stack);
+        if (s.add(id)) setJudgmentPunished(stack, s);
+    }
+
+    public static void clearJudgmentPunished(ItemStack stack) {
+        data(stack).put(SoulSailKeys.JUDGMENT_PUNISHED, new NbtList());
+    }
 
 
     public static int getSelectedAbility(ItemStack stack) {
@@ -125,6 +203,65 @@ public final class SoulSailItemCompat {
         return vals[idx];
     }
 
+    public static void setGrasp(ItemStack stack, java.util.UUID target, long untilTick) {
+        var nbt = data(stack);
+        nbt.putString(SoulSailKeys.GRASP_TARGET, target.toString());
+        nbt.putLong(SoulSailKeys.GRASP_UNTIL, untilTick);
+    }
+    public static long getGraspUntil(ItemStack stack) {
+        return data(stack).getLong(SoulSailKeys.GRASP_UNTIL);
+    }
+    public static java.util.UUID getGraspTarget(ItemStack stack) {
+        var s = data(stack).getString(SoulSailKeys.GRASP_TARGET);
+        if (s == null || s.isEmpty()) return null;
+        try { return java.util.UUID.fromString(s); } catch (Exception e) { return null; }
+    }
+    public static void clearGrasp(ItemStack stack) {
+        var nbt = data(stack);
+        nbt.remove(SoulSailKeys.GRASP_TARGET);
+        nbt.remove(SoulSailKeys.GRASP_UNTIL);
+    }
+    public static void setMaelstrom(ItemStack stack, double x, double y, double z, long untilTick) {
+        var nbt = data(stack);
+        nbt.putDouble(SoulSailKeys.MAELSTROM_X, x);
+        nbt.putDouble(SoulSailKeys.MAELSTROM_Y, y);
+        nbt.putDouble(SoulSailKeys.MAELSTROM_Z, z);
+        nbt.putLong(SoulSailKeys.MAELSTROM_UNTIL, untilTick);
+    }
+    public static long getMaelstromUntil(ItemStack stack) {
+        return data(stack).getLong(SoulSailKeys.MAELSTROM_UNTIL);
+    }
+    public static Vec3d getMaelstromPos(ItemStack stack) {
+        var nbt = data(stack);
+        return new Vec3d(nbt.getDouble(SoulSailKeys.MAELSTROM_X),
+                nbt.getDouble(SoulSailKeys.MAELSTROM_Y),
+                nbt.getDouble(SoulSailKeys.MAELSTROM_Z));
+    }
+    public static boolean isMaelstromActive(ItemStack stack, long nowTick) {
+        return getMaelstromUntil(stack) > nowTick;
+    }
+    public static void setMaelstrom(ItemStack stack, double x, double y, double z, long startTick, long untilTick) {
+        var nbt = data(stack);
+        nbt.putDouble(SoulSailKeys.MAELSTROM_X, x);
+        nbt.putDouble(SoulSailKeys.MAELSTROM_Y, y);
+        nbt.putDouble(SoulSailKeys.MAELSTROM_Z, z);
+        nbt.putLong(SoulSailKeys.MAELSTROM_START, startTick);
+        nbt.putLong(SoulSailKeys.MAELSTROM_UNTIL, untilTick);
+    }
+
+    public static long getMaelstromStart(ItemStack stack) {
+        return data(stack).getLong(SoulSailKeys.MAELSTROM_START);
+    }
+
+    public static void clearMaelstrom(ItemStack stack) {
+        var nbt = data(stack);
+        nbt.remove(SoulSailKeys.MAELSTROM_UNTIL);
+        nbt.remove(SoulSailKeys.MAELSTROM_X);
+        nbt.remove(SoulSailKeys.MAELSTROM_Y);
+        nbt.remove(SoulSailKeys.MAELSTROM_Z);
+        nbt.remove(SoulSailKeys.MAELSTROM_START);
+
+    }
 
 
     public static String getOrCreateSailId(ItemStack stack) {
@@ -327,11 +464,19 @@ public final class SoulSailItemCompat {
 
     public static ItemStack findSoulSail(ServerPlayerEntity sp) {
         ItemStack main = sp.getMainHandStack();
-        if (main.getItem() instanceof SoulSailBannerItem) return main;
+        ItemStack off  = sp.getOffHandStack();
 
-        ItemStack off = sp.getOffHandStack();
-        if (off.getItem() instanceof SoulSailBannerItem) return off;
+        boolean mainIs = main.getItem() instanceof SoulSailBannerItem;
+        boolean offIs  = off.getItem() instanceof SoulSailBannerItem;
 
-        return ItemStack.EMPTY;
+        if (!mainIs && !offIs) return ItemStack.EMPTY;
+        if (mainIs && !offIs) return main;
+        if (!mainIs && offIs) return off;
+
+        SoulBannerGrade gMain = SoulSailItemCompat.getBannerGrade(main);
+        SoulBannerGrade gOff  = SoulSailItemCompat.getBannerGrade(off);
+
+        return (gOff.getLevel() > gMain.getLevel()) ? off : main;
     }
+
 }

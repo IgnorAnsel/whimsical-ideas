@@ -37,6 +37,9 @@ public class BannerBlockEntityMixin implements SoulSailBannerData {
     @Unique private boolean whimsicalideas$PassiveSoulTotem = false;
     @Unique private boolean whimsicalideas$PassiveSoulBarrier = false;
     @Unique private boolean whimsicalideas$PassiveSoulDomain = false;
+    @Unique private long whimsicalideas$GraspUntil = 0L;
+    @Unique private String whimsicalideas$GraspTarget = "";
+
 
     @Unique
     private BannerBlockEntity self() {
@@ -87,6 +90,8 @@ public class BannerBlockEntityMixin implements SoulSailBannerData {
         whimsicalideas$PassiveSoulTotem = nbt.getBoolean(SoulSailKeys.PASSIVE_SOUL_TOTEM);
         whimsicalideas$PassiveSoulBarrier = nbt.getBoolean(SoulSailKeys.PASSIVE_SOUL_BARRIER);
         whimsicalideas$PassiveSoulDomain = nbt.getBoolean(SoulSailKeys.PASSIVE_SOUL_DOMAIN);
+        whimsicalideas$GraspUntil = nbt.getLong(SoulSailKeys.GRASP_UNTIL);
+        whimsicalideas$GraspTarget = nbt.getString(SoulSailKeys.GRASP_TARGET);
         // 兜底：总魂同步一次（防止旧存档不一致）
         wi$syncTotal();
     }
@@ -114,7 +119,8 @@ public class BannerBlockEntityMixin implements SoulSailBannerData {
         nbt.putBoolean(SoulSailKeys.PASSIVE_SOUL_TOTEM, whimsicalideas$PassiveSoulTotem);
         nbt.putBoolean(SoulSailKeys.PASSIVE_SOUL_BARRIER, whimsicalideas$PassiveSoulBarrier);
         nbt.putBoolean(SoulSailKeys.PASSIVE_SOUL_DOMAIN, whimsicalideas$PassiveSoulDomain);
-
+        nbt.putLong(SoulSailKeys.GRASP_UNTIL, whimsicalideas$GraspUntil);
+        nbt.putString(SoulSailKeys.GRASP_TARGET, whimsicalideas$GraspTarget);
         if (!whimsicalideas$returnDim.isEmpty()) {
             nbt.putString(SoulSailKeys.RETURN_DIM, whimsicalideas$returnDim);
             nbt.putDouble(SoulSailKeys.RETURN_X, whimsicalideas$returnX);
@@ -193,5 +199,13 @@ public class BannerBlockEntityMixin implements SoulSailBannerData {
 
     public boolean isWhimsicalideas$PassiveSoulDomain() {
         return whimsicalideas$PassiveSoulDomain;
+    }
+
+    public long getWhimsicalideas$GraspUntil() {
+        return whimsicalideas$GraspUntil;
+    }
+
+    public String getWhimsicalideas$GraspTarget() {
+        return whimsicalideas$GraspTarget;
     }
 }

@@ -29,6 +29,25 @@ public final class SoulSailKeys {
     public static final String PASSIVE_SOUL_TOTEM = "PassiveSoulTotem";
     public static final String PASSIVE_SOUL_BARRIER = "PassiveSoulBarrier"; // boolean
     public static final String PASSIVE_SOUL_DOMAIN = "PassiveSoulDomain";
+    public static final String GRASP_UNTIL = "GraspUntil";   // long
+    public static final String GRASP_TARGET = "GraspTarget"; // uuid string
+
+    public static final String MAELSTROM_UNTIL = "MaelstromUntil"; // long
+    public static final String MAELSTROM_X     = "MaelstromX";     // double
+    public static final String MAELSTROM_Y     = "MaelstromY";     // double
+    public static final String MAELSTROM_Z     = "MaelstromZ";     // double
+    public static final String MAELSTROM_START = "MaelstromStart"; // long
+
+    // SoulSailKeys.java 里加
+    public static final String JUDGMENT_ACTIVE = "JudgmentActive";
+    public static final String JUDGMENT_START  = "JudgmentStart";
+    public static final String JUDGMENT_UNTIL  = "JudgmentUntil";
+    public static final String JUDGMENT_X      = "JudgmentX";
+    public static final String JUDGMENT_Y      = "JudgmentY";
+    public static final String JUDGMENT_Z      = "JudgmentZ";
+
+    // ⚡ 雷罚名单（触碰边界后加入，持续雷劈到死）
+    public static final String JUDGMENT_PUNISHED = "JudgmentPunished";
 
 
 }

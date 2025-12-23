@@ -6,7 +6,11 @@ public enum SoulSailAbility {
     SOUL_BARRIER(SoulBannerGrade.HEAVEN, "魂御", true, 120L, 80),
     SOUL_TOTEM(SoulBannerGrade.MYSTERIOUS, "魂替", true, 100L, 600),
     LIGHTNING(SoulBannerGrade.YELLOW, "唤雷", false, 600L, 100),
-    SOUL_DOMAIN(SoulBannerGrade.UNIVERSE, "魂域", true, 0L, 0);
+    SOUL_DOMAIN(SoulBannerGrade.UNIVERSE, "魂域", true, 0L, 0),
+    SOUL_GRASP(SoulBannerGrade.COSMOS, "魂锁", false, 2000L, 120),
+    SOUL_WAVE(SoulBannerGrade.FLOOD, "魂潮", false, 3500L, 1600),
+    SOUL_MAELSTROM(SoulBannerGrade.WASTELAND, "归葬", false, 8000L, 2400),
+    SOUL_JUDGMENT(SoulBannerGrade.IMMORTAL, "魂劫", false, 5000L, 2400);
 
 
 

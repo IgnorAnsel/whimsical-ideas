@@ -1,12 +1,20 @@
 package com.ignoransel.whimsicalideas.content.soulsail;
 
 import com.ignoransel.whimsicalideas.registry.WIEntities;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.projectile.ProjectileUtil;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.hit.EntityHitResult;
+import net.minecraft.util.math.Box;
+import net.minecraft.util.math.Vec3d;
 
 import java.util.Objects;
+
+import static com.ignoransel.whimsicalideas.content.soulsail.SoulWave.castSoulWave;
 
 public final class SoulSailAbilities {
     private SoulSailAbilities() {}
@@ -121,7 +129,52 @@ public final class SoulSailAbilities {
 
                 sp.sendMessage(Text.literal("唤雷！").formatted(Formatting.YELLOW), true);
             }
+            case SOUL_GRASP -> {
+                // 取准星目标（只在服务端）
+                LivingEntity target = raycastLiving(sp, 24.0);
+                if (target == null) {
+                    sp.sendMessage(Text.literal("未锁定目标").formatted(Formatting.GRAY), true);
+                    return;
+                }
+                if (target instanceof ServerPlayerEntity) {
+                    sp.sendMessage(Text.literal("无法锁定玩家").formatted(Formatting.GRAY), true);
+                    return;
+                }
+                // 冷却/扣魂
+                if (!consumeAndCooldown(sp, stack, ab)) return;
+                int duration = 60; // 3秒（60 tick）可调
+                SoulSailItemCompat.setGrasp(stack, target.getUuid(), now + duration);
 
+                sp.sendMessage(Text.literal("魂锁锁定: " + target.getName().getString())
+                        .formatted(Formatting.AQUA), true);
+            }
+            case SOUL_WAVE -> {
+                if (!consumeAndCooldown(sp, stack, ab)) return;
+                castSoulWave(sp);
+            }
+            case SOUL_MAELSTROM -> {
+                if (!consumeAndCooldown(sp, stack, ab)) return;
+
+                int duration = 200; // 10s
+                // 漩涡中心：玩家前方 4 格，地面上方一点
+                Vec3d center = sp.getPos().add(sp.getRotationVec(1.0f).normalize().multiply(5.0));
+                // 让中心贴地更自然：用玩家脚下高度或稍微下沉一点
+                center = new Vec3d(center.x, sp.getY() + 0.2, center.z);
+                SoulSailItemCompat.setMaelstrom(stack, center.x, center.y, center.z, now, now + duration);
+
+                sp.sendMessage(Text.literal("魂墟·归葬").formatted(Formatting.GOLD), true);
+            }
+            case SOUL_JUDGMENT -> {
+                if (!consumeAndCooldown(sp, stack, ab)) return;
+
+                // 目标点：瞄准位置（类似你唤雷）
+                var hit = sp.raycast(40.0, 0.0f, false);
+
+                Vec3d center = sp.getPos();
+                long duration = 20 * 12;
+                SoulSailItemCompat.startJudgment(stack, now, now + duration, center);
+                sp.sendMessage(Text.literal("魂劫·临").formatted(Formatting.RED), true);
+            }
 
 
         }
@@ -164,5 +217,29 @@ public final class SoulSailAbilities {
         }
         return hit;
     }
+
+    private static LivingEntity raycastLiving(ServerPlayerEntity sp, double range) {
+        Vec3d from = sp.getCameraPosVec(1.0f);
+        Vec3d look = sp.getRotationVec(1.0f);
+        Vec3d to   = from.add(look.multiply(range));
+
+        Box box = sp.getBoundingBox().stretch(look.multiply(range)).expand(1.0, 1.0, 1.0);
+
+        EntityHitResult ehr = ProjectileUtil.raycast(
+                sp,
+                from,
+                to,
+                box,
+                (Entity e) -> e instanceof LivingEntity le && e.isAlive() && e != sp,
+                range * range
+        );
+
+        if (ehr == null) return null;
+        if (ehr.getEntity() instanceof LivingEntity le) return le;
+        return null;
+    }
+
+
+
 
 }

@@ -1,8 +1,7 @@
 package com.ignoransel.whimsicalideas;
 
 import com.ignoransel.whimsicalideas.content.hex.handers.HexRefineHandler;
-import com.ignoransel.whimsicalideas.content.soulsail.SoulSailDomainTick;
-import com.ignoransel.whimsicalideas.content.soulsail.SoulSailEvents;
+import com.ignoransel.whimsicalideas.content.soulsail.*;
 import com.ignoransel.whimsicalideas.content.soulsail.render.*;
 import com.ignoransel.whimsicalideas.registry.*;
 import com.ignoransel.whimsicalideas.render.SoulXpOrbEntityRenderer;
@@ -36,6 +35,10 @@ public class WhimsicalIdeas implements ModInitializer, ClientModInitializer {
         WIEntities.init();
         WIKeybinds.register();
         SoulSailDomainTick.register();
+        SoulSailGraspTick.register();
+        SoulSailMaelstromTick.register();
+        SoulSailJudgmentTick.register();
+        SoulSailGradePassiveTick.register();
 
     }
 
