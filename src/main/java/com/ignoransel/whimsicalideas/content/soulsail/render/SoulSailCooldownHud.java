@@ -31,8 +31,8 @@ public final class SoulSailCooldownHud implements HudRenderCallback {
             if (!(stack.getItem() instanceof SoulSailBannerItem)) return;
         }
 
-        // 你服务器端用 sp.age 写入冷却，所以客户端也用 player.age 读
-        long now = client.player.age;
+        long now = client.world != null ? client.world.getTime() : 0L;
+
 
         NbtCompound bet = SoulSailItemCompat.data(stack);
         NbtCompound cds = bet.getCompound(SoulSailKeys.ABILITY_CDS);

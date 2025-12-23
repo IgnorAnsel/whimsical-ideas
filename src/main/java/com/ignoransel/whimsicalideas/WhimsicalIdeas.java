@@ -87,5 +87,7 @@ public class WhimsicalIdeas implements ModInitializer, ClientModInitializer {
         );
 
         HudRenderCallback.EVENT.register(new SoulSailCooldownHud());
+        EntityRendererRegistry.register(WIEntities.COLORED_LIGHTNING, ColoredLightningRenderer::new);
+
     }
 }

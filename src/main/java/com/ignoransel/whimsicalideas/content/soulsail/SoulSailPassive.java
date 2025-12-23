@@ -8,6 +8,8 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
+import java.util.Objects;
+
 public final class SoulSailPassive {
     private SoulSailPassive() {}
 
@@ -16,7 +18,7 @@ public final class SoulSailPassive {
         if (grade.getLevel() < SoulBannerGrade.HEAVEN.getLevel()) return false;
 
         if (!SoulSailItemCompat.isSoulTotemEnabled(stack)) return false;
-        long now = sp.age;
+        long now = Objects.requireNonNull(sp.getServer()).getOverworld().getTime();
         // 冷却：用物品 cooldown 控制（简单可靠）
         if (SoulSailItemCompat.isAbilityOnCooldown(stack, SoulSailAbility.SOUL_TOTEM, now)) return false;
 

@@ -32,6 +32,11 @@ public class BannerBlockEntityMixin implements SoulSailBannerData {
     @Unique private float whimsicalideas$returnYaw = 0, whimsicalideas$returnPitch = 0;
     @Unique private int whimsicalideas$bannerGrade = 0; // 默认凡阶(0)
     @Unique private int whimsicalideas$lastRadius = 0;
+    @Unique private int whimsicalideas$SelectedAbility = 0; // 默认无(0)
+    @Unique private NbtCompound whimsicalideas$AbilityCooldowns = new NbtCompound();
+    @Unique private boolean whimsicalideas$PassiveSoulTotem = false;
+    @Unique private boolean whimsicalideas$PassiveSoulBarrier = false;
+
 
 
     @Unique
@@ -77,6 +82,11 @@ public class BannerBlockEntityMixin implements SoulSailBannerData {
         whimsicalideas$returnPitch = nbt.getFloat(SoulSailKeys.RETURN_PITCH);
         whimsicalideas$bannerGrade = nbt.getInt(SoulSailKeys.BANNER_GRADE);
         whimsicalideas$lastRadius = nbt.getInt(SoulSailKeys.LAST_RADIUS);
+
+        whimsicalideas$SelectedAbility = nbt.getInt(SoulSailKeys.SELECTED_ABILITY);
+        whimsicalideas$AbilityCooldowns = nbt.getCompound(SoulSailKeys.ABILITY_CDS);
+        whimsicalideas$PassiveSoulTotem = nbt.getBoolean(SoulSailKeys.PASSIVE_SOUL_TOTEM);
+        whimsicalideas$PassiveSoulBarrier = nbt.getBoolean(SoulSailKeys.PASSIVE_SOUL_BARRIER);
         // 兜底：总魂同步一次（防止旧存档不一致）
         wi$syncTotal();
     }
@@ -99,6 +109,11 @@ public class BannerBlockEntityMixin implements SoulSailBannerData {
         nbt.putInt(SoulSailKeys.ROOM_Z, whimsicalideas$roomZ);
         nbt.putInt(SoulSailKeys.BANNER_GRADE, whimsicalideas$bannerGrade);
         nbt.putInt(SoulSailKeys.LAST_RADIUS, whimsicalideas$lastRadius);
+        nbt.putInt(SoulSailKeys.SELECTED_ABILITY, whimsicalideas$SelectedAbility);
+        nbt.put(SoulSailKeys.ABILITY_CDS, whimsicalideas$AbilityCooldowns);
+        nbt.putBoolean(SoulSailKeys.PASSIVE_SOUL_TOTEM, whimsicalideas$PassiveSoulTotem);
+        nbt.putBoolean(SoulSailKeys.PASSIVE_SOUL_BARRIER, whimsicalideas$PassiveSoulBarrier);
+
         if (!whimsicalideas$returnDim.isEmpty()) {
             nbt.putString(SoulSailKeys.RETURN_DIM, whimsicalideas$returnDim);
             nbt.putDouble(SoulSailKeys.RETURN_X, whimsicalideas$returnX);
@@ -157,5 +172,21 @@ public class BannerBlockEntityMixin implements SoulSailBannerData {
     @Override
     public void wi$setBannerGrade(SoulBannerGrade grade) {
         this.whimsicalideas$bannerGrade = grade.getLevel();
+    }
+
+    public int getWhimsicalideas$SelectedAbility() {
+        return whimsicalideas$SelectedAbility;
+    }
+
+    public NbtCompound getWhimsicalideas$AbilityCooldowns() {
+        return whimsicalideas$AbilityCooldowns;
+    }
+
+    public boolean isWhimsicalideas$PassiveSoulTotem() {
+        return whimsicalideas$PassiveSoulTotem;
+    }
+
+    public boolean isWhimsicalideas$PassiveSoulBarrier() {
+        return whimsicalideas$PassiveSoulBarrier;
     }
 }

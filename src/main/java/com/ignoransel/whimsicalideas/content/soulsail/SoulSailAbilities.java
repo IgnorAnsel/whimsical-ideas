@@ -1,9 +1,12 @@
 package com.ignoransel.whimsicalideas.content.soulsail;
 
+import com.ignoransel.whimsicalideas.registry.WIEntities;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+
+import java.util.Objects;
 
 public final class SoulSailAbilities {
     private SoulSailAbilities() {}
@@ -48,7 +51,7 @@ public final class SoulSailAbilities {
             return;
         }
 
-        long now = sp.age;
+        long now = Objects.requireNonNull(sp.getServer()).getOverworld().getTime();
         if (ab.cooldownTicks > 0 && SoulSailItemCompat.isAbilityOnCooldown(stack, ab, now)) {
             return;
         }
@@ -83,6 +86,37 @@ public final class SoulSailAbilities {
                 sp.sendMessage(Text.literal("回春 +" + (heal / 2f) + "❤").formatted(Formatting.GREEN), true);
             }
 
+            case LIGHTNING -> {
+                if (!consumeAndCooldown(sp, stack, ab)) return;
+
+                var hit = raycast(sp, 64.0); // 64格距离，可调
+                var world = sp.getServerWorld();
+
+                var pos = hit.getPos();
+
+                var e = new com.ignoransel.whimsicalideas.content.soulsail.entity.ColoredLightningEntity(
+                        WIEntities.COLORED_LIGHTNING, world
+                );
+
+                e.refreshPositionAfterTeleport(pos.x, pos.y, pos.z);
+
+                // 颜色：用黄阶金色（你也可以用 grade.getGlowColor()）
+                int rgb = SoulSailItemCompat.getBannerGrade(stack).getGlowColor() & 0xFFFFFF;
+                e.setColorRgb(rgb);
+
+                e.setDamage(8.0f);   // 可调
+                e.setRadius(3);      // 可调
+                e.setLifeTicks(8);   // 渲染持续时长
+                e.setDoFire(false);  // 是否点火
+
+                e.setOwner(sp);
+
+                world.spawnEntity(e);
+
+                sp.sendMessage(Text.literal("唤雷！").formatted(Formatting.YELLOW), true);
+            }
+
+
         }
     }
 
@@ -93,9 +127,35 @@ public final class SoulSailAbilities {
             return false;
         }
 
-        long now = sp.age;
+        long now = Objects.requireNonNull(sp.getServer()).getOverworld().getTime();
         SoulSailItemCompat.setAbilityCooldown(stack, ab, now, ab.cooldownTicks);
         return true;
+    }
+    private static net.minecraft.util.hit.HitResult raycast(ServerPlayerEntity sp, double range) {
+        var world = sp.getServerWorld();
+        var start = sp.getCameraPosVec(1.0f);
+        var look = sp.getRotationVec(1.0f);
+        var end = start.add(look.multiply(range));
+
+        var ctx = new net.minecraft.world.RaycastContext(
+                start,
+                end,
+                net.minecraft.world.RaycastContext.ShapeType.OUTLINE,
+                net.minecraft.world.RaycastContext.FluidHandling.NONE,
+                sp
+        );
+
+        var hit = world.raycast(ctx);
+        if (hit.getType() == net.minecraft.util.hit.HitResult.Type.MISS) {
+            // 没命中就用视线尽头
+            return new net.minecraft.util.hit.BlockHitResult(
+                    end,
+                    net.minecraft.util.math.Direction.UP,
+                    net.minecraft.util.math.BlockPos.ofFloored(end),
+                    false
+            );
+        }
+        return hit;
     }
 
 }

@@ -11,6 +11,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
+import java.util.Objects;
+
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityDamageMixin {
 
@@ -32,7 +34,7 @@ public abstract class LivingEntityDamageMixin {
         if (grade.getLevel() < SoulBannerGrade.MYSTERIOUS.getLevel()) return amount;
         if (!SoulSailItemCompat.isSoulBarrierEnabled(stack)) return amount;
 
-        long now = sp.age;
+        long now = Objects.requireNonNull(sp.getServer()).getOverworld().getTime();
         if (SoulSailItemCompat.isAbilityOnCooldown(stack, SoulSailAbility.SOUL_BARRIER, now)) return amount;
 
         long cost = SoulSailAbility.SOUL_BARRIER.costSouls;
