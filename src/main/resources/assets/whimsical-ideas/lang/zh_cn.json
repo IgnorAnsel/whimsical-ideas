@@ -25,5 +25,43 @@
   "effect.whimsical-ideas.refine": "顷刻炼化",
   "effect.whimsical-ideas.refine.description": "挖掘的矿物自动精炼！",
   "effect.whimsical-ideas.regeneration": "无休回复",
-  "effect.whimsical-ideas.regeneration.description": "每移动一百格回复一点生命"
+  "effect.whimsical-ideas.regeneration.description": "每移动一百格回复一点生命",
+
+
+
+
+
+  "advancements.whimsical-ideas.soulsail.root.desc": "§7灵魂，开始汇聚。§r",
+  "advancements.whimsical-ideas.soulsail.root.title": "§b魂帆之路§r",
+
+  "advancements.whimsical-ideas.soulsail/grade/mortal.desc": "§7获得「凡阶」魂幡阶位。§r",
+  "advancements.whimsical-ideas.soulsail/grade/mortal.title": "§7凡尘初启§r §f魂幡立誓§r",
+
+  "advancements.whimsical-ideas.soulsail/grade/earth.desc": "§2获得「地阶」魂幡阶位。§r",
+  "advancements.whimsical-ideas.soulsail/grade/earth.title": "§2地脉苏醒§r §a魂纹成形§r",
+
+  "advancements.whimsical-ideas.soulsail/grade/heaven.desc": "§9获得「天阶」魂幡阶位。§r",
+  "advancements.whimsical-ideas.soulsail/grade/heaven.title": "§9天游有路§r §b灵焰凌空§r",
+
+  "advancements.whimsical-ideas.soulsail/grade/mysterious.desc": "§5获得「玄阶」魂幡阶位。§r",
+  "advancements.whimsical-ideas.soulsail/grade/mysterious.title": "§5玄机暗涌§r §d幽纹自现§r",
+
+  "advancements.whimsical-ideas.soulsail/grade/yellow.desc": "§e获得「黄阶」魂幡阶位。§r",
+  "advancements.whimsical-ideas.soulsail/grade/yellow.title": "§e黄道昭昭§r §6祭魂成章§r",
+
+  "advancements.whimsical-ideas.soulsail/grade/universe.desc": "§1获得「宇阶」魂幡阶位。§r",
+  "advancements.whimsical-ideas.soulsail/grade/universe.title": "§1宇域开阔§r §9星魂共鸣§r",
+
+  "advancements.whimsical-ideas.soulsail/grade/cosmos.desc": "§b获得「宙阶」魂幡阶位。§r",
+  "advancements.whimsical-ideas.soulsail/grade/cosmos.title": "§b宙光流转§r §3苍魂归一§r",
+
+  "advancements.whimsical-ideas.soulsail/grade/flood.desc": "§d获得「洪阶」魂幡阶位。§r",
+  "advancements.whimsical-ideas.soulsail/grade/flood.title": "§d洪潮涌动§r §5万灵汇聚§r",
+
+  "advancements.whimsical-ideas.soulsail/grade/wasteland.desc": "§6获得「荒阶」魂幡阶位。§r",
+  "advancements.whimsical-ideas.soulsail/grade/wasteland.title": "§6荒原不灭§r §e残魂重燃§r",
+
+  "advancements.whimsical-ideas.soulsail/grade/immortal.desc": "§c获得「仙阶」魂幡阶位。§r",
+  "advancements.whimsical-ideas.soulsail/grade/immortal.title": "§c仙路已成§r §e魂幡登极§r"
+
 }

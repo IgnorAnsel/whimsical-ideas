@@ -1,0 +1,38 @@
+{
+  "parent": "whimsical-ideas:soulsail/grade/yellow",
+  "criteria": {
+    "has_item": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "whimsical-ideas:zun_soul_sail_universe"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.whimsical-ideas.soulsail/grade/universe.desc"
+    },
+    "frame": "goal",
+    "hidden": false,
+    "icon": {
+      "item": "whimsical-ideas:zun_soul_sail_universe"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.whimsical-ideas.soulsail/grade/universe.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_item"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

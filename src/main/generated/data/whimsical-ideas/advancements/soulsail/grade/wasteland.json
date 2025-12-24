@@ -1,0 +1,38 @@
+{
+  "parent": "whimsical-ideas:soulsail/grade/flood",
+  "criteria": {
+    "has_item": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "whimsical-ideas:zun_soul_sail_wasteland"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.whimsical-ideas.soulsail/grade/wasteland.desc"
+    },
+    "frame": "challenge",
+    "hidden": false,
+    "icon": {
+      "item": "whimsical-ideas:zun_soul_sail_wasteland"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.whimsical-ideas.soulsail/grade/wasteland.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_item"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

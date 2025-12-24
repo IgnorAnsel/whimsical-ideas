@@ -8,6 +8,8 @@ public class WhimsicalIdeasDataGenerator implements DataGeneratorEntrypoint {
 	public void onInitializeDataGenerator(FabricDataGenerator fabricDataGenerator) {
         FabricDataGenerator.Pack pack = fabricDataGenerator.createPack();
         pack.addProvider(WIRecipeProvider::new);
-        pack.addProvider(WILootTableProvider::new);
+        // pack.addProvider(WILootTableProvider::new);
+        pack.addProvider(WIAdvancementProvider::new);
+        // pack.addProvider(WILangProvider::new);
 	}
 }
