@@ -162,17 +162,29 @@ public final class SoulSailAbilityBarHud implements HudRenderCallback {
     }
 
 
-    private static void drawAbilityIcon(DrawContext ctx, int x, int y, SoulSailAbility ab) {
-        // 单行图标：u = index*16, v=0
-        int idx = ab.ordinal(); // 你也可以做一套自定义 index 映射
-        int u = idx * 16;
-        int v = 0;
+    private static final int ICON_SIZE = 64;      // 图标表每格是 64
+    private static final int DRAW_SIZE = 16;      // 在槽里显示 16（你现在 slot=20，所以 16 合适）
 
-        // 16x16
-        ctx.drawTexture(ICONS, x, y, u, v, 16, 16, 16 * 64, 16);
-        // ↑ 最后两个参数是整张纹理的宽高(像素)。
-        // 这里假设最多 64 个图标：宽 = 16*64，高=16。你按你实际改。
+    private static void drawAbilityIcon(DrawContext ctx, int x, int y, SoulSailAbility ab) {
+        int idx = ab.ordinal();
+        int u = idx * ICON_SIZE;
+
+        int texW = ICON_SIZE * SoulSailAbility.values().length; // 10 -> 640
+        int texH = ICON_SIZE;                                   // 64
+
+        var matrices = ctx.getMatrices();
+        matrices.push();
+        matrices.translate(x, y, 0);
+
+        float s = DRAW_SIZE / (float) ICON_SIZE; // 16/64 = 0.25
+        matrices.scale(s, s, 1.0f);
+
+        // 注意：现在 drawTexture 的 width/height 是“取图区域大小”，我们取 64×64
+        ctx.drawTexture(ICONS, 0, 0, u, 0, ICON_SIZE, ICON_SIZE, texW, texH);
+
+        matrices.pop();
     }
+
 
     private static boolean isPassiveOn(ItemStack stack, SoulSailAbility ab) {
         return switch (ab) {

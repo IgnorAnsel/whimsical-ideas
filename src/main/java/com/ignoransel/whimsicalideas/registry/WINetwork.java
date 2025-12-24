@@ -10,6 +10,8 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 
 import static com.ignoransel.whimsicalideas.content.soulsail.SoulSailItemCompat.findSoulSail;
@@ -78,6 +80,10 @@ public class WINetwork {
                 if (ab != SoulSailAbility.NONE && !ab.unlockedBy(grade)) return;
 
                 SoulSailItemCompat.setSelectedAbility(stack, ord);
+                ((ServerPlayerEntity) player).sendMessage(
+                        Text.literal("术式切换为: " + ab.displayName).formatted(Formatting.AQUA),
+                        true
+                );
             });
         });
 

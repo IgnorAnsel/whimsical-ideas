@@ -225,8 +225,10 @@ public final class SoulSailAbilitySelectScreen extends Screen {
 
     @Override
     public boolean keyReleased(int keyCode, int scanCode, int modifiers) {
-        // 松开 Alt 就关闭
         if (keyCode == GLFW.GLFW_KEY_LEFT_ALT || keyCode == GLFW.GLFW_KEY_RIGHT_ALT) {
+            if (previewOrd != Integer.MIN_VALUE) {
+                sendSetAbility(previewOrd);
+            }
             MinecraftClient.getInstance().setScreen(null);
             return true;
         }
@@ -271,11 +273,29 @@ public final class SoulSailAbilitySelectScreen extends Screen {
         ClientPlayNetworking.send(WINetwork.SET_ABILITY, buf);
     }
 
+    private static final int ICON_SIZE = 64;      // 图标表每格是 64
+    private static final int DRAW_SIZE = 16;      // 在槽里显示 16（你现在 slot=20，所以 16 合适）
+
     private static void drawAbilityIcon(DrawContext ctx, int x, int y, SoulSailAbility ab) {
         int idx = ab.ordinal();
-        int u = idx * 16;
-        ctx.drawTexture(ICONS, x, y, u, 0, 16, 16, 16 * 64, 16);
+        int u = idx * ICON_SIZE;
+
+        int texW = ICON_SIZE * SoulSailAbility.values().length; // 10 -> 640
+        int texH = ICON_SIZE;                                   // 64
+
+        var matrices = ctx.getMatrices();
+        matrices.push();
+        matrices.translate(x, y, 0);
+
+        float s = DRAW_SIZE / (float) ICON_SIZE; // 16/64 = 0.25
+        matrices.scale(s, s, 1.0f);
+
+        // 注意：现在 drawTexture 的 width/height 是“取图区域大小”，我们取 64×64
+        ctx.drawTexture(ICONS, 0, 0, u, 0, ICON_SIZE, ICON_SIZE, texW, texH);
+
+        matrices.pop();
     }
+
 
     private static boolean isPassiveOn(ItemStack stack, SoulSailAbility ab) {
         return switch (ab) {
