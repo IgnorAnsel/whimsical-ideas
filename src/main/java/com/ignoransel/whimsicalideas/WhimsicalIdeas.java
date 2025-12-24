@@ -8,9 +8,11 @@ import com.ignoransel.whimsicalideas.registry.*;
 import com.ignoransel.whimsicalideas.render.SoulXpOrbEntityRenderer;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.*;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.client.util.InputUtil;
@@ -129,6 +131,7 @@ public class WhimsicalIdeas implements ModInitializer, ClientModInitializer {
                 WIBlockEntities.SOUL_SIPHON,
                 com.ignoransel.whimsicalideas.content.soulsail.render.SoulSiphonBlockEntityRenderer::new
         );
+        BlockRenderLayerMap.INSTANCE.putBlock(WIBlocks.SOUL_SIPHON, RenderLayer.getCutout());
 
     }
     private static boolean isOffhandBest(MinecraftClient client, ItemStack best) {

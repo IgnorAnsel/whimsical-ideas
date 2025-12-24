@@ -1,6 +1,10 @@
 {
   "variants": {
-    "active=false": { "model": "whimsical-ideas:block/soul_siphon" },
-    "active=true":  { "model": "whimsical-ideas:block/soul_siphon_on" }
+    "active=false": {
+      "model": "whimsical-ideas:block/soul_siphon_off"
+    },
+    "active=true": {
+      "model": "whimsical-ideas:block/soul_siphon_on"
+    }
   }
 }
