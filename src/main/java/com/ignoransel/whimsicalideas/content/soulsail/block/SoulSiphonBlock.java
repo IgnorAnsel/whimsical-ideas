@@ -6,9 +6,7 @@ import com.ignoransel.whimsicalideas.content.soulsail.SoulSailBannerItem;
 import com.ignoransel.whimsicalideas.content.soulsail.SoulSailItemCompat;
 import com.ignoransel.whimsicalideas.content.soulsail.entity.SoulSiphonBlockEntity;
 import com.ignoransel.whimsicalideas.registry.WIBlockEntities;
-import net.minecraft.block.BlockEntityProvider;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.BlockWithEntity;
+import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
@@ -16,20 +14,34 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.state.StateManager;
+import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 public class SoulSiphonBlock extends BlockWithEntity implements BlockEntityProvider {
-
+    public static final BooleanProperty ACTIVE = BooleanProperty.of("active");
     public SoulSiphonBlock(Settings settings) {
         super(settings);
+        setDefaultState(getStateManager().getDefaultState().with(ACTIVE, false));
     }
 
     @Override
-    public BlockEntity createBlockEntity(net.minecraft.util.math.BlockPos pos, BlockState state) {
+    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+        builder.add(ACTIVE);
+    }
+
+    @Override
+    public BlockRenderType getRenderType(BlockState state) {
+        return BlockRenderType.MODEL;
+    }
+
+    @Override
+    public @Nullable BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
         return new SoulSiphonBlockEntity(pos, state);
     }
 
@@ -39,6 +51,7 @@ public class SoulSiphonBlock extends BlockWithEntity implements BlockEntityProvi
         if (world.isClient) return null;
         return type == WIBlockEntities.SOUL_SIPHON ? (w, p, s, be) -> SoulSiphonBlockEntity.tick(w, p, s, (SoulSiphonBlockEntity) be) : null;
     }
+
 
     @Override
     public ActionResult onUse(BlockState state, World world, net.minecraft.util.math.BlockPos pos,
@@ -54,6 +67,7 @@ public class SoulSiphonBlock extends BlockWithEntity implements BlockEntityProvi
         if (!held.isEmpty() && held.getItem() instanceof SoulSailBannerItem) {
             ItemStack remain = siphon.tryInsertBanner(held);
             player.setStackInHand(hand, remain);
+            // siphon.syncNow();
             world.playSound(null, pos, SoundEvents.BLOCK_ENDER_CHEST_OPEN, SoundCategory.BLOCKS, 0.7f, 1.2f);
             return ActionResult.CONSUME;
         }
@@ -65,6 +79,7 @@ public class SoulSiphonBlock extends BlockWithEntity implements BlockEntityProvi
             if (!player.getInventory().insertStack(out)) {
                 player.dropItem(out, false);
             }
+            // siphon.syncNow();
             world.playSound(null, pos, SoundEvents.BLOCK_ENDER_CHEST_CLOSE, SoundCategory.BLOCKS, 0.7f, 1.2f);
             return ActionResult.CONSUME;
         }

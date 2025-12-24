@@ -12,6 +12,7 @@ import net.minecraft.entity.ItemEntity;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
@@ -38,8 +39,13 @@ public class SoulSiphonBlockEntity extends BlockEntity {
     private int cooldown = 0;
     private int vfxTick = 0;
 
+    private static final String NBT_BANNER = "Banner";
     public SoulSiphonBlockEntity(BlockPos pos, BlockState state) {
         super(WIBlockEntities.SOUL_SIPHON, pos, state);
+
+    }
+    public ItemStack getBannerStack() {
+        return items.get(0);
     }
 
     public static void tick(World world, BlockPos pos, BlockState state, SoulSiphonBlockEntity be) {
@@ -48,6 +54,7 @@ public class SoulSiphonBlockEntity extends BlockEntity {
         ItemStack banner = be.items.get(0);
         if (banner.isEmpty() || !(banner.getItem() instanceof SoulSailBannerItem)) {
             // 没魂幡就停
+            be.setActiveState(false);
             be.pulseActive = false;
             be.spreadRadius = 0;
             be.lastRadius = 0;
@@ -63,6 +70,7 @@ public class SoulSiphonBlockEntity extends BlockEntity {
         // 如果当前没在脉冲，就尝试启动一个新的“感染波”
         if (!be.pulseActive) {
             if (be.hasSoulBlocksInRange((ServerWorld) world, pos, MAX_RANGE)) {
+                be.setActiveState(true);
                 be.pulseActive = true;
                 be.spreadRadius = 0.0;
                 be.lastRadius = 0.0;
@@ -88,6 +96,7 @@ public class SoulSiphonBlockEntity extends BlockEntity {
 
         // 结束一圈
         if (be.spreadRadius >= MAX_RANGE - 1e-6) {
+            be.setActiveState(false);
             be.pulseActive = false;
             be.cooldown = PULSE_COOLDOWN_TICKS;
             be.sync();
@@ -230,7 +239,7 @@ public class SoulSiphonBlockEntity extends BlockEntity {
         this.lastRadius = 0;
 
         markDirty();
-        sync();
+        syncNow();
         return remain;
     }
 
@@ -240,15 +249,26 @@ public class SoulSiphonBlockEntity extends BlockEntity {
 
         items.set(0, ItemStack.EMPTY);
 
-        // 拿走就停
         this.pulseActive = false;
         this.cooldown = 0;
         this.spreadRadius = 0;
         this.lastRadius = 0;
 
         markDirty();
-        sync();
+        syncNow();
         return cur;
+    }
+
+    private void setActiveState(boolean v) {
+        if (this.world == null) return;
+        BlockState st = this.world.getBlockState(this.pos);
+        if (st.getBlock() instanceof com.ignoransel.whimsicalideas.content.soulsail.block.SoulSiphonBlock) {
+            boolean cur = st.get(com.ignoransel.whimsicalideas.content.soulsail.block.SoulSiphonBlock.ACTIVE);
+            if (cur != v) {
+                this.world.setBlockState(this.pos, st.with(com.ignoransel.whimsicalideas.content.soulsail.block.SoulSiphonBlock.ACTIVE, v),
+                        Block.NOTIFY_ALL);
+            }
+        }
     }
 
     public void dropContents(World world, BlockPos pos) {
@@ -271,47 +291,74 @@ public class SoulSiphonBlockEntity extends BlockEntity {
         if (!pulseActive) return 0f;
         return (float) Math.max(0.0, Math.min(1.0, spreadRadius / MAX_RANGE));
     }
+
     @Override
     public void readNbt(NbtCompound nbt) {
         super.readNbt(nbt);
-        // 读物品槽（魂幡）
-        Inventories.readNbt(nbt, items);
 
-        // 读同步状态
+        // 强制清空，避免残留
+        items.set(0, ItemStack.EMPTY);
+
+        if (nbt.contains(NBT_BANNER, NbtCompound.COMPOUND_TYPE)) {
+            items.set(0, ItemStack.fromNbt(nbt.getCompound(NBT_BANNER)));
+        }
+        else if (nbt.contains("Items", NbtElement.LIST_TYPE)) {
+            DefaultedList<ItemStack> tmp = DefaultedList.ofSize(1, ItemStack.EMPTY);
+            Inventories.readNbt(nbt, tmp);
+            items.set(0, tmp.get(0));
+        }
+
         pulseActive  = nbt.getBoolean("PulseActive");
         spreadRadius = nbt.getDouble("SpreadRadius");
         cooldown     = nbt.getInt("Cooldown");
-
-        // lastRadius 兼容：没存就用当前半径
-        if (nbt.contains("LastRadius")) {
-            lastRadius = nbt.getDouble("LastRadius");
-        } else {
-            lastRadius = spreadRadius;
-        }
-
+        lastRadius   = nbt.contains("LastRadius") ? nbt.getDouble("LastRadius") : spreadRadius;
     }
+
 
     @Override
     public void writeNbt(NbtCompound nbt) {
         super.writeNbt(nbt);
-        // 写物品槽（魂幡）
+
         Inventories.writeNbt(nbt, items);
 
-        // 写同步状态
+        ItemStack s = items.get(0);
+        if (!s.isEmpty()) {
+            NbtCompound tag = new NbtCompound();
+            s.writeNbt(tag);
+            nbt.put(NBT_BANNER, tag);
+        } else {
+            nbt.remove(NBT_BANNER);
+        }
+
         nbt.putBoolean("PulseActive", pulseActive);
         nbt.putDouble("SpreadRadius", spreadRadius);
         nbt.putDouble("LastRadius", lastRadius);
         nbt.putInt("Cooldown", cooldown);
-
-        // nbt.putInt("VfxTick", vfxTick);
     }
+
+
+
     @Override
     public NbtCompound toInitialChunkDataNbt() {
         return createNbt();
     }
 
+
+
     // ====== 同步到客户端（不用自定义包） ======
     private void sync() {
+        if (this.world instanceof ServerWorld sw) {
+            sw.getChunkManager().markForUpdate(this.pos);
+        }
+    }
+    public void syncNow() {
+        if (this.world == null || this.world.isClient) return;
+
+        this.markDirty();
+
+        BlockState st = this.world.getBlockState(this.pos);
+        this.world.updateListeners(this.pos, st, st, Block.NOTIFY_ALL);
+
         if (this.world instanceof ServerWorld sw) {
             sw.getChunkManager().markForUpdate(this.pos);
         }
