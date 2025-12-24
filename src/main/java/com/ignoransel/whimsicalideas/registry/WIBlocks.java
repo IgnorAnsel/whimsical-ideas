@@ -3,6 +3,7 @@ package com.ignoransel.whimsicalideas.registry;
 import com.ignoransel.whimsicalideas.WhimsicalIdeas;
 import com.ignoransel.whimsicalideas.content.soulsail.SoulSailBannerBlock;
 import com.ignoransel.whimsicalideas.content.soulsail.SoulSailWallBannerBlock;
+import com.ignoransel.whimsicalideas.content.soulsail.block.SoulSiphonBlock;
 import com.ignoransel.whimsicalideas.content.soulsail.render.SoulBannerBlock;
 import com.ignoransel.whimsicalideas.content.soulsail.render.SoulSailPoleBlock;
 import com.ignoransel.whimsicalideas.content.soultablet.*;
@@ -40,6 +41,10 @@ public final class WIBlocks {
             id("soul_sail_pole"),
             new SoulSailPoleBlock(FabricBlockSettings.copyOf(Blocks.OAK_FENCE).nonOpaque())
     );
+
+    public static final Block SOUL_SIPHON = Registry.register(Registries.BLOCK,
+            id("soul_siphon"),
+            new SoulSiphonBlock(FabricBlockSettings.copyOf(Blocks.OBSIDIAN).strength(3.5f).nonOpaque()));
 
     private static Block register(String id, Block block) {
         return Registry.register(Registries.BLOCK, new Identifier(WhimsicalIdeas.MODID, id), block);

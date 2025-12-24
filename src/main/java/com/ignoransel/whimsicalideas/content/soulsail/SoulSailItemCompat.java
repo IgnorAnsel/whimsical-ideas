@@ -387,6 +387,12 @@ public final class SoulSailItemCompat {
         nbt.putLong(SoulSailKeys.REFINED_SOULS, Math.max(0L, refined + amount));
     }
 
+    public static void addRefinedSouls(ItemStack stack, long amount) {
+        var nbt = data(stack);
+        long refined = nbt.getLong(SoulSailKeys.REFINED_SOULS);
+        nbt.putLong(SoulSailKeys.REFINED_SOULS, Math.max(0L, refined + amount));
+    }
+
     public static void addSouls(ItemStack stack, long amount, long cap) {
         var nbt = data(stack);
         long cur = nbt.getLong(SoulSailKeys.SOULS);

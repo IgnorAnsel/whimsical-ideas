@@ -50,7 +50,7 @@ public final class WITabs {
                             entries.add(WIItems.TEST_ZUN_SOUL_SAIL);
                             entries.add(WIItems.SOUL_SAIL_POLE);
                             entries.add(WIItems.SOUL_FLAG);
-
+                            entries.add(WIItems.SOUL_SIPHON_ITEM);
                             // 添加品阶魂幡
                             entries.add(WIItems.ZUN_SOUL_SAIL_MORTAL.getDefaultStack());
                             entries.add(WIItems.ZUN_SOUL_SAIL_EARTH.getDefaultStack());

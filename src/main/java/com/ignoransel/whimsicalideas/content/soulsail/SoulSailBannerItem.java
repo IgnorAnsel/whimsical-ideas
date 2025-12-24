@@ -101,9 +101,13 @@ public class SoulSailBannerItem extends BannerItem implements ISoulSailItem {
     }
 
     private static SoulBannerGrade getNextGrade(SoulBannerGrade currentGrade, long refinedSouls) {
-        long requiredSouls = (long) Math.pow(10, currentGrade.getLevel() + 1);
-        if (refinedSouls >= requiredSouls) {
-            return switch (currentGrade) {
+        SoulBannerGrade g = currentGrade;
+
+        while (g != SoulBannerGrade.IMMORTAL) {
+            long requiredSouls = (long) Math.pow(10, g.getLevel() + 1);
+            if (refinedSouls < requiredSouls) break;
+
+            g = switch (g) {
                 case MORTAL -> SoulBannerGrade.EARTH;
                 case EARTH -> SoulBannerGrade.HEAVEN;
                 case HEAVEN -> SoulBannerGrade.MYSTERIOUS;
@@ -113,12 +117,13 @@ public class SoulSailBannerItem extends BannerItem implements ISoulSailItem {
                 case COSMOS -> SoulBannerGrade.FLOOD;
                 case FLOOD -> SoulBannerGrade.WASTELAND;
                 case WASTELAND -> SoulBannerGrade.IMMORTAL;
-                default -> currentGrade; // 已经是最高阶
+                default -> g;
             };
         }
 
-        return currentGrade;
+        return g;
     }
+
     // Tooltip 显示信息
     @Override
     public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext context) {

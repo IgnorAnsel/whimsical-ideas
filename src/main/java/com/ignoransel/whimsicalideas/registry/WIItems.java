@@ -91,7 +91,9 @@ public final class WIItems {
         TEST_GRADE_BANNERS.put(SoulBannerGrade.WASTELAND, TEST_ZUN_SOUL_SAIL_WASTELAND);
         TEST_GRADE_BANNERS.put(SoulBannerGrade.IMMORTAL, TEST_ZUN_SOUL_SAIL_IMMORTAL);
     }
-
+    public static final Item SOUL_SIPHON_ITEM = Registry.register(Registries.ITEM,
+            id("soul_siphon"),
+            new BlockItem(WIBlocks.SOUL_SIPHON, new Item.Settings()));
     private static Item registerTestGradeBanner(SoulBannerGrade grade) {
         return Registry.register(
                 Registries.ITEM,

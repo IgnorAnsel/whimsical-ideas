@@ -127,6 +127,8 @@ public class WhimsicalIdeas implements ModInitializer, ClientModInitializer {
                 }
             }
         });
+        HudRenderCallback.EVENT.register(new SoulSiphonHud());
+
 
     }
     private static boolean isOffhandBest(MinecraftClient client, ItemStack best) {

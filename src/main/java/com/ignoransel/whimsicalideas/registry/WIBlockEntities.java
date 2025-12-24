@@ -1,6 +1,8 @@
 package com.ignoransel.whimsicalideas.registry;
 
 import com.ignoransel.whimsicalideas.WhimsicalIdeas;
+
+import com.ignoransel.whimsicalideas.content.soulsail.entity.SoulSiphonBlockEntity;
 import com.ignoransel.whimsicalideas.content.soulsail.render.SoulSailPoleBlockEntity;
 import com.ignoransel.whimsicalideas.content.soultablet.SoulTabletBlockEntity;
 import com.ignoransel.whimsicalideas.content.soultablet.SoulTabletRenderer;
@@ -19,6 +21,9 @@ public final class WIBlockEntities {
 
     public static BlockEntityType<SoulTabletBlockEntity> SOUL_TABLET_BE;
     public static BlockEntityType<SoulBannerBlockEntity> SOUL_BANNER_BE;
+    public static final BlockEntityType<SoulSiphonBlockEntity> SOUL_SIPHON =
+            Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(WhimsicalIdeas.MODID, "soul_siphon"),
+                    FabricBlockEntityTypeBuilder.create(SoulSiphonBlockEntity::new, WIBlocks.SOUL_SIPHON).build());
     public static void init() {
         SOUL_TABLET_BE = Registry.register(
                 Registries.BLOCK_ENTITY_TYPE,
@@ -32,7 +37,7 @@ public final class WIBlockEntities {
 
         SOUL_BANNER_BE = Registry.register(
                 Registries.BLOCK_ENTITY_TYPE,
-                new Identifier("whimsical-ideas", "soul_banner"),
+                new Identifier(WhimsicalIdeas.MODID, "soul_banner"),
                 FabricBlockEntityTypeBuilder.create(SoulBannerBlockEntity::new,
                         WIBlocks.TEST_ZUN_SOUL_BANNER,
                         WIBlocks.TEST_ZUN_SOUL_WALL_BANNER
@@ -43,7 +48,7 @@ public final class WIBlockEntities {
     public static final BlockEntityType<SoulSailPoleBlockEntity> SOUL_SAIL_POLE_BE =
             Registry.register(
                     Registries.BLOCK_ENTITY_TYPE,
-                    new Identifier("whimsical-ideas", "soul_sail_pole"),
+                    new Identifier(WhimsicalIdeas.MODID, "soul_sail_pole"),
                     BlockEntityType.Builder.create(SoulSailPoleBlockEntity::new, WIBlocks.SOUL_SAIL_POLE).build(null)
             );
 

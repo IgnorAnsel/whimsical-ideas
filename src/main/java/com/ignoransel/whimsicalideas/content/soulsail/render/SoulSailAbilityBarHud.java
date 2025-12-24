@@ -16,6 +16,29 @@ public final class SoulSailAbilityBarHud implements HudRenderCallback {
     // 你的图标表：16x16 * N，单行
     private static final Identifier ICONS =
             new Identifier("whimsical-ideas", "textures/gui/soulsail/ability_icons.png");
+    private static SoulBannerGrade getNextGrade(SoulBannerGrade currentGrade, long refinedSouls) {
+        SoulBannerGrade g = currentGrade;
+
+        while (g != SoulBannerGrade.IMMORTAL) {
+            long requiredSouls = (long) Math.pow(10, g.getLevel() + 1);
+            if (refinedSouls < requiredSouls) break;
+
+            g = switch (g) {
+                case MORTAL -> SoulBannerGrade.EARTH;
+                case EARTH -> SoulBannerGrade.HEAVEN;
+                case HEAVEN -> SoulBannerGrade.MYSTERIOUS;
+                case MYSTERIOUS -> SoulBannerGrade.YELLOW;
+                case YELLOW -> SoulBannerGrade.UNIVERSE;
+                case UNIVERSE -> SoulBannerGrade.COSMOS;
+                case COSMOS -> SoulBannerGrade.FLOOD;
+                case FLOOD -> SoulBannerGrade.WASTELAND;
+                case WASTELAND -> SoulBannerGrade.IMMORTAL;
+                default -> g;
+            };
+        }
+
+        return g;
+    }
 
     @Override
     public void onHudRender(DrawContext ctx, float tickDelta) {
@@ -27,9 +50,10 @@ public final class SoulSailAbilityBarHud implements HudRenderCallback {
         if (held.stack.isEmpty()) return;
 
         ItemStack stack = held.stack;
-        SoulBannerGrade grade = SoulSailItemCompat.getBannerGrade(stack);
 
-        // 已解锁技能（NONE也显示）
+        SoulBannerGrade grade = SoulSailItemCompat.getBannerGrade(stack);
+        grade = getNextGrade(grade, SoulSailItemCompat.getRefinedSouls(stack));
+        // 已解锁技能
         List<SoulSailAbility> list = new ArrayList<>();
         for (SoulSailAbility ab : SoulSailAbility.values()) {
             if (ab == SoulSailAbility.NONE || ab.unlockedBy(grade)) list.add(ab);

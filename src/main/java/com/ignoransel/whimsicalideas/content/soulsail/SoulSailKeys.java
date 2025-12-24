@@ -38,7 +38,6 @@ public final class SoulSailKeys {
     public static final String MAELSTROM_Z     = "MaelstromZ";     // double
     public static final String MAELSTROM_START = "MaelstromStart"; // long
 
-    // SoulSailKeys.java 里加
     public static final String JUDGMENT_ACTIVE = "JudgmentActive";
     public static final String JUDGMENT_START  = "JudgmentStart";
     public static final String JUDGMENT_UNTIL  = "JudgmentUntil";
