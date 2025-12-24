@@ -8,6 +8,8 @@ import net.minecraft.nbt.NbtString;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.math.Vec3d;
 
 import java.util.HashSet;
@@ -196,6 +198,14 @@ public final class SoulSailItemCompat {
     public static void setSelectedAbility(ItemStack stack, int idx) {
         data(stack).putInt(SoulSailKeys.SELECTED_ABILITY, idx);
     }
+    public static void setSelectedAbility(ServerPlayerEntity sp, ItemStack stack, int ord, boolean notify) {
+        SoulSailItemCompat.setSelectedAbility(stack, ord);
+        if (notify) {
+            SoulSailAbility ab = SoulSailAbility.values()[ord];
+            sp.sendMessage(Text.literal("术式切换为: " + ab.displayName).formatted(Formatting.AQUA), true);
+        }
+    }
+
     public static SoulSailAbility getSelectedAbilitySafe(ItemStack stack) {
         int idx = getSelectedAbility(stack);
         SoulSailAbility[] vals = SoulSailAbility.values();

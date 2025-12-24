@@ -13,8 +13,6 @@ public enum SoulSailAbility {
     SOUL_JUDGMENT(SoulBannerGrade.IMMORTAL, "魂劫", false, 5000L, 2400);
 
 
-
-
     public final SoulBannerGrade minGrade;
     public final String displayName;
     public final boolean passive;

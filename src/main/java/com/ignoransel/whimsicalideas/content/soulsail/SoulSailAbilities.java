@@ -44,7 +44,7 @@ public final class SoulSailAbilities {
         int next = unlockedIdx[nextPos];
 
         SoulSailItemCompat.setSelectedAbility(stack, next);
-        sp.sendMessage(Text.literal("术式切换为: " + all[next].displayName).formatted(Formatting.AQUA), true);
+
     }
 
     /** 释放当前选择的技能（只在按键触发时消耗魂） */

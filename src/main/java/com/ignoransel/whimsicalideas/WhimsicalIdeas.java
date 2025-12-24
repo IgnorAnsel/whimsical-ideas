@@ -1,5 +1,6 @@
 package com.ignoransel.whimsicalideas;
 
+import com.ignoransel.whimsicalideas.client.ClientTimeSync;
 import com.ignoransel.whimsicalideas.content.hex.handers.HexRefineHandler;
 import com.ignoransel.whimsicalideas.content.soulsail.*;
 import com.ignoransel.whimsicalideas.content.soulsail.render.*;
@@ -7,14 +8,21 @@ import com.ignoransel.whimsicalideas.registry.*;
 import com.ignoransel.whimsicalideas.render.SoulXpOrbEntityRenderer;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
+import net.minecraft.client.util.InputUtil;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
+import org.lwjgl.glfw.GLFW;
+
+import static com.ignoransel.whimsicalideas.content.soulsail.render.SoulSailAbilityBarHud.getBestHeldSoulSail;
 
 public class WhimsicalIdeas implements ModInitializer, ClientModInitializer {
     public static final String MODID = "whimsical-ideas";
@@ -94,6 +102,34 @@ public class WhimsicalIdeas implements ModInitializer, ClientModInitializer {
 
         HudRenderCallback.EVENT.register(new SoulSailCooldownHud());
         EntityRendererRegistry.register(WIEntities.COLORED_LIGHTNING, ColoredLightningRenderer::new);
+        HudRenderCallback.EVENT.register(new SoulSailAbilityBarHud());
+        ClientTimeSync.register();
+        ClientTickEvents.END_CLIENT_TICK.register(client -> {
+            if (client.player == null) return;
 
+            boolean altDown = InputUtil.isKeyPressed(client.getWindow().getHandle(), GLFW.GLFW_KEY_LEFT_ALT)
+                    || InputUtil.isKeyPressed(client.getWindow().getHandle(), GLFW.GLFW_KEY_RIGHT_ALT);
+
+            // 只有手上有魂幡才允许
+            ItemStack best = getBestHeldSoulSail(client); // 你已有的那套取高阶
+            boolean holding = !best.isEmpty() && (best.getItem() instanceof SoulSailBannerItem);
+
+            if (altDown && holding) {
+                // 如果当前没有界面，打开我们的透明选择界面
+                if (client.currentScreen == null) {
+                    boolean anchorLeft = isOffhandBest(client, best); // 副手=左；主手=右
+                    client.setScreen(new SoulSailAbilitySelectScreen(best, anchorLeft));
+                }
+            } else {
+                // 松开Alt：如果当前就是我们的界面就关掉
+                if (client.currentScreen instanceof SoulSailAbilitySelectScreen) {
+                    client.setScreen(null);
+                }
+            }
+        });
+
+    }
+    private static boolean isOffhandBest(MinecraftClient client, ItemStack best) {
+        return client.player.getOffHandStack() == best;
     }
 }
