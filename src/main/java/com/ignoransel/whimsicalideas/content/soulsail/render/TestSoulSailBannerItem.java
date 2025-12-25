@@ -50,8 +50,20 @@ public class TestSoulSailBannerItem extends BlockItem implements ISoulSailItem {
     // 右键空气：开始“使用”（长按）
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-        user.setCurrentHand(hand);
-        return TypedActionResult.consume(user.getStackInHand(hand));
+        ItemStack stack = user.getStackInHand(hand);
+
+        if (user.isSneaking()) {
+            user.setCurrentHand(hand);
+            return TypedActionResult.consume(stack);
+        }
+
+        if (!world.isClient && user instanceof ServerPlayerEntity sp) {
+            SoulSailAbilities.castSelectedAbility(sp, stack);
+            user.stopUsingItem();
+            return TypedActionResult.success(stack);
+        }
+        user.stopUsingItem();
+        return TypedActionResult.pass(stack);
     }
 
     // 长按完成：进入/离开魂幡世界
@@ -110,7 +122,6 @@ public class TestSoulSailBannerItem extends BlockItem implements ISoulSailItem {
     }
 
     // Tooltip 显示信息
-    @Override
     public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext context) {
 
         SoulBannerGrade grade = SoulSailItemCompat.getBannerGrade(stack);
@@ -121,6 +132,7 @@ public class TestSoulSailBannerItem extends BlockItem implements ISoulSailItem {
         SoulBannerGrade Nextgrade = getNextGrade(grade, refinedsouls);
         if(Nextgrade != grade) {
             SoulSailItemCompat.setBannerGrade(stack, Nextgrade);
+            setTier(grade.getSoulSailTier());
             grade = Nextgrade;
         }
         tooltip.add(Text.literal("品阶: ").formatted(Formatting.GRAY)
@@ -131,6 +143,18 @@ public class TestSoulSailBannerItem extends BlockItem implements ISoulSailItem {
         tooltip.add(Text.literal("未炼化: " + rawsouls));
 
         tooltip.add(Text.literal("已炼化: " + refinedsouls));
+        SoulSailAbility ab = SoulSailItemCompat.getSelectedAbilitySafe(stack);
+        tooltip.add(Text.literal("当前术式: " + ab.displayName).formatted(Formatting.AQUA));
+        boolean on = SoulSailItemCompat.isSoulTotemEnabled(stack);
+        tooltip.add(Text.literal("魂替状态: " + (on ? "开启" : "关闭"))
+                .formatted(on ? Formatting.GREEN : Formatting.DARK_GRAY));
+        on = SoulSailItemCompat.isSoulBarrierEnabled(stack);
+        tooltip.add(Text.literal("魂御状态: " + (on ? "开启" : "关闭"))
+                .formatted(on ? Formatting.GREEN : Formatting.DARK_GRAY));
+        if (ab != SoulSailAbility.NONE) {
+            tooltip.add(Text.literal("消耗: " + ab.costSouls + "魂  冷却: " + (ab.cooldownTicks / 20f) + "s")
+                    .formatted(Formatting.DARK_GRAY));
+        }
         if (SoulSailItemCompat.isActive(stack)) {
             tooltip.add(Text.literal("位于此魂幡（已锁定）"));
         } else {

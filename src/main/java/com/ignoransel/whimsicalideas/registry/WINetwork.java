@@ -40,7 +40,7 @@ public class WINetwork {
         ServerPlayNetworking.registerGlobalReceiver(CYCLE_ABILITY, (server, player, handler, buf, responseSender) -> {
             server.execute(() -> {
                 ItemStack stack = findSoulSail(player);
-                if (!(stack.getItem() instanceof SoulSailBannerItem)) return;
+                if (!(stack.getItem() instanceof ISoulSailItem)) return;
                 SoulSailAbilities.cycleAbility((ServerPlayerEntity) player, stack);
             });
         });
@@ -48,7 +48,7 @@ public class WINetwork {
         ServerPlayNetworking.registerGlobalReceiver(CAST_ABILITY, (server, player, handler, buf, responseSender) -> {
             server.execute(() -> {
                 ItemStack stack = findSoulSail(player);
-                if (!(stack.getItem() instanceof SoulSailBannerItem)) return;
+                if (!(stack.getItem() instanceof ISoulSailItem)) return;
                 SoulSailAbilities.castSelectedAbility((ServerPlayerEntity) player, stack);
             });
         });
@@ -68,7 +68,7 @@ public class WINetwork {
             int ord = buf.readVarInt();
             server.execute(() -> {
                 ItemStack stack = SoulSailItemCompat.findSoulSail((ServerPlayerEntity) player);
-                if (!(stack.getItem() instanceof SoulSailBannerItem)) return;
+                if (!(stack.getItem() instanceof ISoulSailItem)) return;
 
                 SoulSailAbility[] vals = SoulSailAbility.values();
                 if (ord < 0 || ord >= vals.length) return;

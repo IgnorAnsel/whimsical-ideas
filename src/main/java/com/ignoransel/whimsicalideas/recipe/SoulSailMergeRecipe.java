@@ -1,9 +1,8 @@
 package com.ignoransel.whimsicalideas.recipe;
 
-import com.ignoransel.whimsicalideas.content.soulsail.SoulSailBannerItem;
+import com.ignoransel.whimsicalideas.content.soulsail.ISoulSailItem;
 import com.ignoransel.whimsicalideas.content.soulsail.SoulSailItemCompat;
 import com.ignoransel.whimsicalideas.registry.WIRecipes;
-import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtElement;
@@ -13,7 +12,6 @@ import net.minecraft.recipe.SpecialCraftingRecipe;
 import net.minecraft.recipe.book.CraftingRecipeCategory;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.Identifier;
-import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 
 public class SoulSailMergeRecipe extends SpecialCraftingRecipe {
@@ -29,7 +27,7 @@ public class SoulSailMergeRecipe extends SpecialCraftingRecipe {
         for (int i = 0; i < inventory.size(); ++i) {
             ItemStack stack = inventory.getStack(i);
             if (!stack.isEmpty()) {
-                if (stack.getItem() instanceof SoulSailBannerItem) {
+                if (stack.getItem() instanceof ISoulSailItem) {
                     count++;
                 } else {
                     return false; // 如果有非魂幡物品，则不匹配
@@ -49,7 +47,7 @@ public class SoulSailMergeRecipe extends SpecialCraftingRecipe {
         // 逻辑：我们假设在合成栏中，索引较小（左上）的是主魂幡，索引较大（右下）的是被吞噬的魂幡
         for (int i = 0; i < inventory.size(); ++i) {
             ItemStack stack = inventory.getStack(i);
-            if (!stack.isEmpty() && stack.getItem() instanceof SoulSailBannerItem) {
+            if (!stack.isEmpty() && stack.getItem() instanceof ISoulSailItem) {
                 if (mainBanner.isEmpty()) {
                     mainBanner = stack;
                 } else {

@@ -1,9 +1,6 @@
 package com.ignoransel.whimsicalideas.content.soulsail.render;
 
-import com.ignoransel.whimsicalideas.content.soulsail.SoulSailAbility;
-import com.ignoransel.whimsicalideas.content.soulsail.SoulSailBannerItem;
-import com.ignoransel.whimsicalideas.content.soulsail.SoulSailItemCompat;
-import com.ignoransel.whimsicalideas.content.soulsail.SoulSailKeys;
+import com.ignoransel.whimsicalideas.content.soulsail.*;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
@@ -26,9 +23,9 @@ public final class SoulSailCooldownHud implements HudRenderCallback {
 
         // 找到玩家手上的魂幡（主手优先，其次副手）
         ItemStack stack = client.player.getMainHandStack();
-        if (!(stack.getItem() instanceof SoulSailBannerItem)) {
+        if (!(stack.getItem() instanceof ISoulSailItem)) {
             stack = client.player.getOffHandStack();
-            if (!(stack.getItem() instanceof SoulSailBannerItem)) return;
+            if (!(stack.getItem() instanceof ISoulSailItem)) return;
         }
 
         long now = client.world != null ? client.world.getTime() : 0L;

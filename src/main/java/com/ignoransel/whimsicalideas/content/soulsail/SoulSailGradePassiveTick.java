@@ -24,7 +24,7 @@ public final class SoulSailGradePassiveTick {
         for (ServerPlayerEntity sp : server.getPlayerManager().getPlayerList()) {
 
             ItemStack stack = SoulSailItemCompat.findSoulSail(sp);
-            boolean holding = !stack.isEmpty() && (stack.getItem() instanceof SoulSailBannerItem);
+            boolean holding = !stack.isEmpty() && (stack.getItem() instanceof ISoulSailItem);
 
             SoulBannerGrade grade = SoulBannerGrade.MORTAL;
             if (holding) grade = SoulSailItemCompat.getBannerGrade(stack);

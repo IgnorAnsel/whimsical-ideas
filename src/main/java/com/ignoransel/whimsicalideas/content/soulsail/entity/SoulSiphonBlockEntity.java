@@ -1,6 +1,6 @@
 package com.ignoransel.whimsicalideas.content.soulsail.entity;
 
-import com.ignoransel.whimsicalideas.content.soulsail.SoulSailBannerItem;
+import com.ignoransel.whimsicalideas.content.soulsail.ISoulSailItem;
 import com.ignoransel.whimsicalideas.content.soulsail.SoulSailItemCompat;
 import com.ignoransel.whimsicalideas.content.soulsail.SoulSailKeys;
 import com.ignoransel.whimsicalideas.registry.WIBlockEntities;
@@ -52,7 +52,7 @@ public class SoulSiphonBlockEntity extends BlockEntity {
         if (world.isClient) return;
 
         ItemStack banner = be.items.get(0);
-        if (banner.isEmpty() || !(banner.getItem() instanceof SoulSailBannerItem)) {
+        if (banner.isEmpty() || !(banner.getItem() instanceof ISoulSailItem)) {
             // 没魂幡就停
             be.setActiveState(false);
             be.pulseActive = false;
@@ -222,7 +222,7 @@ public class SoulSiphonBlockEntity extends BlockEntity {
 
     // ====== 交互：放入/取出魂幡 ======
     public ItemStack tryInsertBanner(ItemStack inHand) {
-        if (inHand.isEmpty() || !(inHand.getItem() instanceof SoulSailBannerItem)) return inHand;
+        if (inHand.isEmpty() || !(inHand.getItem() instanceof ISoulSailItem)) return inHand;
         if (!items.get(0).isEmpty()) return inHand;
 
         ItemStack one = inHand.copy();

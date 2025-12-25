@@ -482,8 +482,8 @@ public final class SoulSailItemCompat {
         ItemStack main = sp.getMainHandStack();
         ItemStack off  = sp.getOffHandStack();
 
-        boolean mainIs = main.getItem() instanceof SoulSailBannerItem;
-        boolean offIs  = off.getItem() instanceof SoulSailBannerItem;
+        boolean mainIs = main.getItem() instanceof ISoulSailItem;
+        boolean offIs  = off.getItem() instanceof ISoulSailItem;
 
         if (!mainIs && !offIs) return ItemStack.EMPTY;
         if (mainIs && !offIs) return main;

@@ -111,7 +111,7 @@ public class WhimsicalIdeas implements ModInitializer, ClientModInitializer {
 
             // 只有手上有魂幡才允许
             ItemStack best = getBestHeldSoulSail(client); // 你已有的那套取高阶
-            boolean holding = !best.isEmpty() && (best.getItem() instanceof SoulSailBannerItem);
+            boolean holding = !best.isEmpty() && (best.getItem() instanceof ISoulSailItem);
 
             if (altDown && holding) {
                 // 如果当前没有界面，打开我们的透明选择界面

@@ -171,8 +171,8 @@ public final class SoulSailAbilityBarHud implements HudRenderCallback {
         ItemStack main = client.player.getMainHandStack();
         ItemStack off  = client.player.getOffHandStack();
 
-        boolean m = main.getItem() instanceof SoulSailBannerItem;
-        boolean o = off.getItem()  instanceof SoulSailBannerItem;
+        boolean m = main.getItem() instanceof ISoulSailItem;
+        boolean o = off.getItem()  instanceof ISoulSailItem;
 
         if (!m && !o) return new HeldSoulSail(ItemStack.EMPTY, Side.RIGHT);
         if (m && !o)  return new HeldSoulSail(main, Side.RIGHT);
@@ -222,8 +222,8 @@ public final class SoulSailAbilityBarHud implements HudRenderCallback {
     public static ItemStack getBestHeldSoulSail(MinecraftClient client) {
         ItemStack main = client.player.getMainHandStack();
         ItemStack off  = client.player.getOffHandStack();
-        boolean m = main.getItem() instanceof SoulSailBannerItem;
-        boolean o = off.getItem()  instanceof SoulSailBannerItem;
+        boolean m = main.getItem() instanceof ISoulSailItem;
+        boolean o = off.getItem()  instanceof ISoulSailItem;
 
         if (!m && !o) return ItemStack.EMPTY;
         if (m && !o) return main;

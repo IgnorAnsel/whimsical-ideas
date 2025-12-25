@@ -23,7 +23,7 @@ public final class SoulSailGraspTick {
 
         for (ServerPlayerEntity sp : server.getPlayerManager().getPlayerList()) {
             ItemStack stack = SoulSailItemCompat.findSoulSail(sp);
-            if (stack.isEmpty() || !(stack.getItem() instanceof SoulSailBannerItem)) continue;
+            if (stack.isEmpty() || !(stack.getItem() instanceof ISoulSailItem)) continue;
 
             // if (!SoulSailItemCompat.isGraspActive(stack, now)) continue;
 

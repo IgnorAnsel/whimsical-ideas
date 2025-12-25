@@ -16,6 +16,7 @@ public class SoulBannerRenderer implements BlockEntityRenderer<SoulBannerBlockEn
     private static final Identifier TEX =
             new Identifier("whimsical-ideas", "textures/entity/soul_banner_purple.png");
 
+
     private final SoulBannerModel model;
     private static final Identifier GLOW_TEX =
             new Identifier("whimsical-ideas", "textures/entity/soul_banner_purple_glow.png");

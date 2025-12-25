@@ -24,7 +24,7 @@ public final class SoulSailMaelstromTick {
     private static void onTick(MinecraftServer server) {
         for (ServerPlayerEntity sp : server.getPlayerManager().getPlayerList()) {
             ItemStack stack = SoulSailItemCompat.findSoulSail(sp);
-            if (stack.isEmpty() || !(stack.getItem() instanceof SoulSailBannerItem)) continue;
+            if (stack.isEmpty() || !(stack.getItem() instanceof ISoulSailItem)) continue;
 
             ServerWorld world = sp.getServerWorld();
             long now = world.getTime();

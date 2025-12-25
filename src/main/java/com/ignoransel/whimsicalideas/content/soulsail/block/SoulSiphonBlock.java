@@ -1,7 +1,7 @@
 package com.ignoransel.whimsicalideas.content.soulsail.block;
 
+import com.ignoransel.whimsicalideas.content.soulsail.ISoulSailItem;
 import com.ignoransel.whimsicalideas.content.soulsail.SoulBannerGrade;
-import com.ignoransel.whimsicalideas.content.soulsail.SoulSailBannerItem;
 
 import com.ignoransel.whimsicalideas.content.soulsail.SoulSailItemCompat;
 import com.ignoransel.whimsicalideas.content.soulsail.entity.SoulSiphonBlockEntity;
@@ -64,7 +64,7 @@ public class SoulSiphonBlock extends BlockWithEntity implements BlockEntityProvi
         ItemStack held = player.getStackInHand(hand);
 
         // 右键：放入魂幡
-        if (!held.isEmpty() && held.getItem() instanceof SoulSailBannerItem) {
+        if (!held.isEmpty() && held.getItem() instanceof ISoulSailItem) {
             ItemStack remain = siphon.tryInsertBanner(held);
             player.setStackInHand(hand, remain);
             // siphon.syncNow();
