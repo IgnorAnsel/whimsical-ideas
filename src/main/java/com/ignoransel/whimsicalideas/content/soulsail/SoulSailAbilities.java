@@ -131,15 +131,15 @@ public final class SoulSailAbilities {
                 sp.sendMessage(Text.literal("唤雷！").formatted(Formatting.YELLOW), true);
             }
             case SOUL_GRASP -> {
-                // 取准星目标（只在服务端）
+                // 取准星目标
                 LivingEntity target = raycastLiving(sp, 24.0);
                 if (target == null) {
                     sp.sendMessage(Text.literal("未锁定目标").formatted(Formatting.GRAY), true);
                     return;
                 }
                 if (target instanceof ServerPlayerEntity) {
-                    sp.sendMessage(Text.literal("无法锁定玩家").formatted(Formatting.GRAY), true);
-                    return;
+                    sp.sendMessage(Text.literal("锁定玩家: " + target.getName().getString())
+                            .formatted(Formatting.AQUA), true);
                 }
                 // 冷却/扣魂
                 if (!consumeAndCooldown(sp, stack, ab)) return;

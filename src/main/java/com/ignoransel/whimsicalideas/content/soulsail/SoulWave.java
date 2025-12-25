@@ -33,7 +33,7 @@ public class SoulWave {
         Box box = sp.getBoundingBox().expand(range, 3.0, range);
 
         for (LivingEntity e : world.getEntitiesByClass(LivingEntity.class, box, ent -> ent.isAlive() && ent != sp)) {
-            if (e instanceof ServerPlayerEntity) continue; // 先不做PVP
+            // if (e instanceof ServerPlayerEntity) continue; // 先不做PVP
 
             Vec3d to = e.getPos().add(0, e.getHeight() * 0.5, 0).subtract(origin);
             double dist = to.length();

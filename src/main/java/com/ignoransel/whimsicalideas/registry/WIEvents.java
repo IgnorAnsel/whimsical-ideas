@@ -3,6 +3,7 @@ package com.ignoransel.whimsicalideas.registry;
 
 
 import com.ignoransel.whimsicalideas.content.soulsail.SoulSailRefine;
+import com.ignoransel.whimsicalideas.content.soulsail.SoulSailRoomManager;
 import com.ignoransel.whimsicalideas.content.soultablet.SoulTabletBlockEntity;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
@@ -10,10 +11,13 @@ import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LightningEntity;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.BannerItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -74,41 +78,6 @@ public final class WIEvents {
     private WIEvents(){}
     public static void init() {
         SoulSailRefine.register();
-//        ItemTooltipCallback.EVENT.register((stack, context, lines) -> {
-//            if (!(stack.getItem() instanceof BannerItem)) return;
-//            if (!hasZunSoulPattern(stack)) return;
-//            if (stack.isOf(WIItems.ZUN_SOUL_SAIL)) return;
-//            // 标题
-//            lines.add(Text.translatable("tooltip.whimsical-ideas.zun_soul_banner.title")
-//                    .formatted(Formatting.GOLD));
-//
-//            // 未按 Shift：提示展开
-//            if (!Screen.hasShiftDown()) {
-//                lines.add(Text.translatable("tooltip.whimsical-ideas.hold_shift")
-//                        .formatted(Formatting.GRAY, Formatting.ITALIC));
-//                return;
-//            }
-//
-//            // 按住 Shift：显示配方
-//            lines.add(Text.translatable("tooltip.whimsical-ideas.zun_soul_banner.hint")
-//                    .formatted(Formatting.GRAY));
-//
-//            // 九宫格
-//            lines.add(Text.literal(" ")
-//                    .append(name(RING[0])).append(Text.literal("  "))
-//                    .append(name(RING[1])).append(Text.literal("  "))
-//                    .append(name(RING[2])).formatted(Formatting.DARK_GRAY));
-//            lines.add(Text.literal(" ")
-//                    .append(name(RING[3])).append(Text.literal("  "))
-//                    .append(Text.translatable("tooltip.whimsical-ideas.zun_soul_banner.center"))
-//                    .append(Text.literal("  "))
-//                    .append(name(RING[5])).formatted(Formatting.DARK_GRAY));
-//            lines.add(Text.literal(" ")
-//                    .append(name(RING[6])).append(Text.literal("  "))
-//                    .append(name(RING[7])).append(Text.literal("  "))
-//                    .append(name(RING[8])).formatted(Formatting.DARK_GRAY));
-//        });
-        // MaxMiningEvents.register();
         ServerLivingEntityEvents.AFTER_DEATH.register((entity, damageSource) -> {
             if (!(entity instanceof ServerPlayerEntity player)) return;
 
@@ -290,8 +259,34 @@ public final class WIEvents {
             return true;
         });
 
-    }
+        ServerLivingEntityEvents.ALLOW_DAMAGE.register((entity, source, amount) -> {
+            // 只管魂幡维度
+            if (!(entity.getWorld() instanceof ServerWorld sw)) return true;
+            if (!sw.getRegistryKey().equals(SoulSailRoomManager.SOUL_SAIL_DIM)) return true;
 
+            // 玩家在小世界无敌
+            if (entity instanceof ServerPlayerEntity) return false;
+
+            // 非玩家：只允许“来自玩家”的伤害
+            return isDamageFromPlayer(source);
+        });
+
+    }
+    private static boolean isDamageFromPlayer(DamageSource source) {
+        // 直接近战/直接来源
+        Entity attacker = source.getAttacker();
+        if (attacker instanceof ServerPlayerEntity) return true;
+
+        // 间接来源（弓箭/投掷物等）：source.getSource() 通常是 ProjectileEntity
+        Entity direct = source.getSource();
+        if (direct instanceof ProjectileEntity proj) {
+            Entity owner = proj.getOwner();
+            return owner instanceof ServerPlayerEntity;
+        }
+
+        // 其他情况（环境、怪物、爆炸、火、摔落、溺水…）都不算玩家造成
+        return false;
+    }
     private static java.util.List<ItemStack> smeltDrops(ServerWorld sw, java.util.List<ItemStack> in) {
         java.util.ArrayList<ItemStack> out = new java.util.ArrayList<>();
         var rm = sw.getRecipeManager();

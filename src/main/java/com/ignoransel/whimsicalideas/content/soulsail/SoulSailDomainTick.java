@@ -51,7 +51,7 @@ public final class SoulSailDomainTick {
             for (LivingEntity e : sp.getServerWorld().getEntitiesByClass(
                     LivingEntity.class, box, ent -> ent.isAlive() && ent != sp)) {
                 // 先不做 PVP（你要 PVP 我再给你队伍/白名单判断）
-                if (e instanceof ServerPlayerEntity) continue;
+                // if (e instanceof ServerPlayerEntity) continue;
 
                 // ✅ 控场：减速/虚弱/“力量减少”(用挖掘疲劳模拟综合削弱)
                 e.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 20, 2, true, false, true));

@@ -76,7 +76,7 @@ public final class SoulSailMaelstromTick {
             double swirlStrength = 0.03 + 0.09 * ease; // 0.03 -> 0.12
 
             for (LivingEntity e : world.getEntitiesByClass(LivingEntity.class, box, ent -> ent.isAlive() && ent != sp)) {
-                if (e instanceof ServerPlayerEntity) continue; // 先不做 PVP
+                // if (e instanceof ServerPlayerEntity) continue; // 先不做 PVP
 
                 Vec3d p = e.getPos().add(0, e.getHeight() * 0.5, 0);
                 Vec3d toCenter = center.add(0, 0.6, 0).subtract(p);
@@ -227,7 +227,7 @@ public final class SoulSailMaelstromTick {
         float leech = 0.25f;
 
         for (LivingEntity e : sw.getEntitiesByClass(LivingEntity.class, box, ent -> ent.isAlive() && ent != sp)) {
-            if (e instanceof ServerPlayerEntity) continue;
+            // if (e instanceof ServerPlayerEntity) continue;
 
             Vec3d p = e.getPos().add(0, e.getHeight() * 0.5, 0);
             Vec3d fromCenter = p.subtract(center.add(0, 0.6, 0));

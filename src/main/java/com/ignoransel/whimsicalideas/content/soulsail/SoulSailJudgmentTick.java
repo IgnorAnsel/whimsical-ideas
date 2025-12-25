@@ -74,7 +74,7 @@ public final class SoulSailJudgmentTick {
                     center.x + outer, center.y + outer, center.z + outer);
 
             for (LivingEntity e : world.getEntitiesByClass(LivingEntity.class, box, ent -> ent.isAlive() && ent != sp)) {
-                if (e instanceof ServerPlayerEntity) continue; // 不做PVP先
+                // if (e instanceof ServerPlayerEntity) continue; // 不做PVP先
                 double d = e.getPos().distanceTo(center);
                 if (d >= inner && d <= outer) {
                     SoulSailItemCompat.addJudgmentPunished(stack, e.getUuid());

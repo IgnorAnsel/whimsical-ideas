@@ -233,8 +233,8 @@ public final class SoulSailRoomManager {
 
             // 小世界生物：无攻击欲望
             if (e instanceof net.minecraft.entity.mob.MobEntity mob) {
-                mob.setAiDisabled(true);
-                mob.setPersistent();
+//                mob.setAiDisabled(true);
+//                mob.setPersistent();
             }
 
             w.spawnEntity(e);
@@ -264,8 +264,8 @@ public final class SoulSailRoomManager {
 
             // 生物不攻击：直接 NoAI
             if (e instanceof net.minecraft.entity.mob.MobEntity mob) {
-                mob.setAiDisabled(true);
-                mob.setPersistent();
+//                mob.setAiDisabled(true);
+//                mob.setPersistent();
             }
 
             w.spawnEntity(e);
