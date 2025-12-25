@@ -39,7 +39,15 @@
                 { "op":"replace", "source":"ReturnY",    "target":"BlockEntityTag.ReturnY" },
                 { "op":"replace", "source":"ReturnZ",    "target":"BlockEntityTag.ReturnZ" },
                 { "op":"replace", "source":"ReturnYaw",  "target":"BlockEntityTag.ReturnYaw" },
-                { "op":"replace", "source":"ReturnPitch","target":"BlockEntityTag.ReturnPitch" }
+                { "op":"replace", "source":"ReturnPitch","target":"BlockEntityTag.ReturnPitch" },
+
+                { "op":"replace", "source":"SelectedAbility", "target":"BlockEntityTag.SelectedAbility" },
+                { "op":"replace", "source":"AbilityCooldowns", "target":"BlockEntityTag.AbilityCooldowns" },
+                { "op":"replace", "source":"PassiveSoulTotem", "target":"BlockEntityTag.PassiveSoulTotem" },
+                { "op":"replace", "source":"PassiveSoulBarrier", "target":"BlockEntityTag.PassiveSoulBarrier" },
+                { "op":"replace", "source":"PassiveSoulDomain", "target":"BlockEntityTag.PassiveSoulDomain" },
+                { "op":"replace", "source":"GraspUntil", "target":"BlockEntityTag.GraspUntil" },
+                { "op":"replace", "source":"GraspTarget", "target":"BlockEntityTag.GraspTarget" }
 
               ],
               "source": "block_entity"

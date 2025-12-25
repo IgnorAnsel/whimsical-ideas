@@ -1,6 +1,8 @@
 package com.ignoransel.whimsicalideas.content.soulsail.render;
 
 import com.ignoransel.whimsicalideas.WhimsicalIdeas;
+import com.ignoransel.whimsicalideas.content.soulsail.SoulBannerGrade;
+import com.ignoransel.whimsicalideas.content.soulsail.SoulSailBannerData;
 import com.ignoransel.whimsicalideas.entity.SoulBannerBlockEntity;
 import net.minecraft.client.render.LightmapTextureManager;
 import net.minecraft.client.render.RenderLayer;
@@ -29,9 +31,12 @@ public class SoulBannerRenderer implements BlockEntityRenderer<SoulBannerBlockEn
     public void render(SoulBannerBlockEntity be, float tickDelta,
                        MatrixStack matrices, VertexConsumerProvider vcp,
                        int light, int overlay) {
-
+        SoulBannerGrade grade = null;
         if (be.getWorld() == null) return;
-
+        if (be instanceof SoulSailBannerData) {
+            SoulSailBannerData d = (SoulSailBannerData) be;
+            grade = d.wi$getBannerGrade();
+        }
         matrices.push();
 
         // 方块中心
@@ -124,7 +129,9 @@ public class SoulBannerRenderer implements BlockEntityRenderer<SoulBannerBlockEn
         // 把所有部件都画出来
         model.pole.render(matrices, vc, light, overlay);
         model.crossbar.render(matrices, vc, light, overlay);
-        model.finial.render(matrices, vc, light, overlay);
+        if (grade != null && grade.getLevel() > 5) {
+            model.finial.render(matrices, vc, light, overlay);
+        }
         // model.chain.render(matrices, vc, light, overlay);
         model.tasselLeft.render(matrices, vc, light, overlay);
         model.tasselRight.render(matrices, vc, light, overlay);

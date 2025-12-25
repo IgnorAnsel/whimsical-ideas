@@ -86,7 +86,6 @@ public final class SoulSailRefine {
         // 必须有待炼化生物 && RawSouls > 0
         if (data.wi$getStoredCount() <= 0) return false;
         if (data.wi$getRawSouls() <= 0) return false;
-
         // 一个生物 = 一个经验球（这里 mobId 你目前没用，但 pop 仍然是消耗列表）
         String mobId = data.wi$popOneStoredMob();
         if (mobId == null) return false;

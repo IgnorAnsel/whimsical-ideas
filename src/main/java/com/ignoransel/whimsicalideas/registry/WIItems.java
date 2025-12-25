@@ -199,12 +199,12 @@ public final class WIItems {
     public static final Item TEST_ZUN_SOUL_SAIL = Registry.register(
             Registries.ITEM,
             new Identifier(WhimsicalIdeas.MODID, "test_zun_soul_sail"),
-            new TestSoulSailBannerItem(WIBlocks.TEST_ZUN_SOUL_BANNER, new FabricItemSettings(), SoulSailTier.MORTAL)
+            new TestSoulSailBannerItem(WIBlocks.TEST_ZUN_SOUL_BANNER, new FabricItemSettings().maxCount(1), SoulSailTier.MORTAL)
     );
     public static final Item SOUL_SAIL_POLE = Registry.register(
             Registries.ITEM,
             id("soul_sail_pole"),
-            new BlockItem(WIBlocks.SOUL_SAIL_POLE, new FabricItemSettings())
+            new BlockItem(WIBlocks.SOUL_SAIL_POLE, new FabricItemSettings().maxCount(1))
     );
     public static final Item SOUL_FLAG = Registry.register(
             Registries.ITEM,

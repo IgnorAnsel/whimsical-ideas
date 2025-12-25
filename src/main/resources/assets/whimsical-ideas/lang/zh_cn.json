@@ -1,8 +1,4 @@
 {
-  "tooltip.whimsical-ideas.zun_soul_banner.title": "尊魂幡合成",
-  "tooltip.whimsical-ideas.hold_shift": "按住 Shift 查看合成",
-  "tooltip.whimsical-ideas.zun_soul_banner.hint": "将“带尊魂图案的旗帜”放在中心，四周按下图摆放：",
-  "tooltip.whimsical-ideas.zun_soul_banner.center": "带尊魂图案的旗帜",
 
   "effect.whimsical-ideas.backlash": "反噬",
   "item.whimsical-ideas.hex_forge_iron": "铁制符能锻造器",
@@ -13,6 +9,8 @@
 
   "item.whimsical-ideas.zun_soul_sail": "尊魂幡",
   "block.whimsical-ideas.zun_soul_banner": "尊魂幡",
+  "item.whimsical-ideas.test_zun_soul_banner": "尊魂幡",
+  "itemGroup.whimsical-ideas.zun_soul_sail": "道友不妨来魂幡一叙？",
 
   "effect.whimsical-ideas.might": "大力",
   "effect.whimsical-ideas.might.description": "增加攻击力",
