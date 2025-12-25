@@ -10,7 +10,14 @@
   "item.whimsical-ideas.zun_soul_sail": "尊魂幡",
   "block.whimsical-ideas.zun_soul_banner": "尊魂幡",
   "item.whimsical-ideas.test_zun_soul_banner": "尊魂幡",
+  "block.whimsical-ideas.test_zun_soul_banner": "尊魂幡",
+  "block.whimsical-ideas.soul_sail_pole": "魂幡杆",
+  "item.whimsical-ideas.soul_flag": "魂幡旗",
+  "block.whimsical-ideas.soul_siphon": "祭魂台",
+
   "itemGroup.whimsical-ideas.zun_soul_sail": "道友不妨来魂幡一叙？",
+
+  "itemGroup.whimsical-ideas.whimsical_ideas": "暂未完成",
 
   "effect.whimsical-ideas.might": "大力",
   "effect.whimsical-ideas.might.description": "增加攻击力",

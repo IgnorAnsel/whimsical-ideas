@@ -14,7 +14,7 @@ import net.minecraft.util.math.RotationAxis;
 
 public class SoulBannerItemRenderer implements BuiltinItemRendererRegistry.DynamicItemRenderer {
     private static final Identifier TEX =
-            new Identifier(WhimsicalIdeas.MODID, "textures/entity/soul_banner_purple_debug.png");
+            new Identifier(WhimsicalIdeas.MODID, "textures/entity/soul_banner_purple.png");
 
     private SoulBannerModel model;
 

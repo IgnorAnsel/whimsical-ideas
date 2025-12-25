@@ -44,7 +44,7 @@ public final class SoulSailAbilities {
         int next = unlockedIdx[nextPos];
 
         SoulSailItemCompat.setSelectedAbility(stack, next);
-        sp.sendMessage(Text.literal("当前术式: " + all[next].name()).formatted(Formatting.AQUA), true);
+        sp.sendMessage(Text.literal("当前术式: " + all[next].displayName).formatted(Formatting.AQUA), true);
 
     }
 

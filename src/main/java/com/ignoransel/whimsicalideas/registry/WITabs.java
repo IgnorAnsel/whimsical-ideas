@@ -18,26 +18,6 @@ public final class WITabs {
     public static ItemGroup WHIMSICAL_IDEAS_GROUP;
     public static ItemGroup ZUN_SOUL_SAIL_GROUP;
     public static void init() {
-        WHIMSICAL_IDEAS_GROUP = Registry.register(
-                Registries.ITEM_GROUP,
-                new Identifier(WhimsicalIdeas.MODID, "whimsical_ideas"),
-                FabricItemGroup.builder()
-                        .displayName(Text.translatable("itemGroup.whimsical-ideas.whimsical_ideas"))
-                        .icon(() -> new ItemStack(WIItems.SOUL_TABLET_ITEM))
-                        .entries((displayContext, entries) -> {
-                            entries.add(WIItems.SOUL_TABLET_ITEM);
-                            entries.add(WIItems.SOUL_TABLET_IRON_ITEM);
-                            entries.add(WIItems.SOUL_TABLET_GOLD_ITEM);
-                            entries.add(WIItems.SOUL_TABLET_DIAMOND_ITEM);
-                            entries.add(WIItems.SOUL_TABLET_NETHERITE_ITEM);
-                            entries.add(WIItems.HEX_FORGE_IRON);
-                            entries.add(WIItems.HEX_FORGE_GOLD);
-                            entries.add(WIItems.HEX_FORGE_DIAMOND);
-                            entries.add(WIItems.HEX_FORGE_NETHERITE);
-                            entries.add(WIItems.HEX_FORGE_RANDOM);
-                        })
-                        .build()
-        );
 
         ZUN_SOUL_SAIL_GROUP = Registry.register(
                 Registries.ITEM_GROUP,
@@ -73,6 +53,27 @@ public final class WITabs {
                             entries.add(WIItems.TEST_ZUN_SOUL_SAIL_FLOOD.getDefaultStack());
                             entries.add(WIItems.TEST_ZUN_SOUL_SAIL_WASTELAND.getDefaultStack());
                             entries.add(WIItems.TEST_ZUN_SOUL_SAIL_IMMORTAL.getDefaultStack());
+                        })
+                        .build()
+        );
+
+        WHIMSICAL_IDEAS_GROUP = Registry.register(
+                Registries.ITEM_GROUP,
+                new Identifier(WhimsicalIdeas.MODID, "whimsical_ideas"),
+                FabricItemGroup.builder()
+                        .displayName(Text.translatable("itemGroup.whimsical-ideas.whimsical_ideas"))
+                        .icon(() -> new ItemStack(WIItems.SOUL_TABLET_ITEM))
+                        .entries((displayContext, entries) -> {
+                            entries.add(WIItems.SOUL_TABLET_ITEM);
+                            entries.add(WIItems.SOUL_TABLET_IRON_ITEM);
+                            entries.add(WIItems.SOUL_TABLET_GOLD_ITEM);
+                            entries.add(WIItems.SOUL_TABLET_DIAMOND_ITEM);
+                            entries.add(WIItems.SOUL_TABLET_NETHERITE_ITEM);
+                            entries.add(WIItems.HEX_FORGE_IRON);
+                            entries.add(WIItems.HEX_FORGE_GOLD);
+                            entries.add(WIItems.HEX_FORGE_DIAMOND);
+                            entries.add(WIItems.HEX_FORGE_NETHERITE);
+                            entries.add(WIItems.HEX_FORGE_RANDOM);
                         })
                         .build()
         );
