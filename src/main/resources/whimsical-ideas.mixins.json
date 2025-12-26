@@ -11,7 +11,8 @@
     "PlayerEntityDropMixin",
     "ScreenHandlerMixin",
     "LivingEntityMixin",
-    "LivingEntityDamageMixin"
+    "LivingEntityDamageMixin",
+    "ItemRendererAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

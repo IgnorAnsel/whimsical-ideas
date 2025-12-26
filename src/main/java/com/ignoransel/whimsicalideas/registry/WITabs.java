@@ -7,6 +7,7 @@ import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroupEntries;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.text.Text;
@@ -14,9 +15,8 @@ import net.minecraft.util.Identifier;
 
 public final class WITabs {
     private WITabs() {}
-
-    public static ItemGroup WHIMSICAL_IDEAS_GROUP;
     public static ItemGroup ZUN_SOUL_SAIL_GROUP;
+    public static ItemGroup WHIMSICAL_IDEAS_GROUP;
     public static void init() {
 
         ZUN_SOUL_SAIL_GROUP = Registry.register(
@@ -74,6 +74,8 @@ public final class WITabs {
                             entries.add(WIItems.HEX_FORGE_DIAMOND);
                             entries.add(WIItems.HEX_FORGE_NETHERITE);
                             entries.add(WIItems.HEX_FORGE_RANDOM);
+                            // entries.add(WIItems.PROJECTION_FRAME);
+                            entries.add(WIItems.TUNING_FORK);
                         })
                         .build()
         );

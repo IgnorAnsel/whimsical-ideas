@@ -7,6 +7,7 @@ import com.ignoransel.whimsicalideas.content.soulsail.block.SoulSiphonBlock;
 import com.ignoransel.whimsicalideas.content.soulsail.render.SoulBannerBlock;
 import com.ignoransel.whimsicalideas.content.soulsail.render.SoulSailPoleBlock;
 import com.ignoransel.whimsicalideas.content.soultablet.*;
+import com.ignoransel.whimsicalideas.content.tuningfork.TuningForkBlock;
 import com.ignoransel.whimsicalideas.mixin.BlockEntityTypeAccessor;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.AbstractBlock;
@@ -22,6 +23,15 @@ import java.util.Set;
 
 public final class WIBlocks {
     private WIBlocks(){}
+    public static final Block TUNING_FORK_BLOCK = Registry.register(
+            Registries.BLOCK,
+            id("tuning_fork"),
+            new TuningForkBlock(
+                    AbstractBlock.Settings.create()
+                            .strength(0.2f)
+                            .nonOpaque()
+            )
+            );
 
     public static final Block ZUN_SOUL_BANNER =
             register("zun_soul_banner", new SoulSailBannerBlock(AbstractBlock.Settings.copy(Blocks.BLACK_BANNER)));

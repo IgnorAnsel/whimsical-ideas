@@ -1,6 +1,7 @@
 package com.ignoransel.whimsicalideas;
 
 import com.ignoransel.whimsicalideas.client.ClientTimeSync;
+import com.ignoransel.whimsicalideas.client.ProjectionFrameRenderer;
 import com.ignoransel.whimsicalideas.content.hex.handers.HexRefineHandler;
 import com.ignoransel.whimsicalideas.content.soulsail.*;
 import com.ignoransel.whimsicalideas.content.soulsail.render.*;
@@ -132,6 +133,9 @@ public class WhimsicalIdeas implements ModInitializer, ClientModInitializer {
                 com.ignoransel.whimsicalideas.content.soulsail.render.SoulSiphonBlockEntityRenderer::new
         );
         BlockRenderLayerMap.INSTANCE.putBlock(WIBlocks.SOUL_SIPHON, RenderLayer.getCutout());
+        BuiltinItemRendererRegistry.INSTANCE.register(WIItems.PROJECTION_FRAME, new ProjectionFrameRenderer());
+
+        BlockRenderLayerMap.INSTANCE.putBlock(WIBlocks.TUNING_FORK_BLOCK, RenderLayer.getCutout());
 
     }
     private static boolean isOffhandBest(MinecraftClient client, ItemStack best) {

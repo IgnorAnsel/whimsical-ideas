@@ -37,7 +37,7 @@ public final class SoulSailMaelstromTick {
 
             Vec3d center = SoulSailItemCompat.getMaelstromPos(stack);
 
-            // 离中心太远就中断（可选）
+            // 离中心太远就中断
             if (sp.squaredDistanceTo(center.x, center.y, center.z) > 50 * 50) {
                 SoulSailItemCompat.clearMaelstrom(stack);
                 continue;

@@ -6,6 +6,7 @@ import com.ignoransel.whimsicalideas.content.soulsail.entity.SoulSiphonBlockEnti
 import com.ignoransel.whimsicalideas.content.soulsail.render.SoulSailPoleBlockEntity;
 import com.ignoransel.whimsicalideas.content.soultablet.SoulTabletBlockEntity;
 import com.ignoransel.whimsicalideas.content.soultablet.SoulTabletRenderer;
+import com.ignoransel.whimsicalideas.content.tuningfork.TuningForkBlockEntity;
 import com.ignoransel.whimsicalideas.entity.SoulBannerBlockEntity;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
@@ -18,6 +19,12 @@ import net.minecraft.util.Identifier;
 
 public final class WIBlockEntities {
     private WIBlockEntities(){}
+    public static final BlockEntityType<TuningForkBlockEntity> TUNING_FORK_BE =
+            Registry.register(
+                    Registries.BLOCK_ENTITY_TYPE,
+                    new Identifier(WhimsicalIdeas.MODID, "tuning_fork"),
+                    FabricBlockEntityTypeBuilder.create(TuningForkBlockEntity::new, WIBlocks.TUNING_FORK_BLOCK).build()
+            );
 
     public static BlockEntityType<SoulTabletBlockEntity> SOUL_TABLET_BE;
     public static BlockEntityType<SoulBannerBlockEntity> SOUL_BANNER_BE;

@@ -2,6 +2,7 @@ package com.ignoransel.whimsicalideas.registry;
 
 import com.ignoransel.whimsicalideas.WhimsicalIdeas;
 
+import com.ignoransel.whimsicalideas.content.Viewfinder.ProjectionFrameItem;
 import com.ignoransel.whimsicalideas.content.hex.HexRarity;
 import com.ignoransel.whimsicalideas.content.hex.item.HexForgeItem;
 import com.ignoransel.whimsicalideas.content.hex.item.RandomHexForgeItem;
@@ -185,7 +186,18 @@ public final class WIItems {
         );
 
     }
+    public static final Item PROJECTION_FRAME = registerItem("projection_frame",
+            new ProjectionFrameItem(new FabricItemSettings().maxCount(1)));
+    public static final Item TUNING_FORK = Registry.register(
+            Registries.ITEM,
+            id("tuning_fork"),
+            new BlockItem(WIBlocks.TUNING_FORK_BLOCK, new FabricItemSettings())
+    );
 
+
+    private static Item registerItem(String name, Item item) {
+        return Registry.register(Registries.ITEM, new Identifier(WhimsicalIdeas.MODID, name), item);
+    }
 
     public static final Item ZUN_SOUL_SAIL =
             Registry.register(Registries.ITEM, new Identifier(WhimsicalIdeas.MODID, "zun_soul_sail"),
@@ -252,6 +264,7 @@ public final class WIItems {
                 new SoulTabletItem(WIBlocks.SOUL_TABLET_NETHERITE, WIBlocks.SOUL_TABLET_NETHERITE_WALL,
                         new FabricItemSettings().maxCount(1))
         );
+
         registerHexForge();
     }
 
