@@ -1,5 +1,6 @@
 package com.ignoransel.whimsicalideas.content.soulsail;
 
+import net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -103,6 +104,8 @@ public final class SoulSailMaelstromTick {
                 if (doDot) {
                     boolean damaged = e.damage(world.getDamageSources().magic(), dot);
                     if (damaged) sp.heal(dot * leech);
+                    if (e.isDead())
+                        ServerEntityCombatEvents.AFTER_KILLED_OTHER_ENTITY.invoker().afterKilledOtherEntity(world, sp, e);
                 }
 
                 // 目标缠魂：形成后更明显

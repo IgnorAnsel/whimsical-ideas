@@ -1,5 +1,6 @@
 package com.ignoransel.whimsicalideas.content.soulsail.entity;
 
+import net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -98,6 +99,16 @@ public class ColoredLightningEntity extends Entity {
             DamageSource src = sw.getDamageSources().lightningBolt();
             e.damage(src, damage);
             e.onStruckByLightning(sw, null);
+            if (e.isDead()) {
+                // 手动触发击杀事件
+                if (this.ownerUuid != null) {
+                    PlayerEntity owner = sw.getPlayerByUuid(ownerUuid);
+                    if (owner != null) {
+                        ServerEntityCombatEvents.AFTER_KILLED_OTHER_ENTITY.invoker()
+                                .afterKilledOtherEntity(sw, owner, e);
+                    }
+                }
+            }
         }
 
         if (doFire && sw.getGameRules().getBoolean(GameRules.DO_FIRE_TICK)) {

@@ -10,6 +10,9 @@ import net.minecraft.registry.Registries;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
+
+import java.util.UUID;
 
 public final class SoulSailEvents {
     private SoulSailEvents() {}
@@ -22,10 +25,10 @@ public final class SoulSailEvents {
         ServerEntityCombatEvents.AFTER_KILLED_OTHER_ENTITY.register((world, attacker, killed) -> {
             if (!(attacker instanceof ServerPlayerEntity sp)) return;
             if (!(killed instanceof LivingEntity)) return;
+            System.out.println("击杀事件：击杀者 " + sp.getName().getString() + " 被击杀者 " + killed.getName().getString() + "");
             LivingEntity le = killed;
 
             boolean inSoulWorld = sp.getServerWorld().getRegistryKey().equals(SoulSailRoomManager.SOUL_SAIL_DIM);
-
             // 魂幡世界：不要求手持，从被杀实体身上反查对应魂幡扣魂
             if (inSoulWorld) {
                 String sailId = getSailIdFromKilled(le);
@@ -46,17 +49,23 @@ public final class SoulSailEvents {
             if (held.isEmpty()) return;
             if (!(held.getItem() instanceof ISoulSailItem bannerItem)) return;
 
-            SoulSailTier tier = bannerItem.tier();
+            SoulSailTier tier = SoulSailItemCompat.getBannerGrade(held).getSoulSailTier();
 
             // 外界击杀：加魂（未炼化）
             SoulSailItemCompat.addRawSouls(held, +1, tier.capacity);
-
             // 记录待生成生物
             Identifier typeId = Registries.ENTITY_TYPE.getId(le.getType());
-            if (typeId != null) {
-
-                SoulSailItemCompat.getOrCreateSailId(held);
-                SoulSailItemCompat.addPendingMob(held, typeId.toString());
+            SoulSailItemCompat.getOrCreateSailId(held);
+            SoulSailItemCompat.addPendingMob(held, typeId.toString());
+            if (killed instanceof ServerPlayerEntity killedPlayer) {
+                ServerWorld target = sp.getServer().getWorld(SoulSailRoomManager.SOUL_SAIL_DIM);
+                if (target != null) {
+                    SoulSailRoomManager.ensureRoomBuilt(target, sp, held, tier);
+                    killedPlayer.requestRespawn();
+                    SoulSailRoomManager.teleportIntoRoom(target, killedPlayer, held, tier);
+                    SoulSailRoomManager.spawnPendingMobsOnce(target, held, tier);
+                    SoulSailRoomManager.applyPacifistRules(target, sp);
+                }
             }
         });
 
@@ -120,4 +129,5 @@ public final class SoulSailEvents {
 
         return ItemStack.EMPTY;
     }
-}
+
+ }

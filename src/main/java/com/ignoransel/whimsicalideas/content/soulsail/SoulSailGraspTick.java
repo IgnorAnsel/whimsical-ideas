@@ -1,9 +1,11 @@
 package com.ignoransel.whimsicalideas.content.soulsail;
 
+import net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.MinecraftServer;
@@ -119,6 +121,8 @@ public final class SoulSailGraspTick {
                 }
 
                 if (sp.getWorld() instanceof ServerWorld sw) {
+                    if (target.isDead())
+                        ServerEntityCombatEvents.AFTER_KILLED_OTHER_ENTITY.invoker().afterKilledOtherEntity(sw, sp, target);
                     sw.spawnParticles(ParticleTypes.SOUL_FIRE_FLAME,
                             target.getX(), target.getBodyY(0.5), target.getZ(),
                             18, 0.35, 0.25, 0.35, 0.02);

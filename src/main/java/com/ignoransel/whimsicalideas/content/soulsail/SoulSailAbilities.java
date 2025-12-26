@@ -8,6 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
@@ -192,7 +193,7 @@ public final class SoulSailAbilities {
         SoulSailItemCompat.setAbilityCooldown(stack, ab, now, ab.cooldownTicks);
         return true;
     }
-    private static net.minecraft.util.hit.HitResult raycast(ServerPlayerEntity sp, double range) {
+    private static BlockHitResult raycast(ServerPlayerEntity sp, double range) {
         var world = sp.getServerWorld();
         var start = sp.getCameraPosVec(1.0f);
         var look = sp.getRotationVec(1.0f);
@@ -239,8 +240,7 @@ public final class SoulSailAbilities {
         if (ehr.getEntity() instanceof LivingEntity le) return le;
         return null;
     }
-
-
+    
 
 
 }

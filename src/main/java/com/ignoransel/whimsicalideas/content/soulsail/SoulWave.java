@@ -1,5 +1,6 @@
 package com.ignoransel.whimsicalideas.content.soulsail;
 
+import net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
@@ -48,7 +49,8 @@ public class SoulWave {
             float damage = (float)(baseDamage * (0.65 + 0.35 * (1.0 - dist / range)));
             boolean damaged = e.damage(world.getDamageSources().magic(), damage);
             if (damaged) sp.heal(damage * leechRatio);
-
+            if (e.isDead())
+                ServerEntityCombatEvents.AFTER_KILLED_OTHER_ENTITY.invoker().afterKilledOtherEntity(world, sp, e);
             // ===== 控制效果 =====
             e.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, slowTicks, slowAmp, true, false, true));
             e.addStatusEffect(new StatusEffectInstance(StatusEffects.WEAKNESS, weakTicks, weakAmp, true, false, true));
