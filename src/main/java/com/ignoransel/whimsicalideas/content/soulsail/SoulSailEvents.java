@@ -3,6 +3,7 @@ package com.ignoransel.whimsicalideas.content.soulsail;
 import net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.item.ItemStack;
@@ -61,23 +62,26 @@ public final class SoulSailEvents {
                 ServerWorld target = sp.getServer().getWorld(SoulSailRoomManager.SOUL_SAIL_DIM);
                 if (target != null) {
                     SoulSailRoomManager.ensureRoomBuilt(target, sp, held, tier);
-                    killedPlayer.requestRespawn();
+                    killedPlayer.setHealth(killedPlayer.getMaxHealth()); // 设置玩家的生命为最大
+                    killedPlayer.clearStatusEffects();
+
+                    killedPlayer.setInvulnerable(false);
+                    killedPlayer.setRemoved(Entity.RemovalReason.DISCARDED);
                     SoulSailRoomManager.teleportIntoRoom(target, killedPlayer, held, tier);
                     SoulSailRoomManager.spawnPendingMobsOnce(target, held, tier);
-                    SoulSailRoomManager.applyPacifistRules(target, sp);
                 }
             }
         });
 
-        // 小世界玩家无敌：取消伤害
-        ServerLivingEntityEvents.ALLOW_DAMAGE.register((entity, source, amount) -> {
-            if (entity instanceof ServerPlayerEntity sp) {
-                if (sp.getServerWorld().getRegistryKey().equals(SoulSailRoomManager.SOUL_SAIL_DIM)) {
-                    return false;
-                }
-            }
-            return true;
-        });
+//        // 小世界玩家无敌：取消伤害
+//        ServerLivingEntityEvents.ALLOW_DAMAGE.register((entity, source, amount) -> {
+//            if (entity instanceof ServerPlayerEntity sp) {
+//                if (sp.getServerWorld().getRegistryKey().equals(SoulSailRoomManager.SOUL_SAIL_DIM)) {
+//                    return false;
+//                }
+//            }
+//            return true;
+//        });
 
         // 小世界生物和平：禁用 AI
         ServerEntityEvents.ENTITY_LOAD.register((entity, world) -> {

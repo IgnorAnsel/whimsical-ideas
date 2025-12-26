@@ -264,8 +264,8 @@ public final class WIEvents {
             if (!(entity.getWorld() instanceof ServerWorld sw)) return true;
             if (!sw.getRegistryKey().equals(SoulSailRoomManager.SOUL_SAIL_DIM)) return true;
 
-            // 玩家在小世界无敌
-            if (entity instanceof ServerPlayerEntity) return false;
+//            // 玩家在小世界无敌
+//            if (entity instanceof ServerPlayerEntity) return false;
 
             // 非玩家：只允许“来自玩家”的伤害
             return isDamageFromPlayer(source);

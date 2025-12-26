@@ -78,6 +78,7 @@ public class SoulSailBannerItem extends BannerItem implements ISoulSailItem {
             if (sp.isSneaking() && inSoulWorld && SoulSailActive.isActiveSail(sp, stack)) {
                 SoulSailActive.clearActive(sp);
                 SoulSailRoomManager.teleportBack(sp, stack);
+                SoulSailRoomManager.removePacifistRules(sp);
                 return stack;
             }
 

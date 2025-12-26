@@ -7,6 +7,8 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
@@ -276,11 +278,16 @@ public final class SoulSailRoomManager {
     }
 
     public static void applyPacifistRules(ServerWorld w, ServerPlayerEntity player) {
-//        // 兜底：给玩家极强抗性/回血（真正“无敌”我们在事件里直接取消伤害）
-//        player.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 20 * 60, 10, true, false));
-//        player.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 20 * 60, 10, true, false));
-//        player.addStatusEffect(new StatusEffectInstance(StatusEffects.ABSORPTION, 20 * 60, 10, true, false));
+        player.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 20 * 60000, 10000, true, false)); // 60秒，抗性等级10
+        player.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOW_FALLING, 20 * 60000, 0, true, false)); // 60秒，免疫击退
     }
+
+    public static void removePacifistRules(ServerPlayerEntity player) {
+        player.removeStatusEffect(StatusEffects.RESISTANCE);
+        player.removeStatusEffect(StatusEffects.SLOW_FALLING);
+    }
+
+
 
     public static void storeReturnPoint(ServerPlayerEntity player, ItemStack sail) {
         var nbt = SoulSailItemCompat.data(sail);
